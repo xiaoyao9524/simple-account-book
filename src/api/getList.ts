@@ -1,8 +1,14 @@
-import axios, {AxiosRequestConfig, AxiosPromise} from 'axios';
+import axios from 'axios';
 
-export function getRecommendList () {
+interface IGetRecommendListParamsProps {
+  a?: string;
+  b?: string;
+}
+
+export function getRecommendList (params: IGetRecommendListParamsProps) {
   return axios({
-    methods: 'get',
-    url: '/index/recommend.json'
-  } as AxiosRequestConfig)
+    method: 'get',
+    url: '/index/recommend.json',
+    params
+  })
 }

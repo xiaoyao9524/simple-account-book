@@ -4,7 +4,7 @@ import './App.scss';
 import './icon/iconfont.css';
 import Calculator from './components/Calculator/calculator';
 
-import {StoreState} from './store/reducers';
+import {IStoreState} from './store/reducers';
 import {getUserInfoRequest} from './store/reducers/modules/user/actionCreator';
 import {UserInfoProps} from './store/reducers/modules/user/types';
 import Counter from './pages/Counter';
@@ -55,7 +55,7 @@ const App: React.FC<AppProps> = (props) => {
   );
 }
 
-const mapStateToProps = (state: StoreState) => ({
+const mapStateToProps = (state: IStoreState) => ({
   userInfo: state.user.userInfo
 });
 

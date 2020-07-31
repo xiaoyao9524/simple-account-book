@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button, SwipeAction, List, InputItem } from 'antd-mobile';
-import { StoreState } from '../../store/reducers';
+import { IStoreState } from '../../store/reducers';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTitleChangeAction, TodoItemProps } from './store';
-// import { getRecommendList } from '../../api/getList';
+import { actionCreators, types } from './store';
+
+const {getTitleChangeAction, } = actionCreators;
 
 const TodoList = () => {
-  const title = useSelector<StoreState, string>(state => state.todoList.title);
-  const list = useSelector<StoreState, TodoItemProps[]>(state => state.todoList.list);
+  const title = useSelector<IStoreState, string>(state => state.todoList.title);
+  const list = useSelector<IStoreState, types.ITodoItemProps[]>(state => state.todoList.list);
   console.log('title: ', title)
   const dispatch = useDispatch();
 
@@ -17,7 +18,8 @@ const TodoList = () => {
       <Button
         onClick={() => {
           dispatch({
-            type: 'TEST_INIT_LIST'
+            type: 'TEST_INIT_LIST',
+            value: '测试传参_initList'
           })
         }}
       >获取列表</Button>

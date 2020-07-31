@@ -1,34 +1,34 @@
-import { put, takeEvery, delay } from 'redux-saga/effects'
-import axios from 'axios';
-import {getInitTodoListAction} from '../pages/TodoList/store';
+import { takeEvery, all } from 'redux-saga/effects'
 
-export function* helloSaga() {
-  console.log('Hello Sagas!');
-  yield takeEvery('TEST_INIT_LIST', getinitList);
+import {
+  sagas as counterSagas,
+  actionTypes as counterActionTypes
+} from '../pages/Counter/store';
+
+import {
+  sagas as todoListSagas,
+  actionTypes as todoListActionTypes
+} from '../pages/TodoList/store';
+
+const {incrementAsync} = counterSagas;
+const {INCREMENT_ASYNC} = counterActionTypes;
+
+const { TEST_INIT_LIST } = todoListActionTypes;
+const {getinitList} = todoListSagas;
+
+// sagas
+function* watchInitTodoList() {
+  yield takeEvery(TEST_INIT_LIST, getinitList);
 }
 
-function* getinitList () {
-  const res = yield axios({
-    method: 'get',
-    url: '/index/recommend.json'
-  })
-
-  console.log(res);
-
-  const list = res.data.list.map((i: any) => ({
-    title: i.title
-  }))
-
-  yield put(getInitTodoListAction(list));
+function* watchIncrementAsync() {
+  yield takeEvery(INCREMENT_ASYNC, incrementAsync)
 }
 
-// Our worker Saga: 将执行异步的 increment 任务
-export function* incrementAsync() {
-  yield delay(1000)
-  yield put({ type: 'INCREMENT' })
-}
-
-// Our watcher Saga: 在每个 INCREMENT_ASYNC action spawn 一个新的 incrementAsync 任务
-export function* watchIncrementAsync() {
-  yield takeEvery('INCREMENT_ASYNC', incrementAsync)
+// export
+export default function* rootSaga () {
+  yield all([
+    watchInitTodoList(),
+    watchIncrementAsync()
+  ])
 }

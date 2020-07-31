@@ -1,24 +1,13 @@
+import reducer from './reducer';
+import * as types from './types';
+import * as actionTypes from './actionTypes';
+import * as actionCreators from './actionCreators';
+import * as sagas from './sagas';
 
-// store
-
-export interface CounterProps {
-  count: number
-}
-
-const defaultState: CounterProps = {
-  count: 0
-}
-
-export default (state = defaultState, action: any) => {
-  const newState = JSON.parse(JSON.stringify(state));
-
-  switch (action.type) {
-    case 'INCREMENT':
-      newState.count++;
-      break;
-    case 'DECREMENT':
-      newState.count--;
-      break;
-  }
-  return newState;
+export {
+  reducer,
+  types,
+  actionTypes,
+  actionCreators,
+  sagas
 }
