@@ -4,13 +4,13 @@ import './App.scss';
 import './icon/iconfont.css';
 import Calculator from './components/Calculator/calculator';
 
-import {IStoreState} from './store/reducers';
-import {getUserInfoRequest} from './store/reducers/modules/user/actionCreator';
-import {UserInfoProps} from './store/reducers/modules/user/types';
+import { IStoreState } from './store/reducers';
+import { getUserInfoRequest } from './store/reducers/modules/user/actionCreator';
+import { UserInfoProps } from './store/reducers/modules/user/types';
 import Counter from './pages/Counter';
 import TodoList from './pages/TodoList';
-import {Dispatch} from 'redux';
-import {connect} from 'react-redux';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 // import {getRecommendList} from './api/getList';
 
@@ -29,7 +29,7 @@ const App: React.FC<AppProps> = (props) => {
       <Router>
         <h3>{navigator.userAgent}</h3>
         <ul className="nav-wrapper">
-        <li className="nav-item">
+          <li className="nav-item">
             <Link className="nav-link" to="/Counter">Counter</Link>
           </li>
 
@@ -60,7 +60,7 @@ const mapStateToProps = (state: IStoreState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  handlerLogin () {
+  handlerLogin() {
     dispatch({
       type: 'aaa',
       action: getUserInfoRequest()
