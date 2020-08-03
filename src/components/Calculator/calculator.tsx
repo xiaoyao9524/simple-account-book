@@ -6,18 +6,39 @@ import { Button } from 'antd-mobile';
 
 type calculationType = null | '+' | '-';
 
+// 判断一个数字是否为整数
+function checkNumberIsInt (num: number | string): boolean {
+  if (typeof num === 'string') {
+    num = parseFloat(num);
+  }
+  if (isNaN(num)) {
+    return false;
+  }
+  return `${num}`.indexOf('.') < 0;
+}
+
+
 const Calculator: React.FC = () => {
   const [firstPrice, setFirstPrice] = useState<string>('0');
   const [secondPrice, setSecondPrice] = useState<string>('');
   const [calculation, setCalculation] = useState<calculationType>(null);
 
-  // const refCalculation = useRef(calculation);
-
   function handlerInputNumber(num: number) {
     console.log('输入了数字：', num);
     const isFirst = calculation === null;
-    let price = (isFirst ? firstPrice : secondPrice);
+    const isZero = num === 0;
+    let price: string;
+    if (isZero) {
+      let curPrice = isFirst ? firstPrice : secondPrice;
+      let floatStr = curPrice.split('.')[1];
+      if (floatStr && floatStr.length >= 2) {
+        return;
+      }
+    }
+
+    price = (isFirst ? firstPrice : secondPrice);
     price = ((price === '') || (price === '0')) ? `${num}` : price + num;
+    
 
     const setPrice = isFirst ? setFirstPrice : setSecondPrice;
     setPrice(price);
@@ -25,25 +46,30 @@ const Calculator: React.FC = () => {
 
   function handlerInputCalculation (inpCalculation: calculationType) {
     console.log('输入了运算符：', inpCalculation);
-    // 什么都没有输入
     const firstPriceNumber = parseFloat(firstPrice);
-    if (!firstPrice || firstPriceNumber <= 0) {
-      return
-    }
-    // 只输入了firstPrice
-    else if (calculation === null || firstPriceNumber <= 0) {
-      setCalculation(inpCalculation);
-      return
-    }
-    // 输入了firstPrice 和 secondPrice
-    else {
-      const secondPriceNumber = parseFloat(secondPrice);
-      const price = calculation === '+' ? (firstPriceNumber + secondPriceNumber) : (firstPriceNumber - secondPriceNumber);
-      const priceIsInt = String(price).indexOf('.') < 0;
-      setFirstPrice(priceIsInt ? `${price}` : price.toFixed(2));
+    const isInputFirstPrice = firstPriceNumber > 0;
+    
+    const secondPriceNumber = parseInt(secondPrice);
+    const isInputSecondPrice = !isNaN(secondPriceNumber);
+    console.log('isInputSecondPrice: ', isInputSecondPrice);
+    // 如果输入了 secondPrice
+    if (isInputSecondPrice) {
+      const currentPrice = calculation === '+' ? (firstPriceNumber + secondPriceNumber) : (firstPriceNumber - secondPriceNumber);
+      const priceStr = checkNumberIsInt(currentPrice) ? `${currentPrice}` : currentPrice.toFixed(2);
+      setFirstPrice(priceStr);
       setSecondPrice('');
-      setCalculation(inpCalculation);
     }
+    setCalculation(inpCalculation);
+  }
+
+  function handlerInputPoint () {
+    const isInpCalculation = calculation !== null;
+
+    let price = isInpCalculation ? secondPrice : firstPrice;
+    if (checkNumberIsInt(price)) {
+      price += '.';
+    }
+
   }
 
   return (
@@ -133,10 +159,20 @@ const Calculator: React.FC = () => {
           >-</Button>
         </div>
         <div className="keys-row">
-          <Button className="code-item">.</Button>
-          <Button className="code-item">0</Button>
+          <Button 
+            className="code-item"
+            onClick={() => {
+              handlerInputPoint();
+            }}
+          >.</Button>
+          <Button 
+            className="code-item"
+            onClick={() => {
+              handlerInputNumber(0);
+            }}
+          >0</Button>
           <Button className="code-item">
-            <span className="icon iconfont icon-rili"></span>
+            <span className="icon iconfont icon-delete"></span>
           </Button>
           <Button className="code-item" type="primary">完成</Button>
         </div>
