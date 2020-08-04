@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import 'normalize.css/normalize.css'
 import './index.css';
+import './icon/iconfont.css';
 import App from './App';
 
 ReactDOM.render(

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom';
 import './App.scss';
-import './icon/iconfont.css';
+
 import Calculator from './components/Calculator/calculator';
 
 import { IStoreState } from './store/reducers';

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 
 // eslint-disable-next-line
@@ -7,7 +7,7 @@ import { Button } from 'antd-mobile';
 type calculationType = null | '+' | '-';
 
 // 判断一个数字是否为整数
-function checkNumberIsInt (num: number | string): boolean {
+function checkNumberIsInt(num: number | string): boolean {
   if (typeof num === 'string') {
     num = parseFloat(num);
   }
@@ -17,14 +17,17 @@ function checkNumberIsInt (num: number | string): boolean {
   return `${num}`.indexOf('.') < 0;
 }
 
+interface ICalculator {
+  onConfirm?: (result: string) => void;
+}
 
-const Calculator: React.FC = () => {
+const Calculator: React.FC<ICalculator> = props => {
+  const {onConfirm} = props;
   const [firstPrice, setFirstPrice] = useState<string>('0');
   const [secondPrice, setSecondPrice] = useState<string>('');
   const [calculation, setCalculation] = useState<calculationType>(null);
 
   function handlerInputNumber(num: number) {
-    console.log('输入了数字：', num);
     const isFirst = calculation === null;
     const isZero = num === 0;
     let price: string;
@@ -38,20 +41,17 @@ const Calculator: React.FC = () => {
 
     price = (isFirst ? firstPrice : secondPrice);
     price = ((price === '') || (price === '0')) ? `${num}` : price + num;
-    
+
 
     const setPrice = isFirst ? setFirstPrice : setSecondPrice;
     setPrice(price);
   }
 
-  function handlerInputCalculation (inpCalculation: calculationType) {
-    console.log('输入了运算符：', inpCalculation);
+  function handlerInputCalculation(inpCalculation: calculationType) {
     const firstPriceNumber = parseFloat(firstPrice);
-    const isInputFirstPrice = firstPriceNumber > 0;
-    
+
     const secondPriceNumber = parseInt(secondPrice);
     const isInputSecondPrice = !isNaN(secondPriceNumber);
-    console.log('isInputSecondPrice: ', isInputSecondPrice);
     // 如果输入了 secondPrice
     if (isInputSecondPrice) {
       const currentPrice = calculation === '+' ? (firstPriceNumber + secondPriceNumber) : (firstPriceNumber - secondPriceNumber);
@@ -62,14 +62,66 @@ const Calculator: React.FC = () => {
     setCalculation(inpCalculation);
   }
 
-  function handlerInputPoint () {
+  function handlerInputPoint() {
     const isInpCalculation = calculation !== null;
+
+    if (!isInpCalculation && firstPrice === '0') {
+      setFirstPrice('.');
+      return;
+    } else if (isInpCalculation && secondPrice === '') {
+      setSecondPrice('.');
+      return;
+    }
 
     let price = isInpCalculation ? secondPrice : firstPrice;
     if (checkNumberIsInt(price)) {
       price += '.';
+      isInpCalculation ? setSecondPrice(price) : setFirstPrice(price);
     }
 
+  }
+
+  function calculationPrice(): string {
+    const firstPriceNum = firstPrice === '.' ? 0 : parseFloat(firstPrice);
+    const secondPriceNum = (secondPrice === '' || secondPrice === '.') ? 0 :parseFloat(secondPrice);
+
+    let priceNum = 0;
+    switch (calculation) {
+      case null:
+        priceNum = firstPriceNum;
+        break;
+      case '+':
+        priceNum = firstPriceNum + secondPriceNum;
+        break;
+      case '-':
+        priceNum = firstPriceNum - secondPriceNum;
+        break;
+    }
+    const ret = checkNumberIsInt(priceNum) ? `${priceNum}` : priceNum.toFixed(2);
+    setFirstPrice(ret);
+    setCalculation(null);
+    setSecondPrice('');
+    return ret;
+  }
+
+  function handlerDelete() {
+    if (firstPrice !== '0' && calculation === null && !secondPrice) {
+      if (firstPrice === '.') {
+        setFirstPrice('0');
+      } else  {
+        setFirstPrice(firstPrice.length <= 1 ? '0' : firstPrice.slice(0, firstPrice.length - 1));
+      }
+    } else 
+    if (calculation !== null && !secondPrice) {
+      setCalculation(null);
+    } else {
+      setSecondPrice(secondPrice.length <= 1 ? '' : secondPrice.slice(0, secondPrice.length - 1));
+    }
+  }
+
+  function handlerConfirm() {
+    const price = calculationPrice();
+    onConfirm && onConfirm(price);
   }
 
   return (
@@ -79,7 +131,7 @@ const Calculator: React.FC = () => {
           <span className="remark-label">备注：</span>
           <input className="remark-inp" />
         </div>
-  <div className="calculator-price" >{firstPrice} {calculation || null} {calculation && secondPrice ? secondPrice : null}</div>
+        <div className="calculator-price" >{firstPrice} {calculation || null} {calculation && secondPrice ? secondPrice : null}</div>
       </div>
 
       <div className="keys-area">
@@ -159,22 +211,41 @@ const Calculator: React.FC = () => {
           >-</Button>
         </div>
         <div className="keys-row">
-          <Button 
+          <Button
             className="code-item"
             onClick={() => {
               handlerInputPoint();
             }}
           >.</Button>
-          <Button 
+          <Button
             className="code-item"
             onClick={() => {
               handlerInputNumber(0);
             }}
           >0</Button>
-          <Button className="code-item">
+          <Button
+            className="code-item"
+            onClick={handlerDelete}
+          >
             <span className="icon iconfont icon-delete"></span>
           </Button>
-          <Button className="code-item" type="primary">完成</Button>
+          {
+            secondPrice === '' ?
+              (
+                <Button
+                  className="code-item"
+                  type="primary"
+                  onClick={handlerConfirm}
+                >完成</Button>
+              ) : (
+                <Button
+                  className="code-item"
+                  type="primary"
+                  onClick={calculationPrice}
+                >=</Button>
+              )
+          }
+
         </div>
       </div>
     </div>
