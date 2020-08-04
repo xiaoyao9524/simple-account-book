@@ -18,6 +18,7 @@ function checkNumberIsInt(num: number | string): boolean {
 }
 
 interface ICalculator {
+  ref?: React.RefObject<React.ReactElement<ICalculator>>;
   onConfirm?: (result: string) => void;
 }
 

@@ -1,8 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom';
+import { 
+  BrowserRouter as Router, 
+  Switch, 
+  Route, 
+  Redirect, 
+  Link 
+} from 'react-router-dom';
 import './App.scss';
 
-import Calculator from './components/Calculator/calculator';
+import TestCalculator from './pages/TestCalculator';
 
 import { IStoreState } from './store/reducers';
 import { getUserInfoRequest } from './store/reducers/modules/user/actionCreator';
@@ -38,7 +44,7 @@ const App: React.FC<AppProps> = (props) => {
           </li>
 
           <li className="nav-item">
-            <Link className="nav-link" to="/Calculator">Calculator</Link>
+            <Link className="nav-link" to="/TestCalculator">TestCalculator</Link>
           </li>
         </ul>
 
@@ -47,7 +53,7 @@ const App: React.FC<AppProps> = (props) => {
             <Redirect from="/" to="/TodoList" exact />
             <Route path="/Counter" component={Counter} />
             <Route path="/TodoList" component={TodoList} />
-            <Route path="/Calculator" component={Calculator} />
+            <Route path="/TestCalculator" component={TestCalculator} />
           </Switch>
         </section>
       </Router>
