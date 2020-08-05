@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './index.scss';
 
 // eslint-disable-next-line
-import { Button } from 'antd-mobile';
+import { Button, List, DatePicker, InputItem } from 'antd-mobile';
 
 type calculationType = null | '+' | '-';
 
@@ -17,13 +17,33 @@ function checkNumberIsInt(num: number | string): boolean {
   return `${num}`.indexOf('.') < 0;
 }
 
+// 格式化日期
+function formatDate (dateObj: Date, delimiter: string = '-'): string {
+  const year = dateObj.getFullYear();
+  const monthNum = dateObj.getMonth() + 1;
+  const month = monthNum < 10 ? `0${monthNum}` : `${monthNum}`;
+  const dateNum = dateObj.getDate();
+  const date = dateNum < 10 ? `0${dateNum}` : `${dateNum}`;
+
+  return `${year}${delimiter}${month}${delimiter}${date}`
+}
+
 interface ICalculator {
-  ref?: React.RefObject<React.ReactElement<ICalculator>>;
-  onConfirm?: (result: string) => void;
+  // ref?: React.RefObject<React.ReactElement<ICalculator>>;
+  onConfirm?: (result: ICalculatorResult) => void;
+  style?: React.CSSProperties;
+}
+
+interface ICalculatorResult {
+  date: string;
+  remark: string;
+  price: string;
 }
 
 const Calculator: React.FC<ICalculator> = props => {
-  const {onConfirm} = props;
+  const { onConfirm, style } = props;
+  const [date, setDate] = useState(new Date());
+  const [remark, setRemark] = useState('');
   const [firstPrice, setFirstPrice] = useState<string>('0');
   const [secondPrice, setSecondPrice] = useState<string>('');
   const [calculation, setCalculation] = useState<calculationType>(null);
@@ -84,7 +104,7 @@ const Calculator: React.FC<ICalculator> = props => {
 
   function calculationPrice(): string {
     const firstPriceNum = firstPrice === '.' ? 0 : parseFloat(firstPrice);
-    const secondPriceNum = (secondPrice === '' || secondPrice === '.') ? 0 :parseFloat(secondPrice);
+    const secondPriceNum = (secondPrice === '' || secondPrice === '.') ? 0 : parseFloat(secondPrice);
 
     let priceNum = 0;
     switch (calculation) {
@@ -109,30 +129,56 @@ const Calculator: React.FC<ICalculator> = props => {
     if (firstPrice !== '0' && calculation === null && !secondPrice) {
       if (firstPrice === '.') {
         setFirstPrice('0');
-      } else  {
+      } else {
         setFirstPrice(firstPrice.length <= 1 ? '0' : firstPrice.slice(0, firstPrice.length - 1));
       }
-    } else 
-    if (calculation !== null && !secondPrice) {
-      setCalculation(null);
-    } else {
-      setSecondPrice(secondPrice.length <= 1 ? '' : secondPrice.slice(0, secondPrice.length - 1));
-    }
+    } else
+      if (calculation !== null && !secondPrice) {
+        setCalculation(null);
+      } else {
+        setSecondPrice(secondPrice.length <= 1 ? '' : secondPrice.slice(0, secondPrice.length - 1));
+      }
   }
 
   function handlerConfirm() {
     const price = calculationPrice();
-    onConfirm && onConfirm(price);
+    onConfirm && onConfirm({
+      date: formatDate(date),
+      remark,
+      price
+    });
   }
 
   return (
-    <div className="calculator">
+    <div className="calculator" style={style || void 0}>
       <div className="remark-row clearfix">
-        <div className="remark-col" >
-          <span className="remark-label">备注：</span>
-          <input className="remark-inp" />
-        </div>
-        <div className="calculator-price" >{firstPrice} {calculation || null} {calculation && secondPrice ? secondPrice : null}</div>
+        <List>
+          <InputItem
+            clear
+            value={remark}
+            onChange={val => {
+              setRemark(val);
+            }}
+            placeholder="请输入备注"
+          >备注</InputItem>
+          <DatePicker
+            mode="date"
+            title="Select Date"
+            extra="Optional"
+            value={date}
+            onChange={(val: Date) => {
+              setDate(val);
+            }}
+          >
+            <List.Item arrow="horizontal">Date</List.Item>
+          </DatePicker>
+          <InputItem
+            clear
+            editable={false}
+            value={`${firstPrice} ${calculation || ''} ${calculation && secondPrice ? secondPrice : ''}`}
+            placeholder="请输入备注"
+          >当前价格</InputItem>
+        </List>
       </div>
 
       <div className="keys-area">
