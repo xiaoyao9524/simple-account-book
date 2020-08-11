@@ -15,12 +15,10 @@ export const getSetUserInfoAction = (userInfo:UserInfoProps):SetUserInfoAction =
 });
 
 export const getUserInfoRequest = () => {
-  console.log(111)
   return async (dispatch: Dispatch) => {
     try {
       const res = await getUserInfo();
 
-      console.log(res);
       dispatch(getSetUserInfoAction(res));
     } catch (err) {
 

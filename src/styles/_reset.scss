@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  background-color: #fff;
+}
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+input,
+textarea {
+  border: none;
+  outline: none;
+  resize: none; /*看不到下面的三角符号，不允许改变尺寸*/
+  -webkit-appearance: none;
+}
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: block;
+  visibility: hidden;
+  line-height: 0;
+  clear: both;
+}
+
+.App {
+  min-width: 320px;
+  max-width: 400px;
+  padding: 0 0 58px 0;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  &.is-ios {
+    padding-bottom: 88px;
+  }
+}
+
+.am-picker-popup-wrap {
+  .am-picker-popup {
+    .am-picker-popup-content {
+      margin: 0 auto;
+      max-width: 400px;
+    }
+  }
+}

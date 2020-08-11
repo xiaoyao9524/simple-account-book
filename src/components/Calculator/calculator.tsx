@@ -29,7 +29,6 @@ function formatDate (dateObj: Date, delimiter: string = '-'): string {
 }
 
 interface ICalculator {
-  // ref?: React.RefObject<React.ReactElement<ICalculator>>;
   onConfirm?: (result: ICalculatorResult) => void;
   style?: React.CSSProperties;
 }

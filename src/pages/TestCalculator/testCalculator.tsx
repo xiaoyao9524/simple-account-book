@@ -28,6 +28,7 @@ const TestCalculator: React.FC = () => {
             onConfirm={res => {
               console.log(res);
               const {date, remark, price} = res;
+              console.log(date, remark, price);
               setCalculatorShow(false);
               setPrice(price);
             }}

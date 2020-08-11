@@ -1,0 +1,36 @@
+.tab-bar {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 400px;
+  transform: translateX(-50%);
+  display: flex;
+  // margin-top: 20px;
+  padding: 5px 0 5px;
+  background: #fff;
+  &.is-ios {
+    padding-bottom: 30px;
+  }
+  .tab-item {
+    flex: 1;
+    .tab-link-wrapper {
+      display: block;
+      .icon-row {
+        text-align: center;
+        vertical-align: middle;
+        height: 30px;
+        .icon {
+          font-size: 22px;
+        }
+      }
+      .tab-title {
+        margin: 5px 0 0;
+        text-align: center;
+        font-size: 12px;
+        line-height: 18px;
+      }
+    }
+  }
+}
