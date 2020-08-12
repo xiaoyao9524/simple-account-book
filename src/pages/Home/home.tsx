@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WingBlank, WhiteSpace, Card, SwipeAction, List } from 'antd-mobile';
+import { SwipeAction, List } from 'antd-mobile';
 
 
 const list = [
