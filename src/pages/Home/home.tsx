@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import { SwipeAction, List } from 'antd-mobile';
-
+import React, { useState } from 'react';
+import { IStoreState } from '../../store/reducers';
+import { useSelector } from 'react-redux';
+import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
+import moment, { Moment } from 'moment';
 
 const list = [
   {
@@ -41,86 +43,94 @@ const list = [
   },
 ]
 
-class Home extends Component {
-  render() {
-    return (
-      <div className="home">
-        <header className="head-container">
-          <ul className="header-list">
-            <li className="header-item date-item">
-              <p className="title">2020年</p>
-              <p className="value">8月 <span className="icon iconfont icon-down"></span></p>
-            </li>
-            <li className="header-item">
-              <p className="title">收入</p>
-              <p className="value">12345.67</p>
-            </li>
-            <li className="header-item">
-              <p className="title">支出</p>
-              <p className="value">12345.67</p>
-            </li>
-          </ul>
-        </header>
-        {/* <WingBlank size="lg">
-          <WhiteSpace size="lg" />
-          <Card>
-            <Card.Header
-              title="简单记账"
-              extra={<span>简单好用的记账工具</span>}
-            />
-            <Card.Body>
-              <div>2020-08-20</div>
-            </Card.Body>
-            <Card.Footer
-              content={<div>收入：1234567.89</div>}
-              extra={<div>支出：1234567.89</div>}
-            />
-          </Card>
-          <WhiteSpace size="lg" />
-        </WingBlank> */}
+const Home = () => {
+  const isIOS = useSelector<IStoreState>(state => state.system.isIOS);
+  const isAndroid = useSelector<IStoreState>(state => state.system.isAndroid);
+  const [date, setDate] = useState<Moment>(moment());
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [year, month] = date.format('YYYY-MM').split('-');
 
-        {
-          list.map(bookItem => (
-            <List
-              key={bookItem.id}
-              renderHeader={() => bookItem.date}
-              className="my-list"
-            >
-              {
-                bookItem.list.map(item => (
-                  <SwipeAction
-                    key={item.id}
-                    style={{ backgroundColor: 'gray' }}
-                    autoClose
-                    right={[
-                      {
-                        text: '编辑',
-                        onPress: () => console.log('cancel'),
-                        style: { backgroundColor: '#1890ff', color: 'white' },
-                      },
-                      {
-                        text: '删除',
-                        onPress: () => console.log('delete'),
-                        style: { backgroundColor: '#F4333C', color: 'white' },
-                      },
-                    ]}
+  const mobileNoticBar = (
+    <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
+      请使用移动模式/设备打开此页以获得更好的体验。
+    </NoticeBar>);
+  return (
+    <div className="home">
+      {(isIOS || isAndroid) ? null : mobileNoticBar}
+
+      <header className="head-container">
+        <ul className="header-list">
+          <li
+            className="header-item date-item"
+            onClick={() => { setDatePickerVisible(true) }}
+          >
+            <p className="title">{year}年</p>
+            <p className="value">{month}月<span className="icon iconfont icon-down"></span></p>
+          </li>
+          <li className="header-item">
+            <p className="title">收入</p>
+            <p className="value">12345.67</p>
+          </li>
+          <li className="header-item">
+            <p className="title">支出</p>
+            <p className="value">12345.67</p>
+          </li>
+        </ul>
+      </header>
+
+      {
+        list.map(bookItem => (
+          <List
+            key={bookItem.id}
+            renderHeader={() => bookItem.date}
+            className="my-list"
+          >
+            {
+              bookItem.list.map(item => (
+                <SwipeAction
+                  key={item.id}
+                  style={{ backgroundColor: 'gray' }}
+                  autoClose
+                  right={[
+                    {
+                      text: '编辑',
+                      onPress: () => console.log('cancel'),
+                      style: { backgroundColor: '#1890ff', color: 'white' },
+                    },
+                    {
+                      text: '删除',
+                      onPress: () => console.log('delete'),
+                      style: { backgroundColor: '#F4333C', color: 'white' },
+                    },
+                  ]}
+                >
+                  <List.Item
+                    extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
+                    onClick={e => console.log(e)}
                   >
-                    <List.Item
-                      extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
-                      onClick={e => console.log(e)}
-                    >
-                      {item.category}
-                    </List.Item>
-                  </SwipeAction>
-                ))
-              }
-            </List>
-          ))
-        }
+                    {item.category}
+                  </List.Item>
+                </SwipeAction>
+              ))
+            }
+          </List>
+        ))
+      }
 
-      </div>
-    )
-  }
+      <DatePicker
+        mode="month"
+        visible={datePickerVisible}
+        value={date.toDate()}
+        onOk={date => {
+          setDate(moment(date));
+          setDatePickerVisible(false);
+        }}
+        onDismiss={() => {
+          setDatePickerVisible(false);
+        }}
+      />
+    </div>
+  )
 }
 
 export default Home;

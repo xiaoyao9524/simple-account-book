@@ -7,7 +7,6 @@
   max-width: 400px;
   transform: translateX(-50%);
   display: flex;
-  // margin-top: 20px;
   padding: 5px 0 5px;
   background: #fff;
   &.is-ios {
@@ -30,6 +29,17 @@
         text-align: center;
         font-size: 12px;
         line-height: 18px;
+      }
+
+      &.active {
+        .icon-row {
+          .icon {
+            color: $base_theme_color;
+          }
+        }
+        .tab-title {
+          color: $base_theme_color;
+        }
       }
     }
   }

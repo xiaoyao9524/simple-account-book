@@ -1,15 +1,13 @@
 .home {
+  padding-top: 10px;
   .head-container {
-    // display: flex;
     padding-top: 20px;
     .header-list {
       display: flex;
-      // padding-left: 10px;
       .header-item {
         flex: 1;
-        // margin-right: 10px;
         &.date-item {
-          flex: 0 0 auto; 
+          flex: 0 0 auto;
           margin-right: 30px;
           padding: 0 10px;
           

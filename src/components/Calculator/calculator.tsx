@@ -3,6 +3,7 @@ import './index.scss';
 
 // eslint-disable-next-line
 import { Button, List, DatePicker, InputItem } from 'antd-mobile';
+import {formatDate} from '../../utils/date';
 
 type calculationType = null | '+' | '-';
 
@@ -15,17 +16,6 @@ function checkNumberIsInt(num: number | string): boolean {
     return false;
   }
   return `${num}`.indexOf('.') < 0;
-}
-
-// 格式化日期
-function formatDate (dateObj: Date, delimiter: string = '-'): string {
-  const year = dateObj.getFullYear();
-  const monthNum = dateObj.getMonth() + 1;
-  const month = monthNum < 10 ? `0${monthNum}` : `${monthNum}`;
-  const dateNum = dateObj.getDate();
-  const date = dateNum < 10 ? `0${dateNum}` : `${dateNum}`;
-
-  return `${year}${delimiter}${month}${delimiter}${date}`
 }
 
 interface ICalculator {
