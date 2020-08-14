@@ -94,7 +94,7 @@ const Home = () => {
                   right={[
                     {
                       text: '编辑',
-                      onPress: () => console.log('cancel'),
+                      onPress: () => console.log('edit'),
                       style: { backgroundColor: '#1890ff', color: 'white' },
                     },
                     {

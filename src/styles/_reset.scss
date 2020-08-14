@@ -50,3 +50,7 @@ textarea {
     }
   }
 }
+
+* {
+  touch-action: pan-y;
+}
