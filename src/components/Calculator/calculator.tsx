@@ -3,7 +3,7 @@ import './index.scss';
 
 // eslint-disable-next-line
 import { Button, List, DatePicker, InputItem } from 'antd-mobile';
-import {formatDate} from '../../utils/date';
+import moment, {Moment} from 'moment';
 
 type calculationType = null | '+' | '-';
 
@@ -24,18 +24,19 @@ interface ICalculator {
 }
 
 interface ICalculatorResult {
-  date: string;
+  date: Moment;
   remark: string;
   price: string;
 }
 
 const Calculator: React.FC<ICalculator> = props => {
   const { onConfirm, style } = props;
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Moment>(moment());
   const [remark, setRemark] = useState('');
   const [firstPrice, setFirstPrice] = useState<string>('0');
   const [secondPrice, setSecondPrice] = useState<string>('');
   const [calculation, setCalculation] = useState<calculationType>(null);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   function handlerInputNumber(num: number) {
     const isFirst = calculation === null;
@@ -132,11 +133,18 @@ const Calculator: React.FC<ICalculator> = props => {
   function handlerConfirm() {
     const price = calculationPrice();
     onConfirm && onConfirm({
-      date: formatDate(date),
+      date,
       remark,
       price
     });
   }
+
+  // 判断选择的日期是否为今天
+  // console.log('选中的日期：', date?.format('YYYY/MM/DD'));
+  // console.log('今天的日期：', moment().format('YYYY/MM/DD'));
+  const dateIsToday = date?.format('YYYY/MM/DD') === moment().format('YYYY/MM/DD');
+  // console.log('选中日期是否为今天：', dateIsToday);
+  
 
   return (
     <div className="calculator" style={style || void 0}>
@@ -150,17 +158,7 @@ const Calculator: React.FC<ICalculator> = props => {
             }}
             placeholder="请输入备注"
           >备注</InputItem>
-          <DatePicker
-            mode="date"
-            title="Select Date"
-            extra="Optional"
-            value={date}
-            onChange={(val: Date) => {
-              setDate(val);
-            }}
-          >
-            <List.Item arrow="horizontal">Date</List.Item>
-          </DatePicker>
+          
           <InputItem
             clear
             editable={false}
@@ -190,8 +188,18 @@ const Calculator: React.FC<ICalculator> = props => {
               handlerInputNumber(9);
             }}
           >9</Button>
-          <Button className="code-item">
-            <span className="icon iconfont icon-rili"></span>&nbsp;今天
+          <Button 
+            className="code-item"
+            onClick={() => {
+              setDatePickerVisible(true);
+            }}
+          >
+            {
+              dateIsToday ? (
+                <><span className="icon iconfont icon-rili"></span>&nbsp;今天</>
+              ) : date.format('YYYY/MM/DD')
+            }
+            
           </Button>
         </div>
         <div className="keys-row">
@@ -284,6 +292,18 @@ const Calculator: React.FC<ICalculator> = props => {
 
         </div>
       </div>
+      <DatePicker
+        mode="date"
+        visible={datePickerVisible}
+        value={date.toDate()}
+        onOk={date => {
+          setDate(moment(date));
+          setDatePickerVisible(false);
+        }}
+        onDismiss={() => {
+          setDatePickerVisible(false);
+        }}
+      />
     </div>
   )
 }

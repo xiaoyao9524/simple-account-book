@@ -1,6 +1,13 @@
-import React from 'react';
-import { List, InputItem, Button } from 'antd-mobile';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import { 
+  List,
+  InputItem, 
+  Button,
+} from 'antd-mobile';
+import NavBar from '../../components/NavBar';
 import useForm from 'rc-form-hooks';
+import {setTabbarShowAction} from '../../store/reducers/modules/system/actionCreators';
 
 const Item = List.Item;
 
@@ -10,13 +17,22 @@ interface ILoginProps {
 }
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setTabbarShowAction(false));
+    return () => {
+      dispatch(setTabbarShowAction(true));
+    }
+  })
   const {
     getFieldDecorator,
     getFieldError,
     validateFields,
     errors,
+    // eslint-disable-next-line
     values
   } = useForm<ILoginProps>();
+
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,6 +59,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-wrapper">
+       <NavBar>登录</NavBar>
       <form className="login-form" onSubmit={onSubmit}>
         <List
           renderHeader="登录"

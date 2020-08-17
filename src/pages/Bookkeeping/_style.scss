@@ -1,0 +1,62 @@
+.bookkeeping {
+  padding: 82px 0 0;
+
+  &.calculation-show {
+    padding-bottom: 300px;
+  }
+
+  .tabs {
+    position: fixed;
+    top: 45px;
+    z-index: 1;
+    padding: 0 15px 10px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+  }
+
+  .icon-box {
+    margin-top: 15px;
+    padding: 0 15px;
+    .icon-list {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-start;
+      .icon-item {
+        box-sizing: border-box;
+        padding: 8px;
+        width: 86px;
+        .icon-container {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: #fff;
+          .icon {
+            display: block;
+            font-size: 28px;
+            text-align: center;
+            line-height: 70px;
+          }
+        }
+        .title {
+          text-align: center;
+          font-size: 14px;
+          line-height: 18px;
+        }
+
+        &.active {
+          .icon-container {
+            background-color: $base-theme-color;
+            .icon {
+              color: #fff;
+            }
+          }
+          .title {
+            color: $base-theme-color;
+          }
+        }
+      }
+    }
+  }
+}

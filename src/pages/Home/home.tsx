@@ -43,6 +43,12 @@ const list = [
   },
 ]
 
+const mobileNoticBar = (
+  <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
+    请使用移动模式/设备打开此页以获得更好的体验。
+  </NoticeBar>
+);
+
 const Home = () => {
   const isIOS = useSelector<IStoreState>(state => state.system.isIOS);
   const isAndroid = useSelector<IStoreState>(state => state.system.isAndroid);
@@ -50,10 +56,7 @@ const Home = () => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
 
-  const mobileNoticBar = (
-    <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
-      请使用移动模式/设备打开此页以获得更好的体验。
-    </NoticeBar>);
+
   return (
     <div className="home">
       {(isIOS || isAndroid) ? null : mobileNoticBar}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+
 import { IStoreState } from '../../store/reducers/index'
 import {
   NavLink
@@ -20,7 +21,7 @@ const tabBarList = [
     to: '/bookkeeping'
   },
   {
-    icon: 'wode2',
+    icon: 'wode',
     title: '我的',
     to: '/my'
   }
@@ -41,12 +42,18 @@ const tabs = tabBarList.map(tab => (
 ));
 
 const TabBar = () => {
+  const tabBarShow = useSelector<IStoreState>(state => state.system.tabBarShow);
   const isIOS = useSelector<IStoreState>(state => state.system.isIOS);
-  
+
+
   return (
-    <ul className={`tab-bar ${isIOS ? 'is-ios' : ''}`}>
-      {tabs}
-    </ul>
+    <>
+      {tabBarShow ? (
+        <ul className={`tab-bar ${isIOS ? 'is-ios' : ''}`} >
+          {tabs}
+        </ul >
+      ) : null}
+    </>
   )
 }
 

@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4239291",
+      "name": "理财",
+      "font_class": "licai",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "7791015",
+      "name": "礼金",
+      "font_class": "lijin",
+      "unicode": "e7ee",
+      "unicode_decimal": 59374
+    },
+    {
+      "icon_id": "11882161",
+      "name": "工资",
+      "font_class": "gongzi",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "13283061",
+      "name": "兼职",
+      "font_class": "jianzhi",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "3208998",
+      "name": "京东",
+      "font_class": "jingdong",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "8242238",
+      "name": "其它",
+      "font_class": "qita",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
       "icon_id": "970718",
       "name": "plus",
       "font_class": "plus",
@@ -13,25 +55,11 @@
       "unicode_decimal": 58896
     },
     {
-      "icon_id": "11231648",
-      "name": "plus",
-      "font_class": "plus1",
-      "unicode": "e786",
-      "unicode_decimal": 59270
-    },
-    {
       "icon_id": "151695",
       "name": "down",
       "font_class": "down",
       "unicode": "e662",
       "unicode_decimal": 58978
-    },
-    {
-      "icon_id": "1393637",
-      "name": "down",
-      "font_class": "down1",
-      "unicode": "e6e9",
-      "unicode_decimal": 59113
     },
     {
       "icon_id": "100585",
@@ -43,23 +71,9 @@
     {
       "icon_id": "887965",
       "name": "我的 (2)",
-      "font_class": "wode2",
+      "font_class": "wode",
       "unicode": "e631",
       "unicode_decimal": 58929
-    },
-    {
-      "icon_id": "3315400",
-      "name": "我的",
-      "font_class": "wode",
-      "unicode": "e625",
-      "unicode_decimal": 58917
-    },
-    {
-      "icon_id": "6997483",
-      "name": "我 的",
-      "font_class": "wodedangxuan",
-      "unicode": "e607",
-      "unicode_decimal": 58887
     },
     {
       "icon_id": "8471207",
@@ -97,13 +111,6 @@
       "unicode_decimal": 58890
     },
     {
-      "icon_id": "674979",
-      "name": "日历",
-      "font_class": "calendar",
-      "unicode": "e679",
-      "unicode_decimal": 59001
-    },
-    {
       "icon_id": "10715428",
       "name": "日历",
       "font_class": "rili",
@@ -120,7 +127,7 @@
     {
       "icon_id": "82381",
       "name": "游戏",
-      "font_class": "94",
+      "font_class": "game",
       "unicode": "e67e",
       "unicode_decimal": 59006
     },
@@ -146,13 +153,6 @@
       "unicode_decimal": 58928
     },
     {
-      "icon_id": "1160975",
-      "name": "steam",
-      "font_class": "steam",
-      "unicode": "e8df",
-      "unicode_decimal": 59615
-    },
-    {
       "icon_id": "1315580",
       "name": "超市",
       "font_class": "chaoshi",
@@ -176,7 +176,7 @@
     {
       "icon_id": "2767701",
       "name": "餐饮",
-      "font_class": "icon-",
+      "font_class": "canyin",
       "unicode": "e645",
       "unicode_decimal": 58949
     },
@@ -195,20 +195,6 @@
       "unicode_decimal": 58899
     },
     {
-      "icon_id": "7302534",
-      "name": "支付宝 账户",
-      "font_class": "zhifubaozhanghu",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
-    },
-    {
-      "icon_id": "7790995",
-      "name": "工资",
-      "font_class": "gongzi",
-      "unicode": "e7e9",
-      "unicode_decimal": 59369
-    },
-    {
       "icon_id": "10262050",
       "name": "设 置",
       "font_class": "shezhi",
@@ -216,25 +202,11 @@
       "unicode_decimal": 58897
     },
     {
-      "icon_id": "11749436",
-      "name": "医疗",
-      "font_class": "yiliao",
-      "unicode": "e682",
-      "unicode_decimal": 59010
-    },
-    {
       "icon_id": "12796369",
       "name": "医疗",
-      "font_class": "yiliao1",
+      "font_class": "yiliao",
       "unicode": "e636",
       "unicode_decimal": 58934
-    },
-    {
-      "icon_id": "15378665",
-      "name": "origin",
-      "font_class": "origin",
-      "unicode": "ec49",
-      "unicode_decimal": 60489
     }
   ]
 }
