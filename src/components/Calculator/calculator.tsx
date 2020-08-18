@@ -140,12 +140,8 @@ const Calculator: React.FC<ICalculator> = props => {
   }
 
   // 判断选择的日期是否为今天
-  // console.log('选中的日期：', date?.format('YYYY/MM/DD'));
-  // console.log('今天的日期：', moment().format('YYYY/MM/DD'));
   const dateIsToday = date?.format('YYYY/MM/DD') === moment().format('YYYY/MM/DD');
-  // console.log('选中日期是否为今天：', dateIsToday);
   
-
   return (
     <div className="calculator" style={style || void 0}>
       <div className="remark-row clearfix">
