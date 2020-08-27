@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import './index.scss';
 
-// eslint-disable-next-line
 import { Button, List, DatePicker, InputItem } from 'antd-mobile';
-import moment, {Moment} from 'moment';
+
+import moment, { Moment } from 'moment';
 
 type calculationType = null | '+' | '-';
 
@@ -18,18 +18,28 @@ function checkNumberIsInt(num: number | string): boolean {
   return `${num}`.indexOf('.') < 0;
 }
 
-interface ICalculator {
-  onConfirm?: (result: ICalculatorResult) => void;
-  style?: React.CSSProperties;
-}
-
-interface ICalculatorResult {
+interface ICalculatorOnConfirmResult {
   date: Moment;
   remark: string;
   price: string;
 }
 
-const Calculator: React.FC<ICalculator> = props => {
+interface ICalculator {
+  onConfirm?: (result: ICalculatorOnConfirmResult) => void;
+  style?: React.CSSProperties;
+}
+
+export interface CalculatorRefProps {
+  setData: (data: SetDataProps, dateFormat?: string) => void;
+}
+
+interface SetDataProps {
+  date?: string | Moment;
+  remark?: string;
+  price: number | string;
+}
+
+const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   const { onConfirm, style } = props;
   const [date, setDate] = useState<Moment>(moment());
   const [remark, setRemark] = useState('');
@@ -37,6 +47,26 @@ const Calculator: React.FC<ICalculator> = props => {
   const [secondPrice, setSecondPrice] = useState<string>('');
   const [calculation, setCalculation] = useState<calculationType>(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    setData: (data, dateFormat: string = 'YYYY-MM-DD') => {
+      let { date, price, remark } = data;
+
+      if (date !== undefined) {
+        setDate((typeof date === 'string' ? moment(date, dateFormat) : date))
+      }
+      
+      if (remark !== undefined) {
+        setRemark(remark);
+      }
+
+      if (price !== undefined) {
+        setFirstPrice((typeof price === 'string' ? price : `${price}`));
+        setSecondPrice('');
+        setCalculation(null);
+      }
+    }
+  }))
 
   function handlerInputNumber(num: number) {
     const isFirst = calculation === null;
@@ -141,7 +171,7 @@ const Calculator: React.FC<ICalculator> = props => {
 
   // 判断选择的日期是否为今天
   const dateIsToday = date?.format('YYYY/MM/DD') === moment().format('YYYY/MM/DD');
-  
+
   return (
     <div className="calculator" style={style || void 0}>
       <div className="remark-row clearfix">
@@ -154,7 +184,7 @@ const Calculator: React.FC<ICalculator> = props => {
             }}
             placeholder="请输入备注"
           >备注</InputItem>
-          
+
           <InputItem
             clear
             editable={false}
@@ -184,7 +214,7 @@ const Calculator: React.FC<ICalculator> = props => {
               handlerInputNumber(9);
             }}
           >9</Button>
-          <Button 
+          <Button
             className="code-item"
             onClick={() => {
               setDatePickerVisible(true);
@@ -195,7 +225,7 @@ const Calculator: React.FC<ICalculator> = props => {
                 <><span className="icon iconfont icon-rili"></span>&nbsp;今天</>
               ) : date.format('YYYY/MM/DD')
             }
-            
+
           </Button>
         </div>
         <div className="keys-row">
@@ -302,6 +332,6 @@ const Calculator: React.FC<ICalculator> = props => {
       />
     </div>
   )
-}
+});
 
 export default Calculator;

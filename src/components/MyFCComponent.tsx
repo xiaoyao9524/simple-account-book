@@ -10,7 +10,6 @@ export interface RefProps {
 }
 
 const MyFCComponent = forwardRef<RefProps, IFCProps>((props, ref) => {
-  console.log(ref);
   const {firstName,lastName} = props;
 
   useImperativeHandle(ref, () => ({

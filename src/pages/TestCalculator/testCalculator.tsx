@@ -3,7 +3,7 @@ import {
   Button,
   Modal
 } from 'antd-mobile';
-import Calculator from '../../components/Calculator';
+import Calculator from '../../components/Calculator/calculator';
 
 const TestCalculator: React.FC = () => {
   const [calculatorShow, setCalculatorShow] = useState(false);

@@ -7,7 +7,7 @@ import {
 import {
   actionCreators as SystemActionCreators
 } from '../../store/reducers/modules/system';
-import Calculator from '../../components/Calculator';
+import Calculator from '../../components/Calculator/calculator';
 type tabs = '收入' | '支出';
 const tabList = ['收入', '支出'];
 
