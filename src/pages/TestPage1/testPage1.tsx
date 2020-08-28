@@ -3,7 +3,7 @@ import Calculator, {CalculatorRefProps} from '../../components/Calculator/calcul
 
 import MyFCComponent, {RefProps} from '../../components/MyFCComponent';
 import MyClassComponent from '../../components/MyClassComponent';
-import {Button} from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import moment from 'moment';
 
 const TestPage1: React.FC = () => {

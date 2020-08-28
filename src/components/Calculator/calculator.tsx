@@ -49,7 +49,7 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    setData: (data, dateFormat: string = 'YYYY-MM-DD') => {
+    setData: (data, dateFormat: string = moment.HTML5_FMT.DATE) => {
       let { date, price, remark } = data;
 
       if (date !== undefined) {
