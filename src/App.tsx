@@ -1,6 +1,6 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
-import {IStoreState} from './store/reducers'
+import {useSelector, useDispatch} from 'react-redux';
+import {IStoreState} from './store/reducers';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,6 +14,9 @@ import Home from './pages/Home';
 import Bookkeeping from './pages/Bookkeeping';
 import My from './pages/My';
 
+// store
+import {setSystemInfoAction} from './store/reducers/modules/system/actionCreators';
+
 // test
 import TestCalculator from './pages/TestCalculator';
 import Counter from './pages/Counter';
@@ -25,9 +28,18 @@ import TestPage3 from './pages/TestPage3';
 import TabBar from './components/TabBar';
 
 const App: React.FC = () => {
-  const isIOS = useSelector<IStoreState>(state => state.system.isIOS);
+  const dispatch = useDispatch();
+
+  dispatch(setSystemInfoAction());
+
+  const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
+
+  window.addEventListener('resize', () => {
+    dispatch(setSystemInfoAction());
+  })
+
   return (
-    <div className={`App ${isIOS ? 'is-ios' : ''}`}>
+    <div className={`App ${isMobile ? 'is-ios' : ''}`}>
       <Router>
         <section className="main-content">
           <Switch>
