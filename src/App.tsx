@@ -9,7 +9,8 @@ import {
 
 
 // pages
-import Login from './pages/Login';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Bookkeeping from './pages/Bookkeeping';
 import My from './pages/My';
@@ -25,7 +26,7 @@ import TestPage1 from './pages/TestPage1';
 import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
 // components
-import TabBar from './components/TabBar';
+// import TabBar from './components/TabBar';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,8 +47,8 @@ const App: React.FC = () => {
             <Route from="/" exact component={Home} />
             <Route path="/bookkeeping" component={Bookkeeping} />
             <Route path="/my" component={My} />
-            <Route path="/login" component={Login} />
-
+            <Route path="/signin" component={Signin} />
+            <Route path="/signup" component={Signup} />
             <Route path="/Counter" component={Counter} />
             <Route path="/TodoList" component={TodoList} />
             <Route path="/TestCalculator" component={TestCalculator} />
@@ -57,7 +58,7 @@ const App: React.FC = () => {
           </Switch>
         </section>
 
-        <TabBar />
+        {/* <TabBar /> */}
       </Router>
     </div>
   );

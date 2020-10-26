@@ -3,6 +3,7 @@ import { IStoreState } from '../../store/reducers';
 import { useSelector } from 'react-redux';
 import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import moment, { Moment } from 'moment';
+import TabBar from '../../components/TabBar';
 
 const list = [
   {
@@ -132,6 +133,8 @@ const Home = () => {
           setDatePickerVisible(false);
         }}
       />
+
+      <TabBar />
     </div>
   )
 }

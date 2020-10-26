@@ -1,13 +1,16 @@
-import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
-import { 
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {
   List,
-  InputItem, 
+  InputItem,
   Button,
 } from 'antd-mobile';
+import {
+  NavLink
+} from 'react-router-dom';
 import NavBar from '../../components/NavBar';
 import useForm from 'rc-form-hooks';
-import {setTabbarShowAction} from '../../store/reducers/modules/system/actionCreators';
+// import { setTabbarShowAction } from '../../store/reducers/modules/system/actionCreators';
 
 const Item = List.Item;
 
@@ -17,13 +20,13 @@ interface ILoginProps {
 }
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setTabbarShowAction(false));
-    return () => {
-      dispatch(setTabbarShowAction(true));
-    }
-  })
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(setTabbarShowAction(false));
+  //   return () => {
+  //     dispatch(setTabbarShowAction(true));
+  //   }
+  // })
   const {
     getFieldDecorator,
     getFieldError,
@@ -59,7 +62,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-wrapper">
-       <NavBar>登录</NavBar>
+      <NavBar>登录</NavBar>
       <form className="login-form" onSubmit={onSubmit}>
         <List
           renderHeader="登录"
@@ -101,8 +104,15 @@ const Login: React.FC = () => {
           )}
           <p className={'error'}>{errors.password?.map(i => i.message).join('、')}</p>
         </List>
+        
         <Item>
-          <Button type="primary" onClick={onSubmit}>Submit</Button>
+          <Button type="primary" onClick={onSubmit}>登录</Button>
+        </Item>
+
+        <Item>
+          <NavLink to="/signup" style={{float: 'right'}}>
+          <Button type="primary" size="small" inline>注册</Button>
+          </NavLink>
         </Item>
       </form>
     </div>
