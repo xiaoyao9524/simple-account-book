@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
 
-import user, {UserState} from './modules/user';
+import {
+  reducer as userState,
+  types as userTypes
+} from './modules/user';
 
 import {
   reducer as systemState,
@@ -22,14 +25,14 @@ export interface IStoreState {
   count: counterTypes.ICounterState;
   todoList: todoListTypes.ITodoListState;
   system: systemTypes.ISystemState,
-  user: UserState;
+  user: userTypes.IUserState;
 }
 
 const reducer = combineReducers<IStoreState>({
   count: counterState,
   todoList: todoListState,
   system: systemState,
-  user
+  user: userState
 });
 
 export default reducer;

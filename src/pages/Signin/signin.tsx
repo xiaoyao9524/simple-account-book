@@ -9,6 +9,7 @@ import {
 
 import {
   NavLink,
+  useHistory,
   useLocation
 } from 'react-router-dom';
 
@@ -23,19 +24,33 @@ import {
 
 import NavBar from '../../components/NavBar';
 import useForm from 'rc-form-hooks';
+import { useDispatch } from 'react-redux';
+
+import {
+  actionCreator as userActionCreator
+} from '../../store/reducers/modules/user';
+
+const {getSetUserInfoAction} = userActionCreator;
 
 const Item = List.Item;
 
+interface LocationProps {
+  redirect?: string;
+}
+
 const Login: React.FC = () => {
+  
+  const dispatch = useDispatch();
   const {
     getFieldDecorator,
     getFieldError,
     validateFields,
     errors
   } = useForm<SigninRequestProps>();
-
-  const location = useLocation();
-  console.log('location: ', location);
+  const history = useHistory();
+  const location = useLocation<LocationProps>();
+  const redirect = location.state.redirect;
+  console.log('redirect: ', redirect);
   
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,6 +89,11 @@ const Login: React.FC = () => {
       const {data: {status, message, userInfo}} = res;
 
       if (status === 200) {
+        const action = getSetUserInfoAction(userInfo);
+
+        dispatch(action);
+
+
 
       } else {
         Toast.fail(message);

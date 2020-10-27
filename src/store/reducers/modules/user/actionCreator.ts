@@ -1,27 +1,26 @@
-import { Dispatch } from 'redux';
+// import { Dispatch } from 'redux';
 import {
   SET_USERINFO
 } from './actionTypes';
-import {getUserInfo} from '../../../../api/userInfo'
 
-import {
-  UserInfoProps,
-  SetUserInfoAction
-} from './types';
+import {UserInfo} from '../../../../types/base';
 
-export const getSetUserInfoAction = (userInfo:UserInfoProps):SetUserInfoAction => ({
+import {SetUserInfoAction} from './types';
+
+export const getSetUserInfoAction = (userInfo: UserInfo): SetUserInfoAction => ({
   type: SET_USERINFO,
-  userInfo
-});
+   userInfo
+})
 
-export const getUserInfoRequest = () => {
-  return async (dispatch: Dispatch) => {
-    try {
-      const res = await getUserInfo();
+// redux-saga示例
+// export const getUserInfoRequest = () => {
+//   return async (dispatch: Dispatch) => {
+//     try {
+//       const res = await getUserInfo();
 
-      dispatch(getSetUserInfoAction(res));
-    } catch (err) {
+//       dispatch(getSetUserInfoAction(res));
+//     } catch (err) {
 
-    }
-  }
-}
+//     }
+//   }
+// }

@@ -1,10 +1,12 @@
-export interface UserInfoProps {
-  id: number;
-  name: string;
-}
+import {UserInfo} from '../../../../types/base';
+import {SET_USERINFO} from './actionTypes';
 
 // actions
 export interface SetUserInfoAction {
-  type: string;
-  userInfo: UserInfoProps;
+  type: SET_USERINFO;
+  userInfo: UserInfo;
+}
+
+export interface IUserState {
+  userInfo: UserInfo;
 }
