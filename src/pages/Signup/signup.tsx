@@ -15,15 +15,13 @@ import NavBar from '../../components/NavBar';
 
 import useForm from 'rc-form-hooks';
 
+import {
+  SignupRequestProps
+} from '../../types/login';
+
 import { signup } from '../../api/login';
 
 const { Item } = List;
-
-interface ISignupProps {
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
 
 const Signup: React.FC = () => {
   const {
@@ -32,7 +30,7 @@ const Signup: React.FC = () => {
     validateFields,
     errors,
     values
-  } = useForm<ISignupProps>();
+  } = useForm<SignupRequestProps>();
 
   const history = useHistory();
 
@@ -48,7 +46,7 @@ const Signup: React.FC = () => {
       })
   }
 
-  async function handlerSignup(userSignupForm: ISignupProps) {
+  async function handlerSignup(userSignupForm: SignupRequestProps) {
     try {
       const res = await signup(userSignupForm);
 

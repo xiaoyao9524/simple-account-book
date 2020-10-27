@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, AxiosPromise, AxiosResponse} from 'axios'
+import axios, {AxiosRequestConfig, AxiosPromise} from 'axios'
 
 const service = axios.create({
   timeout: 60 * 1000 // 请求超时时间
@@ -19,7 +19,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   response => {
-    console.log('响应拦截：', response);
     return response;
   },
   error => {

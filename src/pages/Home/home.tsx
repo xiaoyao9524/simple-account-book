@@ -5,6 +5,8 @@ import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import moment, { Moment } from 'moment';
 import TabBar from '../../components/TabBar';
 
+import { NavLink, useHistory } from 'react-router-dom';
+
 const list = [
   {
     id: 1,
@@ -56,12 +58,20 @@ const Home = () => {
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
-
+  const history = useHistory();
 
   return (
     <div className="home">
       {(isIOS || isAndroid) ? null : mobileNoticBar}
-
+      <button onClick={() => {
+        history.push({
+          pathname: '/signin',
+          state: {
+            redirect: '/my'
+          }
+        })
+      }}>测试</button>
+      <NavLink to={{pathname: '/signin', state: {redirect: '/my'}}}>测试2</NavLink>
       <header className="head-container">
         <ul className="header-list">
           <li
