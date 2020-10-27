@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, AxiosPromise} from 'axios'
+import axios, {AxiosRequestConfig, AxiosPromise, AxiosResponse} from 'axios'
 
 const service = axios.create({
   timeout: 60 * 1000 // 请求超时时间

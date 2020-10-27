@@ -1,7 +1,12 @@
-import axios from 'axios';
+import axios from '../utils/axios';
+
+interface ISignupResultProps {
+    status: number;
+    message: string;
+}
 
 export const signup = (data: any) => (
-    axios({
+    axios<ISignupResultProps>({
         method: 'post',
         url: '/api/admin/signup',
         data

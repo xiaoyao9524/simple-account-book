@@ -4,7 +4,12 @@ import {
   List,
   InputItem,
   Button,
+  Toast
 } from 'antd-mobile';
+
+import {
+  useHistory
+} from 'react-router-dom';
 
 import NavBar from '../../components/NavBar';
 
@@ -29,6 +34,8 @@ const Signup: React.FC = () => {
     values
   } = useForm<ISignupProps>();
 
+  const history = useHistory();
+
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     validateFields()
@@ -41,11 +48,20 @@ const Signup: React.FC = () => {
       })
   }
 
-  async function handlerSignup(data: ISignupProps) {
+  async function handlerSignup(userSignupForm: ISignupProps) {
     try {
-      const res = await signup(data);
+      const res = await signup(userSignupForm);
 
       console.log('res: ', res);
+
+      const {data: {status, message}} = res;
+
+      if (status === 200) {
+        history.goBack();
+        Toast.fail('注册成功，请登录');
+      } else {
+        Toast.fail(message);
+      }
     } catch (err) {
       console.error(err);
 
