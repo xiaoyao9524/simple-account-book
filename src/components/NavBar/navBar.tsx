@@ -9,23 +9,26 @@ import {
 
 interface INavBarProps {
   style?: React.CSSProperties;
+  showBack?: boolean;
   onLeftClick?: () => any;
 }
 
 const NavBar: React.FC<INavBarProps> = props => {
   const history = useHistory();
 
-  const {style, onLeftClick, children} = props;
-
+  const {style, onLeftClick, children, showBack = true} = props;
+  console.log('showBack: ', showBack);
+  
   return (
     <AntdNavBar
       mode="light"
-      icon={<Icon type="left" />}
+      icon={showBack ? <Icon type="left" /> : null}
       style={{
         maxWidth: 400,
         ...style
       }}
       onLeftClick={() => {
+        if (!showBack) {return}
         onLeftClick ? onLeftClick() : history.goBack();
       }}
     >{children}</AntdNavBar>

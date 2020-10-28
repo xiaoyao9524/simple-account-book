@@ -5,8 +5,6 @@ import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import moment, { Moment } from 'moment';
 import TabBar from '../../components/TabBar';
 
-import { NavLink, useHistory } from 'react-router-dom';
-
 const list = [
   {
     id: 1,
@@ -58,7 +56,6 @@ const Home = () => {
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
-  const history = useHistory();
 
   return (
     <div className="home">

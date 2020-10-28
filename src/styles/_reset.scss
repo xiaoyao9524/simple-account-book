@@ -21,6 +21,16 @@ textarea {
   -webkit-appearance: none;
 }
 
+img {
+  width: 100%;
+  height: 100%;
+  vertical-align: top;
+}
+
+p {
+  margin: 0;
+}
+
 .clearfix::before,
 .clearfix::after {
   content: "";

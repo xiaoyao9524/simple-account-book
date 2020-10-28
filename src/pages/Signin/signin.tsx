@@ -10,8 +10,6 @@ import {
 import {
   NavLink,
   useHistory,
-  useLocation,
-  useParams
 } from 'react-router-dom';
 
 import {

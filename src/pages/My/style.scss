@@ -1,0 +1,41 @@
+.my {
+  .my-header {
+    .user-info {
+      .avatar-wrapper {
+        margin: 20px auto 0;
+        width: 80px;
+        height: 80px;
+        .avatar {
+          border-radius: 50%;
+        }
+      }
+
+      .user-detail {
+          .user-name {
+              margin: 0;
+              text-align: center;
+              font-size: 24px;
+              line-height: 32px;
+              font-weight: 600;
+          }
+      }
+    }
+  }
+
+  .account-info {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      .info-item {
+          .title, .number {
+              text-align: center;
+            font-size: 14px;
+            line-height: 18px;
+
+          }
+          .number {
+            margin-top: 5px;
+          }
+      }
+  }
+}
