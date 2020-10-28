@@ -63,15 +63,6 @@ const Home = () => {
   return (
     <div className="home">
       {(isIOS || isAndroid) ? null : mobileNoticBar}
-      <button onClick={() => {
-        history.push({
-          pathname: '/signin',
-          state: {
-            redirect: '/my'
-          }
-        })
-      }}>测试</button>
-      <NavLink to={{pathname: '/signin', state: {redirect: '/my'}}}>测试2</NavLink>
       <header className="head-container">
         <ul className="header-list">
           <li

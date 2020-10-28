@@ -10,7 +10,8 @@ import {
 import {
   NavLink,
   useHistory,
-  useLocation
+  useLocation,
+  useParams
 } from 'react-router-dom';
 
 import {
@@ -22,6 +23,8 @@ import {
   requestUserInfo
 } from '../../api/login';
 
+import useQuery from '../../hooks/useQuery';
+
 import NavBar from '../../components/NavBar';
 import useForm from 'rc-form-hooks';
 import { useDispatch } from 'react-redux';
@@ -30,16 +33,12 @@ import {
   actionCreator as userActionCreator
 } from '../../store/reducers/modules/user';
 
-const {getSetUserInfoAction} = userActionCreator;
+const { getSetUserInfoAction } = userActionCreator;
 
 const Item = List.Item;
 
-interface LocationProps {
-  redirect?: string;
-}
-
 const Login: React.FC = () => {
-  
+
   const dispatch = useDispatch();
   const {
     getFieldDecorator,
@@ -48,10 +47,11 @@ const Login: React.FC = () => {
     errors
   } = useForm<SigninRequestProps>();
   const history = useHistory();
-  const location = useLocation<LocationProps>();
-  const redirect = location.state.redirect;
-  console.log('redirect: ', redirect);
-  
+  console.log('history: ', history);
+
+  const query = useQuery();
+  console.log('query: ', query);
+
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     validateFields()
@@ -64,11 +64,11 @@ const Login: React.FC = () => {
       })
   }
   // 获取token
-  async function handlerSignup (signinForm: SigninRequestProps) {
+  async function handlerSignup(signinForm: SigninRequestProps) {
     try {
-      const {data: {status, message, token}} = await signin(signinForm);
-      
-      if(status === 200 && token) {
+      const { data: { status, message, token } } = await signin(signinForm);
+
+      if (status === 200 && token) {
         localStorage.setItem('token', token);
         getUserInfo();
       } else {
@@ -81,19 +81,19 @@ const Login: React.FC = () => {
   }
 
   // 获取用户信息
-  async function getUserInfo () {
+  async function getUserInfo() {
     try {
       const res = await requestUserInfo();
       console.log('获取用户信息res：', res);
-      
-      const {data: {status, message, userInfo}} = res;
+
+      const { data: { status, message, userInfo } } = res;
 
       if (status === 200) {
         const action = getSetUserInfoAction(userInfo);
 
         dispatch(action);
 
-
+        history.replace(query.redirect || '/');
 
       } else {
         Toast.fail(message);
