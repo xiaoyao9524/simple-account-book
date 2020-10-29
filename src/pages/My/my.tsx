@@ -10,9 +10,6 @@ import {
 
 const { Item } = List;
 
-const {Brief} = Item;
-
-
 const My: React.FC = () => {
   return (
     <div className="my">
@@ -39,8 +36,8 @@ const My: React.FC = () => {
       </header>
 
       <List className="my-list">
-        <Item extra="extra content" arrow="horizontal">类别设置</Item>
-        
+        <Item arrow="horizontal">类别设置</Item>
+        <Item arrow="horizontal">关于简单记账</Item>
       </List>
 
       <TabBar />

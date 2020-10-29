@@ -17,7 +17,6 @@ const NavBar: React.FC<INavBarProps> = props => {
   const history = useHistory();
 
   const {style, onLeftClick, children, showBack = true} = props;
-  console.log('showBack: ', showBack);
   
   return (
     <AntdNavBar

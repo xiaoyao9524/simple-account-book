@@ -20,22 +20,26 @@
           }
       }
     }
+
+    .account-info {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+        .info-item {
+            .title, .number {
+                text-align: center;
+              font-size: 14px;
+              line-height: 18px;
+  
+            }
+            .number {
+              margin-top: 5px;
+            }
+        }
+    }
   }
 
-  .account-info {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-around;
-      .info-item {
-          .title, .number {
-              text-align: center;
-            font-size: 14px;
-            line-height: 18px;
-
-          }
-          .number {
-            margin-top: 5px;
-          }
-      }
+  .my-list {
+      margin-top: 20px;
   }
 }
