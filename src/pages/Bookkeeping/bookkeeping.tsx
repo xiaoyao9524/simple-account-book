@@ -36,13 +36,14 @@ const expenditureIcons = [
   { title: '淘宝', icon: 'taobao' },
   { title: '京东', icon: 'jingdong' },
   { title: '数码', icon: 'shuma' },
+  { title: '游戏', icon: 'game' },
   { title: 'steam', icon: 'steam' },
   { title: 'uplay', icon: 'uplay' },
   { title: 'wegame', icon: 'wegame' },
   { title: 'gog', icon: 'gog' },
   { title: 'epic', icon: 'epic' },
   { title: 'origin', icon: 'origin' },
-  { title: '游戏', icon: 'game' },
+  
   // 日常开销
   { title: '超市', icon: 'chaoshi' },
   { title: '日用品', icon: 'riyongpin' },
@@ -87,14 +88,14 @@ const incomeIcons = [
 ];
 
 const Bookkeeping = () => {
-  const [tab, setTab] = useState<tabs>('收入');
+  const [tab, setTab] = useState<tabs>('支出');
 
   const [category, setCategory] = useState<string | null>(null);
 
   const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
   return (
     <div className={`bookkeeping ${category === null ? '' : 'calculation-show'}`}>
-      <NavBar style={{ position: 'fixed', top: 0, width: '100%' }}>记账</NavBar>
+      <NavBar style={{ position: 'fixed', top: 0, zIndex: 1, width: '100%' }}>记账</NavBar>
 
       <div className="tabs">
         <SegmentedControl

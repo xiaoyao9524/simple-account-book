@@ -1,6 +1,6 @@
 import React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {IStoreState} from './store/reducers';
+import { useSelector, useDispatch } from 'react-redux';
+import { IStoreState } from './store/reducers';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,9 +14,10 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Bookkeeping from './pages/Bookkeeping';
 import My from './pages/My';
+import CategorySetting from './pages/CategorySetting';
 
 // store
-import {setSystemInfoAction} from './store/reducers/modules/system/actionCreators';
+import { setSystemInfoAction } from './store/reducers/modules/system/actionCreators';
 
 // test
 import TestCalculator from './pages/TestCalculator';
@@ -27,6 +28,7 @@ import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
 // components
 // import TabBar from './components/TabBar';
+
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -45,10 +47,12 @@ const App: React.FC = () => {
         <section className="main-content">
           <Switch>
             <Route from="/" exact component={Home} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/signin" component={Signin} />
             <Route path="/bookkeeping" component={Bookkeeping} />
             <Route path="/my" component={My} />
-            <Route path="/signin" component={Signin} />
-            <Route path="/signup" component={Signup} />
+            <Route path="/categorySetting" component={CategorySetting} />
+
             <Route path="/Counter" component={Counter} />
             <Route path="/TodoList" component={TodoList} />
             <Route path="/TestCalculator" component={TestCalculator} />
@@ -57,8 +61,6 @@ const App: React.FC = () => {
             <Route path="/TestPage3" component={TestPage3} />
           </Switch>
         </section>
-
-        {/* <TabBar /> */}
       </Router>
     </div>
   );

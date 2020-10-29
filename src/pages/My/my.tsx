@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom';
 import defaultAvatar from '../../static/image/default-avatar.png';
 import NavBar from '../../components/NavBar';
 import TabBar from '../../components/TabBar';
@@ -11,6 +12,7 @@ import {
 const { Item } = List;
 
 const My: React.FC = () => {
+  const history = useHistory();
   return (
     <div className="my">
       <NavBar showBack={false}>我的</NavBar>
@@ -36,7 +38,11 @@ const My: React.FC = () => {
       </header>
 
       <List className="my-list">
-        <Item arrow="horizontal">类别设置</Item>
+        <Item 
+        arrow="horizontal" 
+        onClick={() => {
+          history.push('/categorySetting')
+        }} >类别设置</Item>
         <Item arrow="horizontal">关于简单记账</Item>
       </List>
 

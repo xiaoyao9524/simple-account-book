@@ -1,10 +1,24 @@
 {
   "id": "1913656",
-  "name": "账本",
+  "name": "账本-记账种类",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "842971",
+      "name": "理财 (1)",
+      "font_class": "licai",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "3154745",
+      "name": "红包",
+      "font_class": "hongbao",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
     {
       "icon_id": "1710433",
       "name": "闲鱼",
@@ -356,13 +370,6 @@
       "unicode_decimal": 59257
     },
     {
-      "icon_id": "4239291",
-      "name": "理财",
-      "font_class": "licai",
-      "unicode": "e635",
-      "unicode_decimal": 58933
-    },
-    {
       "icon_id": "7791015",
       "name": "礼金",
       "font_class": "lijin",
@@ -398,20 +405,6 @@
       "unicode_decimal": 59011
     },
     {
-      "icon_id": "970718",
-      "name": "plus",
-      "font_class": "plus",
-      "unicode": "e610",
-      "unicode_decimal": 58896
-    },
-    {
-      "icon_id": "151695",
-      "name": "down",
-      "font_class": "down",
-      "unicode": "e662",
-      "unicode_decimal": 58978
-    },
-    {
       "icon_id": "100585",
       "name": "记账本",
       "font_class": "jizhang",
@@ -419,32 +412,11 @@
       "unicode_decimal": 58895
     },
     {
-      "icon_id": "887965",
-      "name": "我的 (2)",
-      "font_class": "wode",
-      "unicode": "e631",
-      "unicode_decimal": 58929
-    },
-    {
       "icon_id": "8471207",
       "name": "记账",
       "font_class": "jizhang1",
       "unicode": "e6bd",
       "unicode_decimal": 59069
-    },
-    {
-      "icon_id": "8987348",
-      "name": "明细",
-      "font_class": "mingxi",
-      "unicode": "e68a",
-      "unicode_decimal": 59018
-    },
-    {
-      "icon_id": "14163799",
-      "name": "记账本",
-      "font_class": "jizhangben",
-      "unicode": "e64d",
-      "unicode_decimal": 58957
     },
     {
       "icon_id": "14465067",
@@ -543,13 +515,6 @@
       "font_class": "jiaofei",
       "unicode": "e613",
       "unicode_decimal": 58899
-    },
-    {
-      "icon_id": "10262050",
-      "name": "设 置",
-      "font_class": "shezhi",
-      "unicode": "e611",
-      "unicode_decimal": 58897
     },
     {
       "icon_id": "12796369",

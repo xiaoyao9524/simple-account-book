@@ -1,0 +1,32 @@
+.category-setting {
+    padding-top: 102px;
+    .tabs {
+        position: fixed;
+        left: 0;
+        top: 45px;
+        z-index: 5;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        width: 100%;
+        background: #fff;
+    }
+
+    .current-category-list {
+        padding: 0 15px;
+        box-sizing: border-box;
+        background: #fff;
+        .category-item {
+
+        }
+    }
+
+    .current-category-list {
+        .category-item {
+            .operation-icon-wrapper {
+                .icon {
+                    color: #1AC88E; // 减：#F95A5A
+                }
+            }
+        }
+    }
+}

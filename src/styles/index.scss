@@ -1,6 +1,7 @@
 @import './veriable';
 @import './reset';
-@import './icon/iconfont.scss';
+@import './icon-base/iconfont.scss';
+@import './icon-bookkeep-type/iconfont.scss';
 
 // login
 @import '../pages/Signin/style';
@@ -10,3 +11,4 @@
 @import '../components/TabBar/style';
 // bookkeeping
 @import '../pages/Bookkeeping/style';
+@import '../pages/CategorySetting/style';
