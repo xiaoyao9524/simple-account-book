@@ -67,7 +67,7 @@ const Home = () => {
             onClick={() => { setDatePickerVisible(true) }}
           >
             <p className="title">{year}年</p>
-            <p className="value">{month}月<span className="icon iconfont icon-down"></span></p>
+            <p className="value">{month}月<span className="icon iconfont-base icon-down"></span></p>
           </li>
           <li className="header-item">
             <p className="title">收入</p>

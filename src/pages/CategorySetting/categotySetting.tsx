@@ -25,20 +25,38 @@ const CategorySetting = () => {
         />
       </div>
 
-      <ul className="current-category-list">
-        <li className="category-item">
-          <div className="operation-icon-wrapper">
-            <span className="icon iconfont icon-minus"></span>
-          </div>
-          <div className="category-icon-wrapper">
-            <span className="icon iconfont icon-cha"></span>
-          </div>
-          <p className="category-title">分类名称</p>
-          <div className="drag-sort-wrapper">
-            <span className="icon iconfont icon-sort"></span>
-          </div>
-        </li>
-      </ul>
+      <div className="category-list-wrapper">
+        <ul className="current-category-list">
+          <li className="category-item">
+            <div className="operation-icon-wrapper" onClick={() => {console.log('删除')}}>
+              <span className="icon iconfont-base icon-minus"></span>
+            </div>
+            <div className="category-icon-wrapper">
+              <span className="icon iconfont icon-cha"></span>
+            </div>
+            <p className="category-title">分类名称</p>
+            <div className="drag-sort-wrapper" onTouchStart={() => {console.log('拖拽')}}>
+              <span className="icon iconfont-base icon-sort"></span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div className="category-list-wrapper">
+        <h3 className="title">更多类别</h3>
+        <ul className="more-category-list">
+          <li className="category-item">
+            <div className="operation-icon-wrapper" onClick={() => {console.log('添加')}}>
+              <span className="icon iconfont-base icon-add"></span>
+            </div>
+            <div className="category-icon-wrapper">
+              <span className="icon iconfont icon-cha"></span>
+            </div>
+            <p className="category-title">分类名称</p>
+          </li>
+        </ul>
+      </div>
+
     </div>
   )
 }

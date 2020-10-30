@@ -32,7 +32,7 @@ const tabs = tabBarList.map(tab => (
     <NavLink exact className="tab-link-wrapper" to={tab.to}>
       <div className="icon-row">
         <span
-          className={`icon iconfont icon-${tab.icon} `}
+          className={`icon iconfont-base icon-${tab.icon} `}
           style={tab.iconStyle ? tab.iconStyle : undefined}
         ></span>
       </div>
