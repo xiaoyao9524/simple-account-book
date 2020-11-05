@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom';
 
 
+
+
 // pages
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
@@ -42,6 +44,7 @@ const App: React.FC = () => {
   })
 
   return (
+
     <div className={`App ${isMobile ? 'is-ios' : ''}`}>
       <Router>
         <section className="main-content">

@@ -67,3 +67,35 @@
     }
   }
 }
+
+.category-item {
+  display: flex;
+  padding: 5px 0;
+  .operation-icon-wrapper {
+    flex: 0 0 auto;
+    margin-right: 5px;
+    .icon {
+      font-size: 18px;
+      line-height: 32px;
+      color: #f95a5a; // 减：#F95A5A
+    }
+  }
+  .category-icon-wrapper {
+    flex: 0 0 auto;
+    margin-right: 5px;
+    .icon {
+      font-size: 32px;
+      line-height: 34px;
+    }
+  }
+  .category-title {
+    flex: 1;
+    font-size: 20px;
+    line-height: 34px;
+  }
+  .drag-sort-wrapper {
+    flex: 0 0 auto;
+    font-size: 20px;
+    line-height: 34px;
+  }
+}

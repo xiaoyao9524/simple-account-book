@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
 import NavBar from '../../components/NavBar/navBar';
 import { SegmentedControl } from 'antd-mobile';
-
+import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import CategoryItem, {CategoryItemProps} from './components/CategoryItem';
+// import iconList from '../../utils/iconList';
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
 
+const SortableContainer = sortableContainer(({ children }: any) => {
+  return <ul className="current-category-list">{children}</ul>;
+});
+
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
+  const [items, setItems] = useState<CategoryItemProps[]>([
+    { title: '餐饮', icon: 'canyin' },
+    { title: '水果', icon: 'shuiguo' },
+    { title: '蔬菜', icon: 'shucai' },
+    { title: '零食', icon: 'lingshi' },
+    { title: '茶', icon: 'cha' },
+    { title: '烟酒', icon: 'yanjiu' }
+  ])
+
+  const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+    const newItems = arrayMove(items, oldIndex, newIndex);
+    console.log('newItems: ', newItems);
+    setItems(newItems);
+  };
 
 
   return (
@@ -26,27 +47,19 @@ const CategorySetting = () => {
       </div>
 
       <div className="category-list-wrapper">
-        <ul className="current-category-list">
-          <li className="category-item">
-            <div className="operation-icon-wrapper" onClick={() => {console.log('删除')}}>
-              <span className="icon iconfont-base icon-minus"></span>
-            </div>
-            <div className="category-icon-wrapper">
-              <span className="icon iconfont icon-cha"></span>
-            </div>
-            <p className="category-title">分类名称</p>
-            <div className="drag-sort-wrapper" onTouchStart={() => {console.log('拖拽')}}>
-              <span className="icon iconfont-base icon-sort"></span>
-            </div>
-          </li>
-        </ul>
+        <SortableContainer onSortEnd={onSortEnd} useDragHandle>
+          {items.map((item, index) => (
+            <CategoryItem key={`item-${item.title}`} index={index} title={item.title} icon={item.icon} />
+          ))}
+        </SortableContainer>
       </div>
+
 
       <div className="category-list-wrapper">
         <h3 className="title">更多类别</h3>
         <ul className="more-category-list">
           <li className="category-item">
-            <div className="operation-icon-wrapper" onClick={() => {console.log('添加')}}>
+            <div className="operation-icon-wrapper" onClick={() => { console.log('添加') }}>
               <span className="icon iconfont-base icon-add"></span>
             </div>
             <div className="category-icon-wrapper">
