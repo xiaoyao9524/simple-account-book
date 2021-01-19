@@ -24,10 +24,12 @@ import { setSystemInfoAction } from './store/reducers/modules/system/actionCreat
 // test
 import TestCalculator from './pages/TestCalculator';
 import Counter from './pages/Counter';
+import Counter2 from './pages/Counter2';
 import TodoList from './pages/TodoList';
 import TestPage1 from './pages/TestPage1';
 import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
+import TestPage4 from './pages/TestPage4';
 // components
 // import TabBar from './components/TabBar';
 
@@ -55,13 +57,15 @@ const App: React.FC = () => {
             <Route path="/bookkeeping" component={Bookkeeping} />
             <Route path="/my" component={My} />
             <Route path="/categorySetting" component={CategorySetting} />
-
+            {/* 测试页面 */}
             <Route path="/Counter" component={Counter} />
+            <Route path="/Counter2" component={Counter2} />
             <Route path="/TodoList" component={TodoList} />
             <Route path="/TestCalculator" component={TestCalculator} />
             <Route path="/TestPage1" component={TestPage1} />
             <Route path="/TestPage2" component={TestPage2} />
             <Route path="/TestPage3" component={TestPage3} />
+            <Route path="/TestPage4" component={TestPage4} />
           </Switch>
         </section>
       </Router>

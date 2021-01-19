@@ -42,6 +42,96 @@ const list = [
       }
     ]
   },
+  {
+    id: 3,
+    date: '2020-08-10',
+    list: [
+      {
+        id: 5,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 6,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 7,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 8,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 9,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 10,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 11,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 12,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 13,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 14,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 15,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 16,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+      {
+        id: 17,
+        type: '支出',
+        category: '餐饮',
+        price: '10.00',
+      },
+      {
+        id: 18,
+        type: '收入',
+        category: '红包',
+        price: '11.00',
+      },
+    ]
+  },
 ]
 
 const mobileNoticBar = (

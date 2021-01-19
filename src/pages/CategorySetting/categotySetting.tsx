@@ -3,7 +3,7 @@ import NavBar from '../../components/NavBar/navBar';
 import { SegmentedControl } from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import CategoryItem, {CategoryItemProps} from './components/CategoryItem';
+import CategoryItem, { CategoryItemProps } from './components/CategoryItem';
 // import iconList from '../../utils/iconList';
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
@@ -75,3 +75,46 @@ const CategorySetting = () => {
 }
 
 export default CategorySetting;
+
+// category表
+/*
+[
+  {
+    id: 1,
+    title: '默认1',
+    icon: 'xxx',
+    isDefault: 1
+  },
+  {
+    id: 2,
+    title: '默认2',
+    icon: 'xxx',
+    isDefault: 1
+  },
+  {
+    id: 3,
+    title: '自定义555',
+    icon: 'xxx',
+    isDefault: 0
+  }
+];
+
+// category-sort表
+[
+  {
+    pid: 'admin',
+    cid: 1,
+    sort: 1
+  },
+  {
+    pid: 'admin',
+    cid: 2,
+    sort: 2
+  },
+  {
+    pid: 'admin',
+    cid: 3,
+    sort: 3
+  },
+]
+*/
