@@ -22,9 +22,11 @@ class AdminController extends Controller {
     const { ctx } = this;
     const params: DetailParams = ctx.request.body;
 
+    const {id} = params;
+
     console.log('params: ', params);
     
-    const user = await ctx.service.user.getUser(params.id);
+    const user = await ctx.service.user.getUser({id});
     
     ctx.body = user;
   }

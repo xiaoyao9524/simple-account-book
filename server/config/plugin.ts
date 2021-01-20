@@ -9,6 +9,10 @@ const plugin: EggPlugin = {
   exportssequelize: {
     enable: true,
     package: 'egg-sequelize-ts'
+  },
+  jwt: {
+    enable: true,
+    package: 'egg-jwt',
   }
 };
 
