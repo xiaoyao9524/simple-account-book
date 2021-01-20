@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import moment, { Moment } from 'moment';
 import TabBar from '../../components/TabBar';
+import './style.scss';
 
 const list = [
   {

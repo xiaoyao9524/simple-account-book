@@ -5,6 +5,7 @@ import { IStoreState } from '../../store/reducers/index'
 import {
   NavLink
 } from 'react-router-dom';
+import './style.scss';
 
 const tabBarList = [
   {

@@ -31,6 +31,8 @@ import {
   actionCreator as userActionCreator
 } from '../../store/reducers/modules/user';
 
+import './style.scss';
+
 const { getSetUserInfoAction } = userActionCreator;
 
 const Item = List.Item;

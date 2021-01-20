@@ -7,9 +7,6 @@ import {
   Route
 } from 'react-router-dom';
 
-
-
-
 // pages
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
@@ -29,7 +26,6 @@ import TodoList from './pages/TodoList';
 import TestPage1 from './pages/TestPage1';
 import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
-import TestPage4 from './pages/TestPage4';
 // components
 // import TabBar from './components/TabBar';
 
@@ -65,7 +61,6 @@ const App: React.FC = () => {
             <Route path="/TestPage1" component={TestPage1} />
             <Route path="/TestPage2" component={TestPage2} />
             <Route path="/TestPage3" component={TestPage3} />
-            <Route path="/TestPage4" component={TestPage4} />
           </Switch>
         </section>
       </Router>

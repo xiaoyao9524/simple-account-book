@@ -5,6 +5,7 @@ import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import CategoryItem, { CategoryItemProps } from './components/CategoryItem';
 // import iconList from '../../utils/iconList';
+import './style.scss';
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
 

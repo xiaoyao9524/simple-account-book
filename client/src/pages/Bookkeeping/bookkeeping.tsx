@@ -3,6 +3,8 @@ import { SegmentedControl } from 'antd-mobile';
 import NavBar from '../../components/NavBar';
 
 import Calculator from '../../components/Calculator/calculator';
+import './style.scss';
+
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
 
