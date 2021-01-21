@@ -1,4 +1,8 @@
 import { Service } from 'egg';
+import {
+  RegisterParams
+} from '../types/admin';
+const md5 = require('md5');
 
 interface queryUserParams {
   id?: number;
@@ -30,7 +34,21 @@ class UserService extends Service {
     }
   }
 
+  async insertUser (userInfo: RegisterParams) {
+    const {ctx, app} = this;
 
+    try {
+      const result = await ctx.model.User.create({
+        ...userInfo,
+        password: md5(`${userInfo.password}${app.config.secret}`)
+      });
+
+      return result;
+    } catch (err) {
+      console.log('err: ', err);
+      
+    }
+  }
 }
 
 export default UserService;

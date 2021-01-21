@@ -1,4 +1,5 @@
 import {
+    BaseResult,
     UserInfo
 } from './base';
 
@@ -20,11 +21,11 @@ export interface SigninRequestProps {
     password: string;
 }
 // 获取token返回
-export interface SigninResponseProps {
-    status: number;
-    message: string;
+interface LoginResponseData {
     token?: string;
 }
+
+export type LoginResponse =BaseResult<LoginResponseData>;
 
 // 获取用户信息返回
 export interface RequestUserInfoResponseProps {

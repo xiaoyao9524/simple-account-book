@@ -32,11 +32,13 @@ export class User extends Model<User> {
   password: string;
 
   @Column({
+    type: DataType.DATEONLY,
     field: 'create_time',
   })
   create_time: Date;
 
   @Column({
+    type: DataType.DATE(6),
     field: 'update_time',
   })
   update_time: Date;

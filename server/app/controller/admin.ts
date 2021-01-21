@@ -3,20 +3,19 @@ import { Controller } from 'egg';
 import {
   RegisterParams,
   LoginParams,
-  DetailParams
+  // DetailParams
 } from '../types/admin';
 const md5 = require('md5');
 
 
 class AdminController extends Controller {
-  public async register() {
-    const { ctx } = this;
+  async register() {
+    const { ctx, app } = this;
     const params: RegisterParams = ctx.request.body;
 
-    console.log('params: ', params);
-    const {username} = params;
+    // const {username} = params;
     
-    const user = await ctx.service.user.getUser({username});
+    const user = await ctx.service.user.getUser({username: params.username});
 
     console.log('user: ', user);
     
@@ -27,9 +26,31 @@ class AdminController extends Controller {
       }
       return;
     }
+
+    const insertRes = await ctx.service.user.insertUser(params);
+    console.log('insertRes: ', insertRes);
+    
+    if (!insertRes) {
+      ctx.body = {
+        status: 500,
+        message: '注册失败'
+      }
+      return;
+    }
+
+    const {id, username} = insertRes;
+
+    const token = app.jwt.sign({
+      id,
+      username
+    }, app.config.jwt.secret);
+
+    console.log('token: ', token);
+    
     
     ctx.body = {
-      ...params
+      status: 200,
+      message: 'success'
     };
   }
 
@@ -62,7 +83,7 @@ class AdminController extends Controller {
     const token = app.jwt.sign({
       id: user.id,
       username: user.username
-    });
+    }, app.config.jwt.secret);
 
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpire
@@ -78,11 +99,16 @@ class AdminController extends Controller {
 
   async detail () {
     const { ctx } = this;
-    const params: DetailParams = ctx.request.body;
 
-    const {id} = params;
+    // const reqToken: string = ctx.request.headers.token;
+    
+    // const enCodeToken = app.jwt.verify(reqToken, app.config.jwt.secret);
 
-    console.log('params: ', params);
+    const enCodeToken = ctx.helper.tokenParse();
+    console.log('enCodeToken: ', enCodeToken);
+    
+
+    const {id} = enCodeToken;
     
     const user = await ctx.service.user.getUser({id});
     

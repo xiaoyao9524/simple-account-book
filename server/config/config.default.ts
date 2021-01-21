@@ -33,7 +33,8 @@ export default (appInfo: EggAppInfo) => {
     define: {
       timestamps: false, // 不需要自动为我们添加时间相关字段
       freezeTableName: true // 使用原来的表名称，不需要sequelize处理表名称
-    }
+    },
+    timezone: '+08:00'
   };
 
   // add your special config in here

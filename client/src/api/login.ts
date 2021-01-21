@@ -3,7 +3,8 @@ import {
     SignupRequestProps, 
     SignupResultProps,
     SigninRequestProps,
-    SigninResponseProps,
+    // SigninResponseProps,
+    LoginResponse,
     RequestUserInfoResponseProps
 } from '../types/login';
 
@@ -18,7 +19,7 @@ export const signup = (data: SignupRequestProps) => (
 
 // 获取token
 export function signin (data: SigninRequestProps) {
-    return axios<SigninResponseProps>({
+    return axios<LoginResponse>({
         method: 'post',
         url: '/api/admin/login',
         data

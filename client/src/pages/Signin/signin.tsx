@@ -13,7 +13,8 @@ import {
 } from 'react-router-dom';
 
 import {
-  SigninRequestProps
+  SigninRequestProps,
+  LoginResponse
 } from '../../types/login';
 
 import {
@@ -46,11 +47,9 @@ const Login: React.FC = () => {
     validateFields,
     errors
   } = useForm<SigninRequestProps>();
-  const history = useHistory();
-  console.log('history: ', history);
 
+  const history = useHistory();
   const query = useQuery();
-  console.log('query: ', query);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -66,11 +65,14 @@ const Login: React.FC = () => {
   // 获取token
   async function handlerSignup(signinForm: SigninRequestProps) {
     try {
-      const { data: { status, message, token } } = await signin(signinForm);
+      const { data: { status, message, data } } = await signin(signinForm);
+      const {token} = data;
 
       if (status === 200 && token) {
-        localStorage.setItem('token', token);
-        getUserInfo();
+        console.log('token获取成功: ', token);
+        
+        // localStorage.setItem('token', token);
+        // getUserInfo();
       } else {
         Toast.fail(message);
       }
@@ -125,8 +127,8 @@ const Login: React.FC = () => {
     if (!password) {
       return callback(new Error('必须输入密码！'));
     }
-    if (password.length < 6) {
-      return callback(new Error('密码至少需要6位！'));
+    if (password.length < 4) {
+      return callback(new Error('密码至少需要4位！'));
     }
 
     return callback();
