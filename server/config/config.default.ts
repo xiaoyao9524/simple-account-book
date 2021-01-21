@@ -3,6 +3,7 @@ import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
 
+  const secret = '9524'; // token和md5加密字符串
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1611128577302_2474';
@@ -11,7 +12,7 @@ export default (appInfo: EggAppInfo) => {
   config.middleware = [];
 
   config.jwt = {
-    secret: '9524', //自定义 token 的加密条件字符串
+    secret //自定义 token 的加密条件字符串
   };
 
   config.security = {
@@ -38,6 +39,8 @@ export default (appInfo: EggAppInfo) => {
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
+    secret,
+    tokenExpire: 60 * 60 * 24 * 1000 // token过期时间
   };
 
   // the return config will combines to EggAppConfig

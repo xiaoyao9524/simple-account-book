@@ -27,6 +27,7 @@
     "egg-scripts": "^2.6.0",
     "egg-sequelize": "^6.0.0",
     "egg-sequelize-ts": "^0.2.3-0",
+    "md5": "^2.3.0",
     "mysql2": "^2.2.5"
   },
   "devDependencies": {

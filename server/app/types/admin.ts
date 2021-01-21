@@ -9,3 +9,9 @@ export interface RegisterParams {
 export interface DetailParams {
   id: number;
 }
+
+// 登录传参
+export interface LoginParams {
+  username: string;
+  password: string;
+}
