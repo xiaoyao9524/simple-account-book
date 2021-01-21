@@ -43,7 +43,7 @@ class AdminController extends Controller {
     const token = app.jwt.sign({
       id,
       username
-    }, app.config.jwt.secret);
+    }, app.config.jwt.secret, 30);
 
     console.log('token: ', token);
     
@@ -83,7 +83,7 @@ class AdminController extends Controller {
     const token = app.jwt.sign({
       id: user.id,
       username: user.username
-    }, app.config.jwt.secret);
+    }, app.config.jwt.secret, 30);
 
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpire
@@ -104,11 +104,12 @@ class AdminController extends Controller {
     
     // const enCodeToken = app.jwt.verify(reqToken, app.config.jwt.secret);
 
-    const enCodeToken = ctx.helper.tokenParse();
-    console.log('enCodeToken: ', enCodeToken);
-    
+    // const enCodeToken = ctx.helper.tokenParse();
+    // console.log('enCodeToken: ', enCodeToken);
 
-    const {id} = enCodeToken;
+    console.log('ctx.state.tokenParse: ', ctx.state.tokenParse)
+
+    const {id} = ctx.state.tokenParse;
     
     const user = await ctx.service.user.getUser({id});
     

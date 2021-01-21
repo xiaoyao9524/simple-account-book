@@ -9,7 +9,7 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1611128577302_2474';
 
   // add your egg config in here
-  config.middleware = [];
+  config.middleware = ['checkToken'];
 
   config.jwt = {
     secret //自定义 token 的加密条件字符串
@@ -41,7 +41,14 @@ export default (appInfo: EggAppInfo) => {
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     secret,
-    tokenExpire: 60 * 60 * 24 * 1000 // token过期时间
+    // tokenExpire: 60 * 60 * 24 * 1000, // token过期时间
+    tokenExpire: 1000 * 30,
+    checkToken: {
+      notNeedTokenRouter: [
+        '/api/admin/register',
+        '/api/admin/login'
+      ]
+    }
   };
 
   // the return config will combines to EggAppConfig
