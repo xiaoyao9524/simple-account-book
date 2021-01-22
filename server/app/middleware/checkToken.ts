@@ -37,7 +37,7 @@ export default function checkToken(): any {
       //   username,
       // };
 
-      const tokenParse = ctx.decodeToken(token);
+      const tokenParse = ctx.decodeToken();
 
       console.log('检查token-tokenParse: ', tokenParse);
 

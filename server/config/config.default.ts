@@ -4,8 +4,8 @@ export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // 60 * 60
   const secret = '9524'; // token和md5加密字符串
-  const tokenExpiresSecond = 60 * 60 * 1; // token过期时间（秒）
-  const tokenExpiresMS = tokenExpiresSecond * 1000; // token过期时间（毫秒）
+  const tokenExpiresStr = '1h'; // token过期时间（秒）
+  const tokenExpiresMS = 60 * 60 * 1 * 1000; // token过期时间（毫秒）
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1611128577302_2474';
@@ -53,7 +53,7 @@ export default (appInfo: EggAppInfo) => {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     secret,
     // tokenExpire: 60 * 60 * 24 * 1000, // token过期时间
-    tokenExpiresSecond,
+    tokenExpiresStr,
     tokenExpiresMS,
     checkToken: {
       notNeedTokenRouter: ['/api/admin/register', '/api/admin/login'],

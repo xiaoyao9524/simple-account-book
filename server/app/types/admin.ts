@@ -1,5 +1,3 @@
-import {BaseResponse} from './base';
-
 // 注册传参
 export interface RegisterParams {
   username: string;
@@ -16,9 +14,4 @@ export interface DetailParams {
 export interface LoginParams {
   username: string;
   password: string;
-}
-
-export interface TokenParseProps {
-  id: number;
-  username: string;
 }

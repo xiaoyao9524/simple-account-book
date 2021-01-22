@@ -4,3 +4,11 @@ export interface BaseResponse <T> {
   message: string;
   data: T;
 }
+
+// token解析格式
+export interface TokenParseProps {
+  id: number;
+  username: string;
+  iat?: number;
+  exp?: number;
+}

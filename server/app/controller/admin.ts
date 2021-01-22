@@ -13,6 +13,9 @@ class AdminController extends Controller {
     const params: RegisterParams = ctx.request.body;
     
     const user = await ctx.service.user.getUser({username: params.username});
+
+    console.log('注册-user: ', user);
+    
     
     if (user) {
       ctx.body = {
@@ -23,6 +26,8 @@ class AdminController extends Controller {
     }
 
     const insertRes = await ctx.service.user.insertUser(params);
+
+    console.log('注册-insertRes: ', insertRes);
     
     if (!insertRes) {
       ctx.body = {
@@ -39,6 +44,9 @@ class AdminController extends Controller {
     // });
 
     const token = ctx.encodeToken({id, username});
+
+    console.log('注册-token: ', token);
+    
 
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpiresMS
@@ -115,13 +123,22 @@ class AdminController extends Controller {
     // const enCodeToken = ctx.helper.tokenParse();
     // console.log('enCodeToken: ', enCodeToken);
 
-    console.log('ctx.state.tokenParse: ', ctx.state.tokenParse)
+    // console.log('ctx.state.tokenParse: ', ctx.state.tokenParse)
+    const encodeToken = ctx.decodeToken();
+    const tokenParse = ctx.state.tokenParse;
 
-    const {id} = ctx.state.tokenParse;
+    // const {id} = ctx.state.tokenParse;
     
-    const user = await ctx.service.user.getUser({id});
+    // const user = await ctx.service.user.getUser({id});
     
-    ctx.body = user;
+    ctx.body = {
+      status: 200,
+      message: 'success',
+      data: {
+        encodeToken,
+        tokenParse
+      }
+    };
   }
 
   async testSet () {

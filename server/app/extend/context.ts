@@ -1,29 +1,31 @@
 import { Context } from 'egg';
-import { TokenParseProps } from '../types/admin';
+import { TokenParseProps } from '../types/base';
 
 export default {
   // 将用户信息加密为token
   encodeToken(
     this: Context,
-    { id, username }: TokenParseProps
+    userInfo: TokenParseProps
   ): string {
     const { app } = this;
-    const token = app.jwt.sign(`${id}-$${username}`, app.config.jwt.secret, {
-      expiresIn: app.config.tokenExpiresSecond,
+    console.log('app.config.tokenExpiresStr: ', app.config.tokenExpiresStr);
+    
+    const token = app.jwt.sign(userInfo, app.config.jwt.secret, {
+      expiresIn: app.config.tokenExpiresStr,
     });
     return token;
   },
   // 解密token
-  decodeToken (this: Context, token: string): TokenParseProps {
+  decodeToken (this: Context): TokenParseProps {
     const {app} = this;
-    const tokenDecode = app.jwt.verify(token, app.config.jwt.secret);
 
-    const [id, username] = tokenDecode.split('-');
+    const token = this.request.header.token;
 
-    return {
-      id: Number(id),
-      username
-    }
+    const tokenParse = app.jwt.verify(token, app.config.jwt.secret);
+
+    
+
+    return tokenParse
 
   }
 };
