@@ -7,17 +7,12 @@ import {
 } from '../types/admin';
 const md5 = require('md5');
 
-
 class AdminController extends Controller {
   async register() {
     const { ctx, app } = this;
     const params: RegisterParams = ctx.request.body;
-
-    // const {username} = params;
     
     const user = await ctx.service.user.getUser({username: params.username});
-
-    console.log('user: ', user);
     
     if (user) {
       ctx.body = {
@@ -28,7 +23,6 @@ class AdminController extends Controller {
     }
 
     const insertRes = await ctx.service.user.insertUser(params);
-    console.log('insertRes: ', insertRes);
     
     if (!insertRes) {
       ctx.body = {
@@ -40,19 +34,24 @@ class AdminController extends Controller {
 
     const {id, username} = insertRes;
 
-    const token = app.jwt.sign({
-      id,
-      username
-    }, app.config.jwt.secret, {
-      expiresIn: app.config.tokenExpiresSecond
+    // const token = app.jwt.sign(`${id}-$${username}`, app.config.jwt.secret, {
+    //   expiresIn: app.config.tokenExpiresSecond
+    // });
+
+    const token = ctx.encodeToken({id, username});
+
+    ctx.cookies.set('token', token, {
+      maxAge: app.config.tokenExpiresMS
     });
 
-    console.log('token: ', token);
-    
+    // app.redis
     
     ctx.body = {
       status: 200,
-      message: 'success'
+      message: 'success',
+      data: {
+        token
+      }
     };
   }
 
@@ -81,13 +80,18 @@ class AdminController extends Controller {
       }
       return
     }
+    // {
+    //   id: user.id,
+    //   username: user.username
+    // }
 
-    const token = app.jwt.sign({
+    // const token = app.jwt.sign(`${user.id}-${user.username}`, app.config.jwt.secret, {
+    //   expiresIn: app.config.tokenExpiresSecond
+    // });
+    const token = ctx.encodeToken({
       id: user.id,
       username: user.username
-    }, app.config.jwt.secret, {
-      expiresIn: 30
-    });
+    })
 
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpiresMS
@@ -118,6 +122,63 @@ class AdminController extends Controller {
     const user = await ctx.service.user.getUser({id});
     
     ctx.body = user;
+  }
+
+  async testSet () {
+    const {ctx, app} = this;
+
+    const {username} = ctx.request.body;
+
+    const insertRes = app.redis.hset('user_logins', username, `${username}-token`);
+
+    console.log('redis插入返回: ', insertRes);
+
+    ctx.body = {
+      status: 200,
+      message: 'success',
+      data: {
+        insertRes
+      }
+    }
+    
+  }
+
+  async testGet () {
+    const {ctx, app} = this;
+
+    // const params = ctx.request.body;
+
+    const userLogins = await app.redis.hget('user_logins', 'user1');
+
+    console.log('userLogins: ', userLogins);
+    
+
+    ctx.body = {
+      status: 200,
+      message: '成功',
+      data: {
+        userLogins
+      }
+    }
+  }
+
+  async testDel () {
+    const {ctx, app} = this;
+
+    // const params = ctx.request.body;
+
+    const userLogins = await app.redis.hdel('user_logins', )
+
+    console.log('userLogins: ', userLogins);
+    
+
+    ctx.body = {
+      status: 200,
+      message: '成功',
+      data: {
+        userLogins
+      }
+    }
   }
 }
 

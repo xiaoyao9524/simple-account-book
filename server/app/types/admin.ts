@@ -1,3 +1,5 @@
+import {BaseResponse} from './base';
+
 // 注册传参
 export interface RegisterParams {
   username: string;

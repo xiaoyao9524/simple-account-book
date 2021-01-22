@@ -1,5 +1,4 @@
 import { Context } from 'egg';
-import { TokenParseProps } from '../types/admin';
 
 // 这里是你自定义的中间件
 export default function checkToken(): any {
@@ -7,15 +6,14 @@ export default function checkToken(): any {
     const url = ctx.request.url.split('?')[0];
     const notNeedTokenRouter: string[] =
       ctx.app.config.checkToken.notNeedTokenRouter;
-    console.log('notNeedTokenRouter: ', notNeedTokenRouter);
 
+    // 无需token
     if (notNeedTokenRouter.includes(url)) {
       await next();
       return;
     }
 
     const token = ctx.request.header.token;
-    console.log('token: ', token);
 
     if (!token) {
       ctx.body = {
@@ -26,11 +24,22 @@ export default function checkToken(): any {
     }
 
     try {
-      const tokenParse: TokenParseProps = ctx.app.jwt.verify(
-        token,
-        ctx.app.config.jwt.secret
-      );
-      console.log('👉 tokenParse: ', tokenParse);
+      // const tokenParse: TokenParseProps = ctx.app.jwt.verify(
+      //   token,
+      //   ctx.app.config.jwt.secret
+      // );
+      // const userInfoStr = ctx.app.jwt.verify(token, ctx.app.config.jwt.secret);
+
+      // const [id, username] = userInfoStr.split('-');
+
+      // const tokenParse: TokenParseProps = {
+      //   id: Number(id),
+      //   username,
+      // };
+
+      const tokenParse = ctx.decodeToken(token);
+
+      console.log('检查token-tokenParse: ', tokenParse);
 
       ctx.state.tokenParse = tokenParse;
 
@@ -38,8 +47,8 @@ export default function checkToken(): any {
     } catch (err) {
       ctx.body = {
         status: 1002,
-        message: 'token已失效'
-      }
+        message: 'token已失效',
+      };
     }
   };
 }

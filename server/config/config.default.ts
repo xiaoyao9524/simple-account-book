@@ -2,9 +2,9 @@ import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
-
+  // 60 * 60
   const secret = '9524'; // token和md5加密字符串
-  const tokenExpiresSecond = 60 * 60 * .5; // token过期时间（秒）
+  const tokenExpiresSecond = 60 * 60 * 1; // token过期时间（秒）
   const tokenExpiresMS = tokenExpiresSecond * 1000; // token过期时间（毫秒）
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
@@ -14,7 +14,7 @@ export default (appInfo: EggAppInfo) => {
   config.middleware = ['checkToken'];
 
   config.jwt = {
-    secret //自定义 token 的加密条件字符串
+    secret, //自定义 token 的加密条件字符串
   };
 
   config.security = {
@@ -34,9 +34,18 @@ export default (appInfo: EggAppInfo) => {
     database: 'simple_account_book',
     define: {
       timestamps: false, // 不需要自动为我们添加时间相关字段
-      freezeTableName: true // 使用原来的表名称，不需要sequelize处理表名称
+      freezeTableName: true, // 使用原来的表名称，不需要sequelize处理表名称
     },
-    timezone: '+08:00'
+    timezone: '+08:00',
+  };
+
+  config.redis = {
+    client: {
+      port: 6379,
+      host: 'localhost',
+      password: '123456',
+      db: 0, // 默认为0
+    },
   };
 
   // add your special config in here
@@ -47,11 +56,8 @@ export default (appInfo: EggAppInfo) => {
     tokenExpiresSecond,
     tokenExpiresMS,
     checkToken: {
-      notNeedTokenRouter: [
-        '/api/admin/register',
-        '/api/admin/login'
-      ]
-    }
+      notNeedTokenRouter: ['/api/admin/register', '/api/admin/login'],
+    },
   };
 
   // the return config will combines to EggAppConfig
