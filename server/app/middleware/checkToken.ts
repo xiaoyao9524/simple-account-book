@@ -38,7 +38,7 @@ export default function checkToken(): any {
     } catch (err) {
       ctx.body = {
         status: 1002,
-        message: '无效的token'
+        message: 'token已失效'
       }
     }
   };

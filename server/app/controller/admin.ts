@@ -43,7 +43,9 @@ class AdminController extends Controller {
     const token = app.jwt.sign({
       id,
       username
-    }, app.config.jwt.secret, 30);
+    }, app.config.jwt.secret, {
+      expiresIn: app.config.tokenExpiresSecond
+    });
 
     console.log('token: ', token);
     
@@ -83,10 +85,12 @@ class AdminController extends Controller {
     const token = app.jwt.sign({
       id: user.id,
       username: user.username
-    }, app.config.jwt.secret, 30);
+    }, app.config.jwt.secret, {
+      expiresIn: 30
+    });
 
     ctx.cookies.set('token', token, {
-      maxAge: app.config.tokenExpire
+      maxAge: app.config.tokenExpiresMS
     });
     
     ctx.body = {
