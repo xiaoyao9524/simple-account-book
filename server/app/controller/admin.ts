@@ -146,7 +146,9 @@ class AdminController extends Controller {
 
     const {username} = ctx.request.body;
 
-    const insertRes = app.redis.hset('user_logins', username, `${username}-token`);
+    app.redis.set
+
+    const insertRes = await app.redis.hset('user_logins', username, `${username}-token`);
 
     console.log('redis插入返回: ', insertRes);
 
@@ -163,9 +165,9 @@ class AdminController extends Controller {
   async testGet () {
     const {ctx, app} = this;
 
-    // const params = ctx.request.body;
+    const {username} = ctx.request.body;
 
-    const userLogins = await app.redis.hget('user_logins', 'user1');
+    const userLogins = await app.redis.hget('user_logins', username);
 
     console.log('userLogins: ', userLogins);
     
@@ -182,9 +184,9 @@ class AdminController extends Controller {
   async testDel () {
     const {ctx, app} = this;
 
-    // const params = ctx.request.body;
+    const {username} = ctx.request.body;
 
-    const userLogins = await app.redis.hdel('user_logins', )
+    const userLogins = await app.redis.hdel('user_logins', username);
 
     console.log('userLogins: ', userLogins);
     

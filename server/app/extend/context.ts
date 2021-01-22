@@ -23,9 +23,6 @@ export default {
 
     const tokenParse = app.jwt.verify(token, app.config.jwt.secret);
 
-    
-
-    return tokenParse
-
+    return tokenParse;
   }
 };

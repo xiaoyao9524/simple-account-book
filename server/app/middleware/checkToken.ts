@@ -24,19 +24,6 @@ export default function checkToken(): any {
     }
 
     try {
-      // const tokenParse: TokenParseProps = ctx.app.jwt.verify(
-      //   token,
-      //   ctx.app.config.jwt.secret
-      // );
-      // const userInfoStr = ctx.app.jwt.verify(token, ctx.app.config.jwt.secret);
-
-      // const [id, username] = userInfoStr.split('-');
-
-      // const tokenParse: TokenParseProps = {
-      //   id: Number(id),
-      //   username,
-      // };
-
       const tokenParse = ctx.decodeToken();
 
       console.log('检查token-tokenParse: ', tokenParse);
