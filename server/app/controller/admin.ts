@@ -1,4 +1,4 @@
-import { Controller } from 'egg';
+import BaseController from './BaseController';
 
 import {
   RegisterParams,
@@ -7,7 +7,7 @@ import {
 } from '../types/admin';
 const md5 = require('md5');
 
-class AdminController extends Controller {
+class AdminController extends BaseController {
   async register() {
     const { ctx, app } = this;
     const params: RegisterParams = ctx.request.body;
@@ -64,7 +64,7 @@ class AdminController extends Controller {
   }
 
   async login () {
-    const {ctx, app} = this;
+    const {ctx, app, succcess, error} = this;
 
     const params: LoginParams = ctx.request.body;
     const {username, password} = params;
@@ -72,20 +72,22 @@ class AdminController extends Controller {
     const user = await ctx.service.user.getUser({username});
 
     if (!user) {
-      ctx.body = {
-        status: 500,
-        message: '未找到该用户'
-      }
+      // ctx.body = {
+      //   status: 500,
+      //   message: '未找到该用户'
+      // }
+      error('未找到该用户');
       return
     }
     const secret = app.config.secret;
     const md5Pwd = md5(`${password}${secret}`);
 
     if (md5Pwd !== user.password) {
-      ctx.body = {
-        status: 500,
-        message: '账号或密码错误'
-      }
+      // ctx.body = {
+      //   status: 500,
+      //   message: '账号或密码错误'
+      // }
+      error('账号或密码错误');
       return
     }
     // {
@@ -105,12 +107,13 @@ class AdminController extends Controller {
       maxAge: app.config.tokenExpiresMS
     });
     
-    ctx.body = {
-      status: 200,
-      data: {
-        token
-      }
-    }
+    // ctx.body = {
+    //   status: 200,
+    //   data: {
+    //     token
+    //   }
+    // }
+    succcess({token});
   }
 
   async detail () {
