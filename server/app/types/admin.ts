@@ -1,8 +1,14 @@
 // 注册传参
-export interface RegisterParams {
+// 注册请求
+export interface SignupRequestProps {
   username: string;
   password: string;
-  avatar?: string;
+  confirmPassword: string;
+}
+// 注册返回
+export interface SignupResultProps {
+  status: number;
+  message: string;
 }
 
 // 获取详情传参

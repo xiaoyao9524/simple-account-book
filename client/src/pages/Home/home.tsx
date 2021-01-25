@@ -142,15 +142,15 @@ const mobileNoticBar = (
 );
 
 const Home = () => {
-  const isIOS = useSelector<IStoreState>(state => state.system.isIOS);
-  const isAndroid = useSelector<IStoreState>(state => state.system.isAndroid);
+  const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
+  
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
 
   return (
     <div className="home">
-      {(isIOS || isAndroid) ? null : mobileNoticBar}
+      {isMobile ? null : mobileNoticBar}
       <header className="head-container">
         <ul className="header-list">
           <li

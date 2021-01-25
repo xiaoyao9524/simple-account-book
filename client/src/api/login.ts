@@ -6,7 +6,7 @@ import {
     // SigninResponseProps,
     LoginResponse,
     RequestUserInfoResponseProps
-} from '../types/login';
+} from '../types/admin';
 
 
 export const signup = (data: SignupRequestProps) => (

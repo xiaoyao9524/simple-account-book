@@ -8,8 +8,8 @@ import {
 } from 'react-router-dom';
 
 // pages
-import Signin from './pages/Signin';
-import Signup from './pages/Signup';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import Bookkeeping from './pages/Bookkeeping';
 import My from './pages/My';
@@ -38,6 +38,8 @@ const App: React.FC = () => {
   const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
 
   window.addEventListener('resize', () => {
+    console.log('app-resize');
+    
     dispatch(setSystemInfoAction());
   })
 
@@ -48,8 +50,8 @@ const App: React.FC = () => {
         <section className="main-content">
           <Switch>
             <Route from="/" exact component={Home} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/signin" component={Signin} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
             <Route path="/bookkeeping" component={Bookkeeping} />
             <Route path="/my" component={My} />
             <Route path="/categorySetting" component={CategorySetting} />

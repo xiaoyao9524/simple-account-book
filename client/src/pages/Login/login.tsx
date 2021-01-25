@@ -8,31 +8,48 @@ import {
 } from 'antd-mobile';
 
 import {
-  useHistory
+  NavLink,
+  useHistory,
 } from 'react-router-dom';
 
-import NavBar from '../../components/NavBar';
-
-import useForm from 'rc-form-hooks';
+import {
+  SigninRequestProps,
+  LoginResponse
+} from '../../types/admin';
 
 import {
-  SignupRequestProps
-} from '../../types/login';
+  signin,
+  requestUserInfo
+} from '../../api/login';
 
-import { signup } from '../../api/login';
+import useQuery from '../../hooks/useQuery';
 
-const { Item } = List;
+import NavBar from '../../components/NavBar';
+import useForm from 'rc-form-hooks';
+import { useDispatch } from 'react-redux';
 
-const Signup: React.FC = () => {
+import {
+  actionCreator as userActionCreator
+} from '../../store/reducers/modules/user';
+
+import './style.scss';
+
+const { getSetUserInfoAction } = userActionCreator;
+
+const Item = List.Item;
+
+const Login: React.FC = () => {
+
+  const dispatch = useDispatch();
   const {
     getFieldDecorator,
     getFieldError,
     validateFields,
-    errors,
-    values
-  } = useForm<SignupRequestProps>();
+    errors
+  } = useForm<SigninRequestProps>();
 
   const history = useHistory();
+  const query = useQuery();
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,24 +62,47 @@ const Signup: React.FC = () => {
         console.error(err.message);
       })
   }
-
-  async function handlerSignup(userSignupForm: SignupRequestProps) {
+  // 获取token
+  async function handlerSignup(signinForm: SigninRequestProps) {
     try {
-      const res = await signup(userSignupForm);
+      const { data: { status, message, data } } = await signin(signinForm);
+      const {token} = data;
 
-      console.log('res: ', res);
-
-      const {data: {status, message}} = res;
-
-      if (status === 200) {
-        history.goBack();
-        Toast.fail('注册成功，请登录');
+      if (status === 200 && token) {
+        console.log('token获取成功: ', token);
+        
+        // localStorage.setItem('token', token);
+        // getUserInfo();
       } else {
         Toast.fail(message);
       }
-    } catch (err) {
-      console.error(err);
 
+    } catch (err) {
+      Toast.fail(err.message);
+    }
+  }
+
+  // 获取用户信息
+  async function getUserInfo() {
+    try {
+      const res = await requestUserInfo();
+      console.log('获取用户信息res：', res);
+
+      const { data: { status, message, userInfo } } = res;
+
+      if (status === 200) {
+        const action = getSetUserInfoAction(userInfo);
+
+        dispatch(action);
+
+        history.replace(query.redirect || '/');
+
+      } else {
+        Toast.fail(message);
+      }
+
+    } catch (err) {
+      Toast.fail(err.message);
     }
   }
 
@@ -94,22 +134,15 @@ const Signup: React.FC = () => {
     return callback();
   }
 
-  const validateConfirmPassword = (rule: any, value: string, callback: (err: Error | void) => any) => {
-    const confirmPassword = value.trim();
-
-    return callback(confirmPassword !== values.password ? new Error('两次密码输入不一致！') : void 0);
-  }
-
   return (
-    <div className="signup-wrapper">
-      <NavBar>注册</NavBar>
-
+    <div className="login-wrapper">
+      <NavBar>登录</NavBar>
       <form className="login-form">
         <List
-          renderHeader="注册"
+          renderHeader="登录"
         >
           {getFieldDecorator('username', {
-            initialValue: 'admin',
+            initialValue: '',
             rules: [
               { required: true, message: '必须输入用户名!' },
               { validator: validateUserName }
@@ -127,7 +160,7 @@ const Signup: React.FC = () => {
           <p className={'error'}>{errors.username?.map(i => i.message).join('、')}</p>
 
           {getFieldDecorator('password', {
-            initialValue: '123456',
+            initialValue: '',
             rules: [
               { required: true, message: '请输入密码' },
               { validator: validatePassword }
@@ -144,32 +177,20 @@ const Signup: React.FC = () => {
             >密码</InputItem>
           )}
           <p className={'error'}>{errors.password?.map(i => i.message).join('、')}</p>
-
-          {getFieldDecorator('confirmPassword', {
-            initialValue: '123456',
-            rules: [
-              { required: true, message: '请再次输入密码' },
-              { validator: validateConfirmPassword }
-            ]
-          })(
-            <InputItem
-              type="password"
-              clear
-              error={getFieldError('password').length > 0}
-              onErrorClick={() => {
-                alert(getFieldError('password').join('、'));
-              }}
-              placeholder="请再次输入密码"
-            >确认密码</InputItem>
-          )}
-          <p className={'error'}>{errors.confirmPassword?.map(i => i.message).join('、')}</p>
         </List>
+
         <Item>
-          <Button type="primary" onClick={onSubmit}>注册</Button>
+          <Button type="primary" onClick={onSubmit}>登录</Button>
+        </Item>
+
+        <Item>
+          <NavLink to="/signup" style={{ float: 'right', color: '#108ee9' }}>
+            注册
+          </NavLink>
         </Item>
       </form>
     </div>
   )
 }
 
-export default Signup;
+export default Login;

@@ -1,7 +1,7 @@
 import BaseController from './BaseController';
 
 import {
-  RegisterParams,
+  SignupRequestProps,
   LoginParams
 } from '../types/admin';
 const md5 = require('md5');
@@ -9,7 +9,13 @@ const md5 = require('md5');
 class AdminController extends BaseController {
   async register() {
     const { ctx, app } = this;
-    const params: RegisterParams = ctx.request.body;
+    const params: SignupRequestProps = ctx.request.body;
+    const {password, confirmPassword} = params;
+
+    if (password !== confirmPassword) {
+      this.error('两次密码输入不一致！');
+      return
+    }
     
     const user = await ctx.service.user.getUser({username: params.username});
 
