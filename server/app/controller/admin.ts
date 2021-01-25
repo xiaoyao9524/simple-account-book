@@ -9,7 +9,7 @@ const md5 = require('md5');
 
 class AdminController extends BaseController {
   async register() {
-    const { ctx, app } = this;
+    const { ctx, app, succcess, error } = this;
     const params: RegisterParams = ctx.request.body;
     
     const user = await ctx.service.user.getUser({username: params.username});
@@ -18,10 +18,11 @@ class AdminController extends BaseController {
     
     
     if (user) {
-      ctx.body = {
-        status: 500,
-        message: '用户已存在'
-      }
+      // ctx.body = {
+      //   status: 500,
+      //   message: '用户已存在'
+      // }
+      error('用户已存在');
       return;
     }
 
@@ -30,10 +31,11 @@ class AdminController extends BaseController {
     console.log('注册-insertRes: ', insertRes);
     
     if (!insertRes) {
-      ctx.body = {
-        status: 500,
-        message: '注册失败'
-      }
+      // ctx.body = {
+      //   status: 500,
+      //   message: '注册失败'
+      // }
+      error('注册失败');
       return;
     }
 
@@ -54,13 +56,14 @@ class AdminController extends BaseController {
 
     // app.redis
     
-    ctx.body = {
-      status: 200,
-      message: 'success',
-      data: {
-        token
-      }
-    };
+    // ctx.body = {
+    //   status: 200,
+    //   message: 'success',
+    //   data: {
+    //     token
+    //   }
+    // };
+    succcess({token});
   }
 
   async login () {
@@ -134,14 +137,18 @@ class AdminController extends BaseController {
     
     // const user = await ctx.service.user.getUser({id});
     
-    ctx.body = {
-      status: 200,
-      message: 'success',
-      data: {
-        encodeToken,
-        tokenParse
-      }
-    };
+    // ctx.body = {
+    //   status: 200,
+    //   message: 'success',
+    //   data: {
+    //     encodeToken,
+    //     tokenParse
+    //   }
+    // };
+    this.succcess({
+      encodeToken,
+      tokenParse
+    })
   }
 
   async testSet () {
