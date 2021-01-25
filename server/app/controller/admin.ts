@@ -2,14 +2,13 @@ import BaseController from './BaseController';
 
 import {
   RegisterParams,
-  LoginParams,
-  // DetailParams
+  LoginParams
 } from '../types/admin';
 const md5 = require('md5');
 
 class AdminController extends BaseController {
   async register() {
-    const { ctx, app, succcess, error } = this;
+    const { ctx, app } = this;
     const params: RegisterParams = ctx.request.body;
     
     const user = await ctx.service.user.getUser({username: params.username});
@@ -18,32 +17,18 @@ class AdminController extends BaseController {
     
     
     if (user) {
-      // ctx.body = {
-      //   status: 500,
-      //   message: '用户已存在'
-      // }
-      error('用户已存在');
+      this.error('用户已存在');
       return;
     }
 
     const insertRes = await ctx.service.user.insertUser(params);
-
-    console.log('注册-insertRes: ', insertRes);
     
     if (!insertRes) {
-      // ctx.body = {
-      //   status: 500,
-      //   message: '注册失败'
-      // }
-      error('注册失败');
+      this.error('注册失败');
       return;
     }
 
     const {id, username} = insertRes;
-
-    // const token = app.jwt.sign(`${id}-$${username}`, app.config.jwt.secret, {
-    //   expiresIn: app.config.tokenExpiresSecond
-    // });
 
     const token = ctx.encodeToken({id, username});
 
@@ -54,20 +39,13 @@ class AdminController extends BaseController {
       maxAge: app.config.tokenExpiresMS
     });
 
-    // app.redis
-    
-    // ctx.body = {
-    //   status: 200,
-    //   message: 'success',
-    //   data: {
-    //     token
-    //   }
-    // };
-    succcess({token});
+    app.redis.set(`user_${username}_token`, token, 'EX', app.config.tokenExpiresSeconds);
+
+    this.success({token});
   }
 
   async login () {
-    const {ctx, app, succcess, error} = this;
+    const {ctx, app} = this;
 
     const params: LoginParams = ctx.request.body;
     const {username, password} = params;
@@ -75,32 +53,17 @@ class AdminController extends BaseController {
     const user = await ctx.service.user.getUser({username});
 
     if (!user) {
-      // ctx.body = {
-      //   status: 500,
-      //   message: '未找到该用户'
-      // }
-      error('未找到该用户');
+      this.error('未找到该用户');
       return
     }
     const secret = app.config.secret;
     const md5Pwd = md5(`${password}${secret}`);
 
     if (md5Pwd !== user.password) {
-      // ctx.body = {
-      //   status: 500,
-      //   message: '账号或密码错误'
-      // }
-      error('账号或密码错误');
+      this.error('账号或密码错误');
       return
     }
-    // {
-    //   id: user.id,
-    //   username: user.username
-    // }
-
-    // const token = app.jwt.sign(`${user.id}-${user.username}`, app.config.jwt.secret, {
-    //   expiresIn: app.config.tokenExpiresSecond
-    // });
+    
     const token = ctx.encodeToken({
       id: user.id,
       username: user.username
@@ -109,43 +72,19 @@ class AdminController extends BaseController {
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpiresMS
     });
+
+    app.redis.set(`user_${user.username}_token`, token, 'EX', app.config.tokenExpiresSeconds);
     
-    // ctx.body = {
-    //   status: 200,
-    //   data: {
-    //     token
-    //   }
-    // }
-    succcess({token});
+    this.success({token});
   }
 
   async detail () {
     const { ctx } = this;
 
-    // const reqToken: string = ctx.request.headers.token;
-    
-    // const enCodeToken = app.jwt.verify(reqToken, app.config.jwt.secret);
-
-    // const enCodeToken = ctx.helper.tokenParse();
-    // console.log('enCodeToken: ', enCodeToken);
-
-    // console.log('ctx.state.tokenParse: ', ctx.state.tokenParse)
     const encodeToken = ctx.decodeToken();
     const tokenParse = ctx.state.tokenParse;
 
-    // const {id} = ctx.state.tokenParse;
-    
-    // const user = await ctx.service.user.getUser({id});
-    
-    // ctx.body = {
-    //   status: 200,
-    //   message: 'success',
-    //   data: {
-    //     encodeToken,
-    //     tokenParse
-    //   }
-    // };
-    this.succcess({
+    this.success({
       encodeToken,
       tokenParse
     })

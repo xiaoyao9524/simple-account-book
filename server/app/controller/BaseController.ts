@@ -1,8 +1,8 @@
-import {Controller} from 'egg';
+import { Controller } from 'egg';
 import {BaseResponse} from '../types/base';
 
 class BaseController extends Controller {
-  succcess <T> (data: T, message?: string) {
+  success <T> (data: T, message?: string) {
     const {ctx} = this;
 
     const body: BaseResponse<T> = {

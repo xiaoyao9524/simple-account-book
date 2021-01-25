@@ -26,7 +26,17 @@ export default function checkToken(): any {
     try {
       const tokenParse = ctx.decodeToken();
 
-      console.log('检查token-tokenParse: ', tokenParse);
+      const {username} = tokenParse;
+
+      const currentRedisToken = await ctx.app.redis.get(`user_${username}_token`);
+      
+      if (token !== currentRedisToken) {
+        ctx.body = {
+          status: 1002,
+          message: 'token已失效',
+        };
+        return;
+      }
 
       ctx.state.tokenParse = tokenParse;
 
