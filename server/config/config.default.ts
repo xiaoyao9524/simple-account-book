@@ -50,11 +50,6 @@ export default (appInfo: EggAppInfo) => {
     },
   };
 
-  config.validate = {
-    // convert: false,
-    // validateRoot: false,
-  }
-
   config.validatePlus = {
     resolveError(ctx, errors) {
       if (errors.length) {
