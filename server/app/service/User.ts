@@ -1,6 +1,6 @@
 import { Service } from 'egg';
 import {
-  RegisterParams
+  SignupRequestProps
 } from '../types/admin';
 const md5 = require('md5');
 
@@ -34,7 +34,7 @@ class UserService extends Service {
     }
   }
 
-  async insertUser (userInfo: RegisterParams) {
+  async insertUser (userInfo: SignupRequestProps) {
     const {ctx, app} = this;
 
     try {

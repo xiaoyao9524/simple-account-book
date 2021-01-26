@@ -4,6 +4,7 @@ import {TokenParseProps} from './app/types/admin';
 
 declare module 'egg' {
   interface Application {
+    rules: any,
     jwt: {
       sign(
         payload: string | Buffer | object,

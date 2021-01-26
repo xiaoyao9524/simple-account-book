@@ -2,13 +2,13 @@ import { Controller } from 'egg';
 import {BaseResponse} from '../types/base';
 
 class BaseController extends Controller {
-  success <T> (data: T, message?: string) {
+  success <T> (data?: T | undefined, message?: string) {
     const {ctx} = this;
 
-    const body: BaseResponse<T> = {
+    const body: BaseResponse<T | undefined> = {
       status: 200,
       message: message || 'success',
-      data
+      data: data || undefined
     }
     ctx.body = body;
   }

@@ -18,6 +18,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-redis',
   },
+  validatePlus: {
+    enable: true,
+    package: 'egg-validate-plus',
+  }
 };
 
 export default plugin;

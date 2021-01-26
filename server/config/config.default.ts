@@ -50,6 +50,24 @@ export default (appInfo: EggAppInfo) => {
     },
   };
 
+  config.validate = {
+    // convert: false,
+    // validateRoot: false,
+  }
+
+  config.validatePlus = {
+    resolveError(ctx, errors) {
+      if (errors.length) {
+        ctx.type = 'json';
+        ctx.status = 500;
+        ctx.body = {
+          status: 500,
+          message: errors.map(i => i.message).join('、')
+        };
+      }
+    }
+  }
+
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,

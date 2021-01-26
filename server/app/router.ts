@@ -6,9 +6,11 @@ export default (app: Application) => {
   router.get('/', controller.home.index);
   router.post('/api/admin/register', controller.admin.register);
   router.post('/api/admin/login', controller.admin.login);
-  router.post('/api/admin/detail', controller.admin.detail);
-  router.post('/api/admin/testSet', controller.admin.testSet);
-  router.post('/api/admin/testGet', controller.admin.testGet);
-  router.post('/api/admin/testDel', controller.admin.testDel);
 
+  /** test controller */
+  router.post('/api/test/detail', controller.test.detail);
+  router.post('/api/test/testSet', controller.test.testSet);
+  router.post('/api/test/testGet', controller.test.testGet);
+  router.post('/api/test/testDel', controller.test.testDel);
+  router.post('/api/test/testValidate', controller.test.testValidate);
 };
