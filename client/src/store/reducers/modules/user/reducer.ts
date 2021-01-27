@@ -1,35 +1,32 @@
-import {
-  SET_USERINFO
-} from './actionTypes';
+import { SET_USER_INFO, SET_TOKEN } from './actionTypes';
 
 import { UserInfo } from '../../../../types/base';
 
-import {
-  SetUserInfoAction
-} from './types';
+import { SetUserInfoAction } from './actionInterface';
 
 type actionTypeProps = SetUserInfoAction;
 
-export interface UserState {
-  userInfo: UserInfo;
-}
+
 
 const defaultState: UserState = {
   userInfo: {
-    id: -1,
-    username: ''
-  }
-}
+    username: '',
+    avatar: ''
+  },
+  token: null
+};
 
 export default (state = defaultState, action: actionTypeProps) => {
-  const newState = JSON.parse(JSON.stringify(defaultState));
+  const newState = {
+    ...state
+  };
 
   switch (action.type) {
-    case SET_USERINFO:
-      console.log('设置用户信息：', action.userInfo);
-      
+    case SET_USER_INFO:
       newState.userInfo = action.userInfo;
       break;
+    case SET_TOKEN:
+      newState.token = action.token;
   }
   return newState;
-}
+};

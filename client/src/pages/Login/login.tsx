@@ -12,20 +12,21 @@ import {
   useHistory,
 } from 'react-router-dom';
 
+import useForm from 'rc-form-hooks';
+
 import {
-  SigninRequestProps,
-  LoginResponse
+  LoginRequestProps
 } from '../../types/admin';
 
 import {
-  signin,
-  requestUserInfo
-} from '../../api/login';
+  login,
+  getUserInfo
+} from '../../api/admin';
 
 import useQuery from '../../hooks/useQuery';
 
 import NavBar from '../../components/NavBar';
-import useForm from 'rc-form-hooks';
+
 import { useDispatch } from 'react-redux';
 
 import {
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
     getFieldError,
     validateFields,
     errors
-  } = useForm<SigninRequestProps>();
+  } = useForm<LoginRequestProps>();
 
   const history = useHistory();
   const query = useQuery();
@@ -56,39 +57,37 @@ const Login: React.FC = () => {
     validateFields()
       .then((res => {
         console.log('success: ', res);
-        handlerSignup(res);
+        handlerLogin(res);
       }))
       .catch((err: Error) => {
         console.error(err.message);
       })
   }
   // 获取token
-  async function handlerSignup(signinForm: SigninRequestProps) {
+  async function handlerLogin(signinForm: LoginRequestProps) {
     try {
-      const { data: { status, message, data } } = await signin(signinForm);
-      const {token} = data;
+      const loginRes = await login(signinForm);
 
-      if (status === 200 && token) {
-        console.log('token获取成功: ', token);
+      const loginData = loginRes.data;
+      console.log('loginData: ', loginData);
+      if (loginData.status === 200) {
         
-        // localStorage.setItem('token', token);
-        // getUserInfo();
       } else {
-        Toast.fail(message);
+        Toast.fail(loginData.message);
       }
 
     } catch (err) {
       Toast.fail(err.message);
     }
   }
-
+/*
   // 获取用户信息
-  async function getUserInfo() {
+  async function requestUserInfo() {
     try {
-      const res = await requestUserInfo();
+      const res = await getUserInfo();
       console.log('获取用户信息res：', res);
 
-      const { data: { status, message, userInfo } } = res;
+      const { status } } = res;
 
       if (status === 200) {
         const action = getSetUserInfoAction(userInfo);
@@ -105,7 +104,7 @@ const Login: React.FC = () => {
       Toast.fail(err.message);
     }
   }
-
+*/
   const validateUserName = (rule: any, value: string, callback: (err: Error | void) => any) => {
     const userName = value.trim();
 
@@ -151,9 +150,6 @@ const Login: React.FC = () => {
             <InputItem
               clear
               error={errors.username && errors.username.length > 0}
-              onErrorClick={() => {
-                alert(getFieldError('username').map(i => i.message).join('、'));
-              }}
               placeholder="请输入用户名"
             >用户名</InputItem>
           )}
@@ -170,9 +166,6 @@ const Login: React.FC = () => {
               type="password"
               clear
               error={getFieldError('password').length > 0}
-              onErrorClick={() => {
-                alert(getFieldError('password').join('、'));
-              }}
               placeholder="请输入密码"
             >密码</InputItem>
           )}

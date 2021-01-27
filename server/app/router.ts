@@ -6,6 +6,7 @@ export default (app: Application) => {
   router.get('/', controller.home.index);
   router.post('/api/admin/register', controller.admin.register);
   router.post('/api/admin/login', controller.admin.login);
+  router.post('/api/admin/getUserInfo', controller.admin.getUserInfo);
 
   /** test controller */
   router.post('/api/test/detail', controller.test.detail);

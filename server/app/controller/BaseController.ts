@@ -10,6 +10,8 @@ class BaseController extends Controller {
       message: message || 'success',
       data: data || undefined
     }
+    ctx.status = 200;
+    ctx.statusText = message || 'success';
     ctx.body = body;
   }
 

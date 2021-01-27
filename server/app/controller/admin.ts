@@ -1,6 +1,7 @@
 import BaseController from './BaseController';
 
 import { SignupRequestProps, LoginParams } from '../types/admin';
+import { TokenParseProps } from '../types/base';
 const md5 = require('md5');
 
 class AdminController extends BaseController {
@@ -67,12 +68,6 @@ class AdminController extends BaseController {
 
     const validateResult = await ctx.validate(loginRules, ctx.request.body);
 
-    console.log('loginRules: ', loginRules);
-    console.log('validateResult: ', validateResult);
-    
-
-    
-
     if (!validateResult) {
       return
     }
@@ -110,6 +105,29 @@ class AdminController extends BaseController {
     );
 
     this.success({ token });
+  }
+
+  async getUserInfo () {
+    const {ctx} = this;
+
+    const {id} = ctx.state.tokenParse as TokenParseProps;
+
+    const user = await ctx.service.user.getUser({id});
+
+    if (!user) {
+      this.error('用户不存在');
+      return;
+    }
+
+    const {username, avatar} = user;
+
+    const ret = {
+      username,
+      avatar
+    }
+
+    this.success({ret})
+
   }
 }
 

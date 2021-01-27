@@ -3,7 +3,7 @@ import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
   // 60 * 60
-  const secret = '9524'; // token和md5加密字符串
+  const secret = '58rrot234gg'; // token和md5加密字符串
   const tokenExpireHour = 1; // token过期时间（小时）
   const tokenExpiresStr = `${tokenExpireHour}h`; // token过期时间（字符串-小时）
   const tokenExpiresSeconds = 60 * 60 * tokenExpireHour; // token过期时间（秒）

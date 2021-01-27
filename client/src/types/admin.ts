@@ -1,35 +1,29 @@
-import {
-    BaseResult,
-    UserInfo
-} from './base';
+import { BaseResult, UserInfo } from './base';
 
 // 注册请求
 export interface SignupRequestProps {
-    username: string;
-    password: string;
-    confirmPassword: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
 }
+
 // 注册返回
-export interface SignupResultProps {
-    status: number;
-    message: string;
+export type RegisterResponseProps = BaseResult<{
+  token?: string;
+}>;
+
+// 登录请求
+export interface LoginRequestProps {
+  username: string;
+  password: string;
 }
 
-// 获取token请求
-export interface SigninRequestProps {
-    username: string;
-    password: string;
-}
-// 获取token返回
-interface LoginResponseData {
-    token?: string;
-}
-
-export type LoginResponse =BaseResult<LoginResponseData>;
+// 登录返回
+export type LoginResponseProps = BaseResult<{
+  token?: string;
+}>;
 
 // 获取用户信息返回
-export interface RequestUserInfoResponseProps {
-    status: number;
-    message: string;
-    userInfo: UserInfo;
-}
+export type userInfoProps = BaseResult<{
+  userInfo: UserInfo;
+}>;

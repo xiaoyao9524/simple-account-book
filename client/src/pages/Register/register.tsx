@@ -19,11 +19,11 @@ import {
   SignupRequestProps
 } from '../../types/admin';
 
-import { signup } from '../../api/login';
+import { register } from '../../api/admin';
 import './style.scss';
 const { Item } = List;
 
-const Signup: React.FC = () => {
+const Register: React.FC = () => {
   const {
     getFieldDecorator,
     getFieldError,
@@ -48,7 +48,7 @@ const Signup: React.FC = () => {
 
   async function handlerSignup(userSignupForm: SignupRequestProps) {
     try {
-      const res = await signup(userSignupForm);
+      const res = await register(userSignupForm);
 
       console.log('res: ', res);
 
@@ -172,4 +172,4 @@ const Signup: React.FC = () => {
   )
 }
 
-export default Signup;
+export default Register;

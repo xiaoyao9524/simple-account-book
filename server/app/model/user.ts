@@ -26,6 +26,12 @@ export class User extends Model<User> {
   username: string;
 
   @Column({
+    type: DataType.CHAR(255),
+    comment: '用户头像'
+  })
+  avatar: string;
+
+  @Column({
     type: DataType.CHAR(32),
     comment: '密码'
   })
