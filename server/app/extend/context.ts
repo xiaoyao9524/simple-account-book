@@ -19,7 +19,7 @@ export default {
   decodeToken (this: Context): TokenParseProps {
     const {app} = this;
 
-    const token = this.request.header.token;
+    const token = this.cookies.get('token');
 
     const tokenParse = app.jwt.verify(token, app.config.jwt.secret);
 

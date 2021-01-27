@@ -35,7 +35,7 @@ import {
 
 import './style.scss';
 
-const { getSetUserInfoAction } = userActionCreator;
+const { getSetTokenAction, getSetUserInfoAction } = userActionCreator;
 
 const Item = List.Item;
 
@@ -71,7 +71,8 @@ const Login: React.FC = () => {
       const loginData = loginRes.data;
       console.log('loginData: ', loginData);
       if (loginData.status === 200) {
-        
+        dispatch(getSetTokenAction(loginData.data.token));
+        requestUserInfo();
       } else {
         Toast.fail(loginData.message);
       }
@@ -80,31 +81,31 @@ const Login: React.FC = () => {
       Toast.fail(err.message);
     }
   }
-/*
+
   // 获取用户信息
   async function requestUserInfo() {
     try {
-      const res = await getUserInfo();
-      console.log('获取用户信息res：', res);
+      const userInfoRes = await getUserInfo();
+      
+      const userInfoData = userInfoRes.data;
 
-      const { status } } = res;
+      console.log('userInfoData: ', userInfoData);
+      
 
-      if (status === 200) {
-        const action = getSetUserInfoAction(userInfo);
-
-        dispatch(action);
+      if (userInfoData.status === 200) {
+        dispatch(getSetUserInfoAction(userInfoData.data));
 
         history.replace(query.redirect || '/');
 
       } else {
-        Toast.fail(message);
+        Toast.fail(userInfoData.message);
       }
 
     } catch (err) {
       Toast.fail(err.message);
     }
   }
-*/
+
   const validateUserName = (rule: any, value: string, callback: (err: Error | void) => any) => {
     const userName = value.trim();
 

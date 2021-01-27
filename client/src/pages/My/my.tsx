@@ -1,6 +1,9 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
+import {IStoreState} from '../../store/reducers';
+import {UserInfo} from '../../types/user';
 import {useHistory} from 'react-router-dom';
-import defaultAvatar from '../../static/image/default-avatar.png';
+import defaultAvatar from '../../static/image/default-avatar.jpg';
 import NavBar from '../../components/NavBar';
 import TabBar from '../../components/TabBar';
 import './style.scss';
@@ -13,16 +16,25 @@ const { Item } = List;
 
 const My: React.FC = () => {
   const history = useHistory();
+  const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
   return (
     <div className="my">
       <NavBar showBack={false}>我的</NavBar>
       <header className="my-header">
-        <div className="user-info">
+        <div 
+          className="user-info"
+          onClick={() => {
+            if (userInfo.username) {
+              return
+            }
+            history.push('/login?redirect=/my');
+          }}
+        >
           <div className="avatar-wrapper">
-            <img className="avatar" src={defaultAvatar} alt="" />
+            <img className="avatar" src={userInfo.avatar || defaultAvatar} alt="" />
           </div>
           <div className="user-detail">
-            <p className="user-name">XY</p>
+            <p className="user-name">{userInfo.username || '请登录'}</p>
           </div>
         </div>
         <div className="account-info">

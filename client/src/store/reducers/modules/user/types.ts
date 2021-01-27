@@ -1,4 +1,4 @@
-import {UserInfo} from '../../../../types/base';
+import {UserInfo} from '../../../../types/user';
 
 // user-store
 export interface IUserState {

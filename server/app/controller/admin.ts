@@ -126,7 +126,7 @@ class AdminController extends BaseController {
       avatar
     }
 
-    this.success({ret})
+    this.success({...ret})
 
   }
 }

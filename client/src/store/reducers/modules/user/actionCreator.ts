@@ -4,9 +4,9 @@ import {
   SET_USER_INFO
 } from './actionTypes';
 
-import {UserInfo} from '../../../../types/base';
+import {UserInfo} from '../../../../types/user';
 
-import {SetUserInfoAction} from './actionInterface';
+import {SetUserInfoAction} from './actionInterfaces';
 
 export const getSetTokenAction = (token: string) => ({
   type: SET_TOKEN,

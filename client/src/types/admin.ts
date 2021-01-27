@@ -1,4 +1,5 @@
-import { BaseResult, UserInfo } from './base';
+import { BaseResult } from './base';
+import { UserInfo } from './user';
 
 // 注册请求
 export interface SignupRequestProps {
@@ -9,7 +10,7 @@ export interface SignupRequestProps {
 
 // 注册返回
 export type RegisterResponseProps = BaseResult<{
-  token?: string;
+  token: string;
 }>;
 
 // 登录请求
@@ -20,10 +21,8 @@ export interface LoginRequestProps {
 
 // 登录返回
 export type LoginResponseProps = BaseResult<{
-  token?: string;
+  token: string;
 }>;
 
 // 获取用户信息返回
-export type userInfoProps = BaseResult<{
-  userInfo: UserInfo;
-}>;
+export type userInfoProps = BaseResult<UserInfo>;

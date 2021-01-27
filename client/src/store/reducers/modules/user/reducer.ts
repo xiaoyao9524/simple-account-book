@@ -1,14 +1,11 @@
-import { SET_USER_INFO, SET_TOKEN } from './actionTypes';
+import UserActions from './actionInterfaces';
+import { 
+  SET_USER_INFO,
+  SET_TOKEN
+} from './actionTypes';
+import {IUserState} from './types';
 
-import { UserInfo } from '../../../../types/base';
-
-import { SetUserInfoAction } from './actionInterface';
-
-type actionTypeProps = SetUserInfoAction;
-
-
-
-const defaultState: UserState = {
+const defaultState: IUserState = {
   userInfo: {
     username: '',
     avatar: ''
@@ -16,17 +13,19 @@ const defaultState: UserState = {
   token: null
 };
 
-export default (state = defaultState, action: actionTypeProps) => {
+export default (state = defaultState, action: UserActions) => {
   const newState = {
     ...state
   };
 
   switch (action.type) {
     case SET_USER_INFO:
+      localStorage.setItem('userInfo', JSON.stringify(action.userInfo));
       newState.userInfo = action.userInfo;
       break;
     case SET_TOKEN:
       newState.token = action.token;
+      break;
   }
   return newState;
 };

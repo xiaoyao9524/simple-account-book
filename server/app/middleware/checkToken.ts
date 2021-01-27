@@ -13,7 +13,7 @@ export default function checkToken(): any {
       return;
     }
 
-    const token = ctx.request.header.token;
+    const token = ctx.cookies.get('token');
 
     if (!token) {
       ctx.body = {
@@ -26,9 +26,17 @@ export default function checkToken(): any {
     try {
       const tokenParse = ctx.decodeToken();
 
+      console.log('tokenParse: ', tokenParse);
+      
+
       const {username} = tokenParse;
 
       const currentRedisToken = await ctx.app.redis.get(`user_${username}_token`);
+
+      console.log('请求的token: ', token);
+      console.log('redistoken: ', currentRedisToken);
+      
+      
       
       if (token !== currentRedisToken) {
         ctx.body = {
