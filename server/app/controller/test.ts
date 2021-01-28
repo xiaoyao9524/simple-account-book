@@ -2,14 +2,8 @@ import BaseController from './BaseController';
 
 class TestController extends BaseController {
   async detail () {
-    const { ctx } = this;
-
-    const encodeToken = ctx.decodeToken();
-    const tokenParse = ctx.state.tokenParse;
-
     this.success({
-      encodeToken,
-      tokenParse
+      msg: '成功'
     })
   }
 

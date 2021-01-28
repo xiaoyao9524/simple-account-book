@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
   List,
@@ -51,6 +51,12 @@ const Login: React.FC = () => {
 
   const history = useHistory();
   const query = useQuery();
+
+  useEffect(() => {
+    if (query.failMsg) {
+      Toast.fail(decodeURIComponent(query.failMsg));
+    }
+  }, [])
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();

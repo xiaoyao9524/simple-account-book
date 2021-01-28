@@ -32,3 +32,12 @@ export function getUserInfo () {
         url: '/api/admin/getUserInfo'
     })
 }
+
+export function testReq () {
+    return request<{
+        msg: string;
+    }>({
+        method: 'post',
+        url: '/api/test/detail'
+    })
+}

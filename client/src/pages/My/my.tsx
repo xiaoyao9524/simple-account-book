@@ -6,6 +6,7 @@ import {useHistory} from 'react-router-dom';
 import defaultAvatar from '../../static/image/default-avatar.jpg';
 import NavBar from '../../components/NavBar';
 import TabBar from '../../components/TabBar';
+import {testReq} from '../../api/admin';
 import './style.scss';
 
 import {
@@ -17,6 +18,15 @@ const { Item } = List;
 const My: React.FC = () => {
   const history = useHistory();
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
+
+  const test = async () => {
+    const res = await testReq();
+    const {data} = res;
+    
+    console.log('test-data: ', data);
+    
+  }
+
   return (
     <div className="my">
       <NavBar showBack={false}>我的</NavBar>
@@ -55,7 +65,7 @@ const My: React.FC = () => {
         onClick={() => {
           history.push('/categorySetting')
         }} >类别设置</Item>
-        <Item arrow="horizontal">关于简单记账</Item>
+        <Item arrow="horizontal" onClick={test}>关于简单记账</Item>
       </List>
 
       <TabBar />

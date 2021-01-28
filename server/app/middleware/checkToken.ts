@@ -16,6 +16,8 @@ export default function checkToken(): any {
     const token = ctx.cookies.get('token');
 
     if (!token) {
+      ctx.status = 200;
+      ctx.statusText = '用户未登录';
       ctx.body = {
         status: 1001,
         message: '用户未登录',
@@ -27,18 +29,19 @@ export default function checkToken(): any {
       const tokenParse = ctx.decodeToken();
 
       console.log('tokenParse: ', tokenParse);
-      
 
-      const {username} = tokenParse;
+      const { username } = tokenParse;
 
-      const currentRedisToken = await ctx.app.redis.get(`user_${username}_token`);
+      const currentRedisToken = await ctx.app.redis.get(
+        `user_${username}_token`
+      );
 
       console.log('请求的token: ', token);
       console.log('redistoken: ', currentRedisToken);
-      
-      
-      
+
       if (token !== currentRedisToken) {
+        ctx.status = 200;
+        ctx.statusText = 'token已失效';
         ctx.body = {
           status: 1002,
           message: 'token已失效',
@@ -50,6 +53,8 @@ export default function checkToken(): any {
 
       await next();
     } catch (err) {
+      ctx.status = 200;
+      ctx.statusText = 'token已失效';
       ctx.body = {
         status: 1002,
         message: 'token已失效',
