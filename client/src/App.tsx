@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IStoreState } from './store/reducers';
 import {
@@ -17,6 +17,7 @@ import CategorySetting from './pages/CategorySetting';
 
 // store
 import { setSystemInfoAction } from './store/reducers/modules/system/actionCreators';
+import {getSetUserDataByLocalAction} from './store/reducers/modules/user/actionCreator';
 
 // test
 import TestCalculator from './pages/TestCalculator';
@@ -33,7 +34,11 @@ import TestPage3 from './pages/TestPage3';
 const App: React.FC = () => {
   const dispatch = useDispatch();
 
-  dispatch(setSystemInfoAction());
+  useEffect(() => {
+    dispatch(setSystemInfoAction());
+    dispatch(getSetUserDataByLocalAction());
+  }, [])
+  
 
   const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
 

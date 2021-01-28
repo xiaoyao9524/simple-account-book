@@ -1,4 +1,8 @@
-import {SET_USER_INFO, SET_TOKEN} from './actionTypes';
+import {
+  SET_USER_INFO, 
+  SET_TOKEN,
+  SET_USER_DATA_BY_LOCAL
+} from './actionTypes';
 import {UserInfo} from '../../../../types/user';
 
 // 设置token
@@ -13,6 +17,11 @@ export interface SetUserInfoAction {
   userInfo: UserInfo;
 }
 
- type UserActions = SetTokenAction | SetUserInfoAction;
+// 从localstorage中读取用户信息和token
+export interface SetUserDataByLocalStorage {
+  type: SET_USER_DATA_BY_LOCAL;
+}
+
+type UserActions = SetTokenAction | SetUserInfoAction | SetUserDataByLocalStorage;
 
  export default UserActions;
