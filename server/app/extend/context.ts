@@ -8,7 +8,6 @@ export default {
     userInfo: TokenParseProps
   ): string {
     const { app } = this;
-    console.log('app.config.tokenExpiresStr: ', app.config.tokenExpiresStr);
     
     const token = app.jwt.sign(userInfo, app.config.jwt.secret, {
       expiresIn: app.config.tokenExpiresStr,

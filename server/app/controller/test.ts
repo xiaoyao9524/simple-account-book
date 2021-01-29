@@ -38,8 +38,6 @@ class TestController extends BaseController {
 
     const insertRes = await app.redis.hset('user_logins', username, `${username}-token`);
 
-    console.log('redis插入返回: ', insertRes);
-
     ctx.body = {
       status: 200,
       message: 'success',
@@ -57,9 +55,6 @@ class TestController extends BaseController {
 
     const userLogins = await app.redis.hget('user_logins', username);
 
-    console.log('userLogins: ', userLogins);
-    
-
     ctx.body = {
       status: 200,
       message: '成功',
@@ -75,9 +70,6 @@ class TestController extends BaseController {
     const {username} = ctx.request.body;
 
     const userLogins = await app.redis.hdel('user_logins', username);
-
-    console.log('userLogins: ', userLogins);
-    
 
     ctx.body = {
       status: 200,

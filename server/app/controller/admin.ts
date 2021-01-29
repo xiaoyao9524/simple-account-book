@@ -25,8 +25,6 @@ class AdminController extends BaseController {
 
     const user = await ctx.service.user.getUser({ username: params.username });
 
-    console.log('注册-user: ', user);
-
     if (user) {
       this.error('用户已存在');
       return;
@@ -42,8 +40,6 @@ class AdminController extends BaseController {
     const { id, username } = insertRes;
 
     const token = ctx.encodeToken({ id, username });
-
-    console.log('注册-token: ', token);
 
     ctx.cookies.set('token', token, {
       maxAge: app.config.tokenExpiresMS,
