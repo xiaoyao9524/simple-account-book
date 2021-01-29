@@ -180,7 +180,7 @@ const Login: React.FC = () => {
         </Item>
 
         <Item>
-          <NavLink to="/signup" style={{ float: 'right', color: '#108ee9' }}>
+          <NavLink to={`/register?redirect=${query.redirect}`} style={{ float: 'right', color: '#108ee9' }}>
             注册
           </NavLink>
         </Item>

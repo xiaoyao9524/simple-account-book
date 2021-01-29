@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import {
   List,
@@ -7,9 +8,8 @@ import {
   Toast
 } from 'antd-mobile';
 
-import {
-  useHistory
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import useQuery from '../../hooks/useQuery';
 
 import NavBar from '../../components/NavBar';
 
@@ -20,6 +20,9 @@ import {
 } from '../../types/admin';
 
 import { register } from '../../api/admin';
+
+import {getUserInfo} from '../../api/admin';
+import {getSetUserInfoAction} from '../../store/reducers/modules/user/actionCreator';
 import './style.scss';
 const { Item } = List;
 
@@ -32,17 +35,18 @@ const Register: React.FC = () => {
     values
   } = useForm<SignupRequestProps>();
 
+  const dispatch = useDispatch();
   const history = useHistory();
+  const query = useQuery();
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     validateFields()
       .then((res => {
-        console.log('success: ', res);
-        // handlerSignup(res);
+        handlerSignup(res);
       }))
-      .catch((err: Error) => {
-        console.error(err.message);
+      .catch((err) => {
+        Toast.fail(err.message);
       })
   }
 
@@ -50,19 +54,40 @@ const Register: React.FC = () => {
     try {
       const res = await register(userSignupForm);
 
-      console.log('res: ', res);
+     const resData = res.data;
 
-      const {data: {status, message}} = res;
-
-      if (status === 200) {
-        history.goBack();
-        Toast.fail('注册成功，请登录');
+      if (resData.status === 200) {
+        // history.replace(query.redirect ? decodeURIComponent(query.redirect) : '/');
+        requestUserInfo();
+        Toast.success('注册成功');
       } else {
-        Toast.fail(message);
+        Toast.fail(resData.message);
       }
     } catch (err) {
       console.error(err);
+      Toast.fail(err.message);
 
+    }
+  }
+
+  // 获取用户信息
+  async function requestUserInfo() {
+    try {
+      const userInfoRes = await getUserInfo();
+      
+      const userInfoData = userInfoRes.data;
+
+      if (userInfoData.status === 200) {
+        dispatch(getSetUserInfoAction(userInfoData.data));
+
+        history.replace(decodeURIComponent(query.redirect) || '/');
+
+      } else {
+        Toast.fail(userInfoData.message);
+      }
+
+    } catch (err) {
+      Toast.fail(err.message);
     }
   }
 
@@ -109,7 +134,7 @@ const Register: React.FC = () => {
           renderHeader="注册"
         >
           {getFieldDecorator('username', {
-            initialValue: 'admin',
+            initialValue: '',
             rules: [
               { required: true, message: '必须输入用户名!' },
               { validator: validateUserName }
