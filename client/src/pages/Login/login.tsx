@@ -62,11 +62,10 @@ const Login: React.FC = () => {
     e.preventDefault();
     validateFields()
       .then((res => {
-        console.log('success: ', res);
         handlerLogin(res);
       }))
-      .catch((err: Error) => {
-        console.error(err.message);
+      .catch((err) => {
+        Toast.fail(err.message);
       })
   }
   // 获取token
@@ -75,7 +74,7 @@ const Login: React.FC = () => {
       const loginRes = await login(signinForm);
 
       const loginData = loginRes.data;
-      console.log('loginData: ', loginData);
+
       if (loginData.status === 200) {
         dispatch(getSetTokenAction(loginData.data.token));
         requestUserInfo();
@@ -95,13 +94,10 @@ const Login: React.FC = () => {
       
       const userInfoData = userInfoRes.data;
 
-      console.log('userInfoData: ', userInfoData);
-      
-
       if (userInfoData.status === 200) {
         dispatch(getSetUserInfoAction(userInfoData.data));
 
-        history.replace(query.redirect || '/');
+        history.replace(decodeURIComponent(query.redirect) || '/');
 
       } else {
         Toast.fail(userInfoData.message);

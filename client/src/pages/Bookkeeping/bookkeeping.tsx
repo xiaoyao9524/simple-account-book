@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
+import { IStoreState } from '../../store/reducers';
+import { UserInfo } from '../../types/user';
+
 import { SegmentedControl } from 'antd-mobile';
 import NavBar from '../../components/NavBar';
+import NoLogin from '../../components/NoLogin/noLogin';
 
 import Calculator from '../../components/Calculator/calculator';
 import './style.scss';
+
+
+
 
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
@@ -45,7 +53,7 @@ const expenditureIcons = [
   { title: 'gog', icon: 'gog' },
   { title: 'epic', icon: 'epic' },
   { title: 'origin', icon: 'origin' },
-  
+
   // 日常开销
   { title: '超市', icon: 'chaoshi' },
   { title: '日用品', icon: 'riyongpin' },
@@ -90,6 +98,7 @@ const incomeIcons = [
 ];
 
 const Bookkeeping = () => {
+  const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
   const [tab, setTab] = useState<tabs>('支出');
 
   const [category, setCategory] = useState<string | null>(null);
@@ -99,53 +108,62 @@ const Bookkeeping = () => {
     <div className={`bookkeeping ${category === null ? '' : 'calculation-show'}`}>
       <NavBar style={{ position: 'fixed', top: 0, zIndex: 1, width: '100%' }}>记账</NavBar>
 
-      <div className="tabs">
-        <SegmentedControl
-          style={{ marginTop: 10 }}
-          values={tabList}
-          selectedIndex={tabList.indexOf(tab)}
-          onChange={e => {
-            const tab: tabs = e.nativeEvent.value;
-            setCategory(null);
-            setTab(tab);
-          }}
-        />
-      </div>
-
-      <div className="icon-box">
-        <ul className="icon-list">
-          {
-            currentIcons.map(i => (
-              <li
-                className={`icon-item ${i.title === category ? 'active' : ''}`} key={i.title}
-                onClick={() => {
-                  setCategory(i.title)
-                }}
-              >
-
-                <div className="icon-container">
-                  <span className={`icon iconfont icon-${i.icon}`}></span>
-                </div>
-                <p className="title">{i.title}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
       {
-        category === null ?
-          null :
-          <Calculator
-            onConfirm={(data) => {
-              console.log('data1: ', data);
-              console.log('tab: ', tab);
-              console.log('category: ', category);
-              
-            }}
-            style={{ position: 'fixed', bottom: 0, zIndex: 1 }} 
-          />
+        userInfo.username === '' ? <NoLogin /> : (
+          <div>
+            <div className="tabs">
+              <SegmentedControl
+                style={{ marginTop: 10 }}
+                values={tabList}
+                selectedIndex={tabList.indexOf(tab)}
+                onChange={e => {
+                  const tab: tabs = e.nativeEvent.value;
+                  setCategory(null);
+                  setTab(tab);
+                }}
+              />
+            </div>
+
+            <div className="icon-box">
+              <ul className="icon-list">
+                {
+                  currentIcons.map(i => (
+                    <li
+                      className={`icon-item ${i.title === category ? 'active' : ''}`} key={i.title}
+                      onClick={() => {
+                        setCategory(i.title)
+                      }}
+                    >
+
+                      <div className="icon-container">
+                        <span className={`icon iconfont icon-${i.icon}`}></span>
+                      </div>
+                      <p className="title">{i.title}</p>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+
+            {
+              category === null ?
+                null :
+                <Calculator
+                  onConfirm={(data) => {
+                    console.log('data1: ', data);
+                    console.log('tab: ', tab);
+                    console.log('category: ', category);
+
+                  }}
+                  style={{ position: 'fixed', bottom: 0, zIndex: 1 }}
+                />
+            }
+          </div>
+
+        )
       }
+
+
 
     </div>
   )

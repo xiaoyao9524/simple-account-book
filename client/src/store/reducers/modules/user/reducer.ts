@@ -42,7 +42,7 @@ export default (state = defaultState, action: UserActions) => {
           newState.userInfo = localUserInfo;
         }
       } catch (err) {
-        console.error('读取localstorage')
+        console.error('读取localstorage失败！');
       }
       
       const localToken = localStorage.getItem('token');

@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+
 import { IStoreState } from '../../store/reducers';
 import { useSelector } from 'react-redux';
-import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
+import { UserInfo } from '../../types/user';
+
 import moment, { Moment } from 'moment';
+import {useLocation} from 'react-router-dom';
+
+import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import TabBar from '../../components/TabBar';
+import NoLogin from '../../components/NoLogin';
+
 import './style.scss';
 
 const list = [
@@ -142,87 +149,94 @@ const mobileNoticBar = (
 );
 
 const Home = () => {
-  const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
-  
+  const location = useLocation();
+  const isMobile = useSelector<IStoreState, boolean>(state => state.system.isMobile);
+  const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
+
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
 
   return (
     <div className="home">
-      {isMobile ? null : mobileNoticBar}
-      <header className="head-container">
-        <ul className="header-list">
-          <li
-            className="header-item date-item"
-            onClick={() => { setDatePickerVisible(true) }}
-          >
-            <p className="title">{year}年</p>
-            <p className="value">{month}月<span className="icon iconfont-base icon-down"></span></p>
-          </li>
-          <li className="header-item">
-            <p className="title">收入</p>
-            <p className="value">12345.67</p>
-          </li>
-          <li className="header-item">
-            <p className="title">支出</p>
-            <p className="value">12345.67</p>
-          </li>
-        </ul>
-      </header>
-
       {
-        list.map(bookItem => (
-          <List
-            key={bookItem.id}
-            renderHeader={() => bookItem.date}
-            className="my-list"
-          >
-            {
-              bookItem.list.map(item => (
-                <SwipeAction
-                  key={item.id}
-                  style={{ backgroundColor: 'gray' }}
-                  autoClose
-                  right={[
-                    {
-                      text: '编辑',
-                      onPress: () => console.log('edit'),
-                      style: { backgroundColor: '#1890ff', color: 'white' },
-                    },
-                    {
-                      text: '删除',
-                      onPress: () => console.log('delete'),
-                      style: { backgroundColor: '#F4333C', color: 'white' },
-                    },
-                  ]}
+        userInfo.username === '' ? <NoLogin /> : (
+          <div>
+            {isMobile ? null : mobileNoticBar}
+            <header className="head-container">
+              <ul className="header-list">
+                <li
+                  className="header-item date-item"
+                  onClick={() => { setDatePickerVisible(true) }}
                 >
-                  <List.Item
-                    extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
-                    onClick={e => console.log(e)}
-                  >
-                    {item.category}
-                  </List.Item>
-                </SwipeAction>
+                  <p className="title">{year}年</p>
+                  <p className="value">{month}月<span className="icon iconfont-base icon-down"></span></p>
+                </li>
+                <li className="header-item">
+                  <p className="title">收入</p>
+                  <p className="value">12345.67</p>
+                </li>
+                <li className="header-item">
+                  <p className="title">支出</p>
+                  <p className="value">12345.67</p>
+                </li>
+              </ul>
+            </header>
+
+            {
+              list.map(bookItem => (
+                <List
+                  key={bookItem.id}
+                  renderHeader={() => bookItem.date}
+                  className="my-list"
+                >
+                  {
+                    bookItem.list.map(item => (
+                      <SwipeAction
+                        key={item.id}
+                        style={{ backgroundColor: 'gray' }}
+                        autoClose
+                        right={[
+                          {
+                            text: '编辑',
+                            onPress: () => console.log('edit'),
+                            style: { backgroundColor: '#1890ff', color: 'white' },
+                          },
+                          {
+                            text: '删除',
+                            onPress: () => console.log('delete'),
+                            style: { backgroundColor: '#F4333C', color: 'white' },
+                          },
+                        ]}
+                      >
+                        <List.Item
+                          extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
+                          onClick={e => console.log(e)}
+                        >
+                          {item.category}
+                        </List.Item>
+                      </SwipeAction>
+                    ))
+                  }
+                </List>
               ))
             }
-          </List>
-        ))
+
+            <DatePicker
+              mode="month"
+              visible={datePickerVisible}
+              value={date.toDate()}
+              onOk={date => {
+                setDate(moment(date));
+                setDatePickerVisible(false);
+              }}
+              onDismiss={() => {
+                setDatePickerVisible(false);
+              }}
+            />
+          </div>
+        )
       }
-
-      <DatePicker
-        mode="month"
-        visible={datePickerVisible}
-        value={date.toDate()}
-        onOk={date => {
-          setDate(moment(date));
-          setDatePickerVisible(false);
-        }}
-        onDismiss={() => {
-          setDatePickerVisible(false);
-        }}
-      />
-
       <TabBar />
     </div>
   )

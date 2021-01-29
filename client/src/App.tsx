@@ -27,9 +27,6 @@ import TodoList from './pages/TodoList';
 import TestPage1 from './pages/TestPage1';
 import TestPage2 from './pages/TestPage2';
 import TestPage3 from './pages/TestPage3';
-// components
-// import TabBar from './components/TabBar';
-
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,8 +40,6 @@ const App: React.FC = () => {
   const isMobile = useSelector<IStoreState>(state => state.system.isMobile);
 
   window.addEventListener('resize', () => {
-    console.log('app-resize');
-    
     dispatch(setSystemInfoAction());
   })
 
