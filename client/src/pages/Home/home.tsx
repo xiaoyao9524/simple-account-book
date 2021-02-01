@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { UserInfo } from '../../types/user';
 
 import moment, { Moment } from 'moment';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import TabBar from '../../components/TabBar';
@@ -183,44 +183,47 @@ const Home = () => {
               </ul>
             </header>
 
-            {
-              list.map(bookItem => (
-                <List
-                  key={bookItem.id}
-                  renderHeader={() => bookItem.date}
-                  className="my-list"
-                >
-                  {
-                    bookItem.list.map(item => (
-                      <SwipeAction
-                        key={item.id}
-                        style={{ backgroundColor: 'gray' }}
-                        autoClose
-                        right={[
-                          {
-                            text: '编辑',
-                            onPress: () => console.log('edit'),
-                            style: { backgroundColor: '#1890ff', color: 'white' },
-                          },
-                          {
-                            text: '删除',
-                            onPress: () => console.log('delete'),
-                            style: { backgroundColor: '#F4333C', color: 'white' },
-                          },
-                        ]}
-                      >
-                        <List.Item
-                          extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
-                          onClick={e => console.log(e)}
+            <div className="book-list-wrapper">
+              {
+                list.map(bookItem => (
+                  <List
+                    key={bookItem.id}
+                    renderHeader={() => bookItem.date}
+                    className="my-list"
+                  >
+                    {
+                      bookItem.list.map(item => (
+                        <SwipeAction
+                          key={item.id}
+                          style={{ backgroundColor: 'gray' }}
+                          autoClose
+                          right={[
+                            {
+                              text: '编辑',
+                              onPress: () => console.log('edit'),
+                              style: { backgroundColor: '#1890ff', color: 'white' },
+                            },
+                            {
+                              text: '删除',
+                              onPress: () => console.log('delete'),
+                              style: { backgroundColor: '#F4333C', color: 'white' },
+                            },
+                          ]}
                         >
-                          {item.category}
-                        </List.Item>
-                      </SwipeAction>
-                    ))
-                  }
-                </List>
-              ))
-            }
+                          <List.Item
+                            extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
+                            onClick={e => console.log(e)}
+                          >
+                            {item.category}
+                          </List.Item>
+                        </SwipeAction>
+                      ))
+                    }
+                  </List>
+                ))
+              }
+            </div>
+
 
             <DatePicker
               mode="month"

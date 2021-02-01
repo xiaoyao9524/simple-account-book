@@ -1,7 +1,13 @@
 .home {
-  padding-top: 10px;
+  padding-top: 65px;
   .head-container {
-    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    padding: 20px 0 10px;
+    background: #f5f5f9;
     .header-list {
       display: flex;
       .header-item {

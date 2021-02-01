@@ -8,6 +8,8 @@ export default (app: Application) => {
   router.post('/api/admin/login', controller.admin.login);
   router.post('/api/admin/getUserInfo', controller.admin.getUserInfo);
 
+  // 分类相关
+  router.post('/api/category/insert', controller.category.insert);
   /** test controller */
   router.post('/api/test/detail', controller.test.detail);
   router.post('/api/test/testSet', controller.test.testSet);
