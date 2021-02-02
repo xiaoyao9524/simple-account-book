@@ -20,16 +20,16 @@ export class User extends Model<User> {
   id: number;
 
   @Column({
-    type: DataType.CHAR(20),
-    comment: '用户姓名',
-  })
-  username: string;
-
-  @Column({
     type: DataType.CHAR(255),
     comment: '用户头像'
   })
   avatar: string;
+
+  @Column({
+    type: DataType.CHAR(20),
+    comment: '用户姓名',
+  })
+  username: string;
 
   @Column({
     type: DataType.CHAR(32),
@@ -38,15 +38,21 @@ export class User extends Model<User> {
   password: string;
 
   @Column({
+    type: DataType.CHAR(255),
+    comment: '分类id字符串，使用\',\'分隔'
+  })
+  categoryList: string;
+
+  @Column({
     type: DataType.DATEONLY,
     field: 'create_time',
   })
-  create_time: Date;
+  createTime: Date;
 
   @Column({
     type: DataType.DATE(6),
     field: 'update_time',
   })
-  update_time: Date;
+  updateTime: Date;
 }
 export default () => User;

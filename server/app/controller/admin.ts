@@ -30,12 +30,30 @@ class AdminController extends BaseController {
       return;
     }
 
-    const insertRes = await ctx.service.user.insertUser(params);
+    // 生成默认的分类列表
+    const categoryListData = await ctx.service.category.getCategoryList();
+    console.log('categoryListData: ', categoryListData);
+    
+    let categoryList: string;
+
+    if (categoryListData) {
+      categoryList = categoryListData.map(i => i.id).join(',');
+    } else {
+      this.error('注册失败');
+      return;
+    }
+
+    const insertRes = await ctx.service.user.insertUser({
+      ...params,
+      categoryList
+    });
 
     if (!insertRes) {
       this.error('注册失败');
       return;
     }
+
+    
 
     const { id, username } = insertRes;
 

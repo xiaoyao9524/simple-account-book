@@ -9,6 +9,10 @@ interface queryUserParams {
   username?: string;
 }
 
+interface InsertUserProps extends SignupRequestProps {
+  categoryList: string;
+}
+
 class UserService extends Service {
   public async getUser(params: queryUserParams) {
     const {ctx} = this;
@@ -35,14 +39,17 @@ class UserService extends Service {
     }
   }
 
-  async insertUser (userInfo: SignupRequestProps) {
+  async insertUser (userInfo: InsertUserProps) {
     const {ctx, app} = this;
 
     try {
-      const result = await ctx.model.User.create({
+
+      const insertData = {
         ...userInfo,
         password: md5(`${userInfo.password}${app.config.secret}`)
-      });
+      };
+      
+      const result = await ctx.model.User.create(insertData);
 
       return result;
     } catch (err) {
