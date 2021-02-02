@@ -32,7 +32,6 @@ class AdminController extends BaseController {
 
     // 生成默认的分类列表
     const categoryListData = await ctx.service.category.getCategoryList();
-    console.log('categoryListData: ', categoryListData);
     
     let categoryList: string;
 
@@ -122,9 +121,9 @@ class AdminController extends BaseController {
   }
 
   async getUserInfo () {
-    const {ctx} = this;
+    const { ctx } = this;
 
-    const {id} = ctx.state.tokenParse as TokenParseProps;
+    const { id } = ctx.state.tokenParse as TokenParseProps;
 
     const user = await ctx.service.user.getUser({id});
 
@@ -135,9 +134,12 @@ class AdminController extends BaseController {
 
     const {username, avatar} = user;
 
+    const categoryList = await ctx.service.category.getCategoryList(user.categoryList.split(',').map(i => Number(i)));
+
     const ret = {
       username,
-      avatar
+      avatar,
+      categoryList
     }
 
     this.success({...ret})

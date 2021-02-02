@@ -15,6 +15,9 @@ export default function checkToken(): any {
 
     const token = ctx.cookies.get('token');
 
+    console.log('token333: ', token);
+    
+
     if (!token) {
       ctx.status = 200;
       ctx.statusText = '用户未登录';

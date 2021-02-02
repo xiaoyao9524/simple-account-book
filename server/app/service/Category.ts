@@ -74,11 +74,7 @@ class CategoryService extends Service {
         is_default: 1,
       };
 
-      console.log('insertData: ', insertData);
-
       const result = await ctx.model.Category.create(insertData);
-
-      console.log('result: ', result);
 
       return result;
     } catch (err) {
