@@ -31,6 +31,7 @@ class UserService extends Service {
       return result;
     } catch (err) {
       console.log('err: ', err);
+      return null;
     }
   }
 
@@ -46,7 +47,7 @@ class UserService extends Service {
       return result;
     } catch (err) {
       console.log('err: ', err);
-      
+      return null;
     }
   }
 }
