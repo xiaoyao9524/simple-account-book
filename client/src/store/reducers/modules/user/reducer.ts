@@ -1,54 +1,84 @@
 import UserActions from './actionInterfaces';
-import { 
+import {
   SET_USER_INFO,
   SET_TOKEN,
-  SET_USER_DATA_BY_LOCAL
+  SET_USER_DATA_BY_LOCAL,
 } from './actionTypes';
-import {IUserState} from './types';
-import {UserInfo} from '../../../../types/user';
+import { IUserState } from './types';
+import { UserInfo } from '../../../../types/user';
+import { CategoryItem } from '../../../../types/category';
+
+function transformUserInfo(state: IUserState, userInfo: UserInfo) {
+  // 支出
+  const expenditureIcons: CategoryItem[] = [];
+  // 收入
+  const incomeIcons: CategoryItem[] = [];
+
+  for (let item of userInfo.categoryList) {
+    if (item.categoryType === 0) {
+      incomeIcons.push(item);
+    } else {
+      expenditureIcons.push(item);
+    }
+  }
+
+  return {
+    ...state,
+    userInfo,
+    expenditureIcons,
+    incomeIcons,
+  };
+}
 
 const defaultState: IUserState = {
   userInfo: {
     username: '',
-    avatar: ''
+    avatar: '',
+    categoryList: [],
   },
-  token: null
+  token: null,
+  expenditureIcons: [], // 支出
+  incomeIcons: [], // 收入
 };
 
 export default (state = defaultState, action: UserActions) => {
-  const newState = {
-    ...state
+  let newState = {
+    ...state,
   };
 
   switch (action.type) {
     case SET_USER_INFO:
+      const newStateInfo = transformUserInfo(newState, action.userInfo);
       localStorage.setItem('userInfo', JSON.stringify(action.userInfo));
-      newState.userInfo = action.userInfo;
+
+      newState = {
+        ...newStateInfo,
+      };
       break;
     case SET_TOKEN:
       localStorage.setItem('token', JSON.stringify(action.token));
       newState.token = action.token;
       break;
     case SET_USER_DATA_BY_LOCAL:
-      console.group('从localstorage中读取数据');
-      
       const localUserInfoStr = localStorage.getItem('userInfo');
-      console.log('localUserInfoStr: ', localUserInfoStr);
 
       try {
         if (localUserInfoStr) {
           const localUserInfo = JSON.parse(localUserInfoStr) as UserInfo;
 
-          newState.userInfo = localUserInfo;
+          const newStateInfo = transformUserInfo(newState, localUserInfo);
+
+          const localToken = localStorage.getItem('token');
+          if (!localToken || !localUserInfo) {
+            throw new Error('读取localstorage失败！');
+          }
+          newStateInfo.token = localToken;
+
+          newState = newStateInfo;
         }
       } catch (err) {
-        console.error('读取localstorage失败！');
+        newState = JSON.parse(JSON.stringify(defaultState));
       }
-      
-      const localToken = localStorage.getItem('token');
-      console.log('localToken: ', localToken);
-      
-      console.groupEnd();
       break;
   }
   return newState;

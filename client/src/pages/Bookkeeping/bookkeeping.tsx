@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { IStoreState } from '../../store/reducers';
 import { UserInfo } from '../../types/user';
+import { CategoryItem } from '../../types/category';
 
 import { SegmentedControl } from 'antd-mobile';
 import NavBar from '../../components/NavBar';
@@ -10,12 +11,10 @@ import NoLogin from '../../components/NoLogin/noLogin';
 import Calculator from '../../components/Calculator/calculator';
 import './style.scss';
 
-
-
-
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
 
+/*
 // 支出icons
 const expenditureIcons = [
   // 衣
@@ -96,9 +95,11 @@ const incomeIcons = [
   { title: '兼职', icon: 'jianzhi' },
   { title: '其它', icon: 'qita' }
 ];
-
+*/
 const Bookkeeping = () => {
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
+  const expenditureIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.expenditureIcons);
+  const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.incomeIcons);
   const [tab, setTab] = useState<tabs>('支出');
 
   const [category, setCategory] = useState<string | null>(null);

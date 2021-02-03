@@ -15,9 +15,6 @@ export default function checkToken(): any {
 
     const token = ctx.cookies.get('token');
 
-    console.log('token333: ', token);
-    
-
     if (!token) {
       ctx.status = 200;
       ctx.statusText = '用户未登录';
@@ -40,6 +37,7 @@ export default function checkToken(): any {
       if (token !== currentRedisToken) {
         ctx.status = 200;
         ctx.statusText = 'token已失效';
+        ctx.cookies.set('token', null);
         ctx.body = {
           status: 1002,
           message: 'token已失效',
@@ -53,6 +51,7 @@ export default function checkToken(): any {
     } catch (err) {
       ctx.status = 200;
       ctx.statusText = 'token已失效';
+      ctx.cookies.set('token', null);
       ctx.body = {
         status: 1002,
         message: 'token已失效',
