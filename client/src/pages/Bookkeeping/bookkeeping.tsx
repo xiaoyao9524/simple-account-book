@@ -98,8 +98,8 @@ const incomeIcons = [
 */
 const Bookkeeping = () => {
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
-  const expenditureIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.expenditureIcons);
-  const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.incomeIcons);
+  const expenditureIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.expenditureIcons);
+  const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.incomeIcons);
   const [tab, setTab] = useState<tabs>('支出');
 
   const [category, setCategory] = useState<string | null>(null);

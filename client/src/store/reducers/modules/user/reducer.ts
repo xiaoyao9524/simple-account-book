@@ -8,37 +8,17 @@ import { IUserState } from './types';
 import { UserInfo } from '../../../../types/user';
 import { CategoryItem } from '../../../../types/category';
 
-function transformUserInfo(state: IUserState, userInfo: UserInfo) {
-  // 支出
-  const expenditureIcons: CategoryItem[] = [];
-  // 收入
-  const incomeIcons: CategoryItem[] = [];
-
-  for (let item of userInfo.categoryList) {
-    if (item.categoryType === 0) {
-      incomeIcons.push(item);
-    } else {
-      expenditureIcons.push(item);
-    }
-  }
-
-  return {
-    ...state,
-    userInfo,
-    expenditureIcons,
-    incomeIcons,
-  };
-}
-
 const defaultState: IUserState = {
   userInfo: {
     username: '',
     avatar: '',
-    categoryList: [],
+    category: {
+      expenditureIcons: [], // 支出
+      incomeIcons: [], // 收入
+    }
   },
-  token: null,
-  expenditureIcons: [], // 支出
-  incomeIcons: [], // 收入
+  token: '',
+  
 };
 
 export default (state = defaultState, action: UserActions) => {
@@ -48,12 +28,8 @@ export default (state = defaultState, action: UserActions) => {
 
   switch (action.type) {
     case SET_USER_INFO:
-      const newStateInfo = transformUserInfo(newState, action.userInfo);
+      newState.userInfo = action.userInfo;
       localStorage.setItem('userInfo', JSON.stringify(action.userInfo));
-
-      newState = {
-        ...newStateInfo,
-      };
       break;
     case SET_TOKEN:
       localStorage.setItem('token', JSON.stringify(action.token));
@@ -66,15 +42,13 @@ export default (state = defaultState, action: UserActions) => {
         if (localUserInfoStr) {
           const localUserInfo = JSON.parse(localUserInfoStr) as UserInfo;
 
-          const newStateInfo = transformUserInfo(newState, localUserInfo);
+          newState.userInfo = localUserInfo;
 
           const localToken = localStorage.getItem('token');
           if (!localToken || !localUserInfo) {
             throw new Error('读取localstorage失败！');
           }
-          newStateInfo.token = localToken;
-
-          newState = newStateInfo;
+          newState.token = localToken;
         }
       } catch (err) {
         newState = JSON.parse(JSON.stringify(defaultState));

@@ -20,8 +20,8 @@ const SortableContainer = sortableContainer(({ children }: any) => {
 
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
-  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.expenditureIcons);
-  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.incomeIcons);
+  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.expenditureIcons);
+  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.incomeIcons);
 
   const [currentIcons, setCurrentIcons] = useState(tab === '支出' ? [...expenditureIcons] : [...incomeIcons]);
   // const [items, setItems] = useState<CategoryItemProps[]>([

@@ -3,5 +3,8 @@ import {CategoryItem} from './category';
 export interface UserInfo {
   username: string;
   avatar?: string;
-  categoryList: CategoryItem[];
+  category: {
+    expenditureIcons: CategoryItem[];
+    incomeIcons: CategoryItem[];
+  };
 }
