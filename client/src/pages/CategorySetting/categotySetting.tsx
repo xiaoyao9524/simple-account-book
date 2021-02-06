@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import NavBar from '../../components/NavBar/navBar';
 import { SegmentedControl } from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import CategoryItem, { CategoryItemProps } from './components/CategoryItem';
+
+import { IStoreState } from '../../store/reducers';
+import { CategoryItem as ICategoryItemProps } from '../../types/category';
+
 // import iconList from '../../utils/iconList';
 import './style.scss';
 type tabs = '支出' | '收入';
@@ -15,19 +20,23 @@ const SortableContainer = sortableContainer(({ children }: any) => {
 
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
-  const [items, setItems] = useState<CategoryItemProps[]>([
-    { title: '餐饮', icon: 'canyin' },
-    { title: '水果', icon: 'shuiguo' },
-    { title: '蔬菜', icon: 'shucai' },
-    { title: '零食', icon: 'lingshi' },
-    { title: '茶', icon: 'cha' },
-    { title: '烟酒', icon: 'yanjiu' }
-  ])
+  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.expenditureIcons);
+  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.incomeIcons);
+
+  const [currentIcons, setCurrentIcons] = useState(tab === '支出' ? [...expenditureIcons] : [...incomeIcons]);
+  // const [items, setItems] = useState<CategoryItemProps[]>([
+  //   { title: '餐饮', icon: 'canyin' },
+  //   { title: '水果', icon: 'shuiguo' },
+  //   { title: '蔬菜', icon: 'shucai' },
+  //   { title: '零食', icon: 'lingshi' },
+  //   { title: '茶', icon: 'cha' },
+  //   { title: '烟酒', icon: 'yanjiu' }
+  // ])
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-    const newItems = arrayMove(items, oldIndex, newIndex);
-    console.log('newItems: ', newItems);
-    setItems(newItems);
+    const newItems = arrayMove(currentIcons, oldIndex, newIndex);
+    setCurrentIcons(newItems);
+    console.log(`新的${tab}列表: `, newItems);
   };
 
 
@@ -49,7 +58,7 @@ const CategorySetting = () => {
 
       <div className="category-list-wrapper">
         <SortableContainer onSortEnd={onSortEnd} useDragHandle>
-          {items.map((item, index) => (
+          {currentIcons.map((item, index) => (
             <CategoryItem key={`item-${item.title}`} index={index} title={item.title} icon={item.icon} />
           ))}
         </SortableContainer>
