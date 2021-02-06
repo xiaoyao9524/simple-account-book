@@ -3,3 +3,7 @@ export interface InsertCategoryProps {
   title: string;
   icon: string;
 }
+
+export interface CategoryItemProps extends InsertCategoryProps {
+  readonly id: number;
+}

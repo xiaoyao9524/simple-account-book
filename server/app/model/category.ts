@@ -23,7 +23,7 @@ export class Category extends Model<Category> {
     comment: '收入0，支出 1',
     field: 'category_type'
   })
-  categoryType: string;
+  categoryType: number;
 
   @Column({
     type: DataType.CHAR(20),

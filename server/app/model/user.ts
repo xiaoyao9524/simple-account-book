@@ -39,9 +39,17 @@ export class User extends Model<User> {
 
   @Column({
     type: DataType.CHAR(255),
-    comment: '分类id字符串，使用\',\'分隔'
+    field: 'expenditure_list',
+    comment: '支出类型id字符串，使用逗号分隔'
   })
-  categoryList: string;
+  expenditureList: string;
+
+  @Column({
+    type: DataType.CHAR(255),
+    field: 'income_list',
+    comment: '收入类型id字符串，使用逗号分隔'
+  })
+  incomeList: string;
 
   @Column({
     type: DataType.DATEONLY,

@@ -2,6 +2,7 @@ import BaseController from './BaseController';
 
 import { SignupRequestProps, LoginParams } from '../types/admin';
 import { TokenParseProps } from '../types/base';
+import { CategoryItemProps } from '../types/category';
 const md5 = require('md5');
 
 class AdminController extends BaseController {
@@ -32,11 +33,17 @@ class AdminController extends BaseController {
 
     // 生成默认的分类列表
     const categoryListData = await ctx.service.category.getCategoryList();
-    
-    let categoryList: string;
+    const expenditureList: CategoryItemProps[] = [];
+    const incomeList: CategoryItemProps[] = [];
 
     if (categoryListData) {
-      categoryList = categoryListData.map(i => i.id).join(',');
+      for (let item of categoryListData) {
+        if (item.categoryType === 0) {
+          incomeList.push(item);
+        } else {
+          expenditureList.push(item);
+        }
+      }
     } else {
       this.error('注册失败');
       return;
@@ -44,7 +51,8 @@ class AdminController extends BaseController {
 
     const insertRes = await ctx.service.user.insertUser({
       ...params,
-      categoryList
+      expenditureList: expenditureList.map(i => i.id).join(','),
+      incomeList: incomeList.map(i => i.id).join(',')
     });
 
     if (!insertRes) {
@@ -134,12 +142,22 @@ class AdminController extends BaseController {
 
     const {username, avatar} = user;
 
-    const categoryList = await ctx.service.category.getCategoryList(user.categoryList.split(',').map(i => Number(i)));
+    // const categoryList = await ctx.service.category.getCategoryList(user.categoryList.split(',').map(i => Number(i)));
+    const expenditureIcons = await ctx.service.category.getCategoryList(user.expenditureList.split(',').map(i => Number(i)));
+    const incomeIcons = await ctx.service.category.getCategoryList(user.incomeList.split(',').map(i => Number(i)));
+
+    if (!expenditureIcons || !incomeIcons) {
+      this.error('获取失败');
+      return
+    }
 
     const ret = {
       username,
       avatar,
-      categoryList
+      category: {
+        incomeIcons,
+        expenditureIcons
+      }
     }
 
     this.success({...ret})

@@ -4,6 +4,8 @@ import { InsertCategoryProps } from '../types/category';
 
 import { incomeIcons } from '../data/categoryList';
 
+import { CategoryItemProps } from '../types/category';
+
 class CategoryController extends BaseController {
   async insert() {
     const { ctx, app } = this;
@@ -39,17 +41,38 @@ class CategoryController extends BaseController {
     });
   }
 
+  /**test */
   async getCategoryList () {
     const { ctx } = this;
 
     const categoryList = await ctx.service.category.getCategoryList();
+
+    console.log('categoryList: ', categoryList);
+    
 
     if (!categoryList) {
       this.error('获取分类失败');
       return;
     }
 
-    this.success(categoryList);
+    const expenditureIcons: CategoryItemProps[] = [];
+    const incomeIcons: CategoryItemProps[] = [];
+
+    if (categoryList) {
+      for (let item of categoryList) {
+        const { categoryType } = item;
+        if (categoryType === 0) {
+          incomeIcons.push(item);
+        } else {
+          expenditureIcons.push(item);
+        }
+      }
+    }
+
+    this.success({
+      expenditureIcons: expenditureIcons.map(i => i.id).join(','),
+      incomeIcons: incomeIcons.map(i => i.id).join(',')
+    });
   }
 
   async insertDefaultCategory() {

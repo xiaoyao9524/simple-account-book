@@ -2,6 +2,7 @@ import { Service } from 'egg';
 import {
   SignupRequestProps
 } from '../types/admin';
+
 const md5 = require('md5');
 
 interface queryUserParams {
@@ -10,7 +11,8 @@ interface queryUserParams {
 }
 
 interface InsertUserProps extends SignupRequestProps {
-  categoryList: string;
+  expenditureList: string;
+  incomeList: string;
 }
 
 class UserService extends Service {
@@ -40,13 +42,17 @@ class UserService extends Service {
   }
 
   async insertUser (userInfo: InsertUserProps) {
-    const {ctx, app} = this;
+    const { ctx, app } = this;
+
+    const { expenditureList, incomeList } = userInfo;
 
     try {
 
       const insertData = {
         ...userInfo,
-        password: md5(`${userInfo.password}${app.config.secret}`)
+        password: md5(`${userInfo.password}${app.config.secret}`),
+        expenditureList,
+        incomeList
       };
       
       const result = await ctx.model.User.create(insertData);
