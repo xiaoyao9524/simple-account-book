@@ -10,9 +10,12 @@ export default (app: Application) => {
 
   // 分类相关
   router.post('/api/category/insert', controller.category.insert);
+  router.post('/api/category/getAllCategoryList', controller.category.getAllCategoryList)
 
+  /** 特殊controller */
   router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);
   router.post('/api/category/getCategoryList', controller.category.getCategoryList);
+
   /** test controller */
   router.post('/api/test/detail', controller.test.detail);
   router.post('/api/test/testSet', controller.test.testSet);

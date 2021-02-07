@@ -2,9 +2,10 @@ import { Service } from 'egg';
 
 import { TokenParseProps } from '../types/base';
 import { InsertCategoryProps } from '../types/category';
-// import { Op } from 'sequelize';
+import { Op } from 'sequelize';
 
 class CategoryService extends Service {
+  // 新增类别
   async insertCategory(categoryDetail: InsertCategoryProps) {
     const { ctx } = this;
     const tokenParse: TokenParseProps = ctx.state.tokenParse;
@@ -20,6 +21,31 @@ class CategoryService extends Service {
       return result;
     } catch (err) {
       console.log('err: ', err);
+      return null;
+    }
+  }
+
+  // 获取某用户下全部的类别，包含该用户移除的类别（所有默认的 + 该用户新建的）
+  async getAllCategoryList (pid: number) {
+    const { ctx } = this;
+    
+    try {
+      const result = await ctx.model.Category.findAll({
+        where: {
+          [Op.or]: [
+            {
+              isDefault: 1
+            },
+            {
+              pid
+            }
+          ]
+        }
+      })
+
+      return result;
+    } catch (err) {
+      console.log(err.message);
       return null;
     }
   }

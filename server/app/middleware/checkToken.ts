@@ -13,7 +13,10 @@ export default function checkToken(): any {
       return;
     }
 
-    const token = ctx.cookies.get('token');
+    const cookieToken = ctx.cookies.get('token');
+    const headersToken = ctx.request.headers['token'];
+
+    const token = cookieToken || headersToken;
 
     if (!token) {
       ctx.status = 200;

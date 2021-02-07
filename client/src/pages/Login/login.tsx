@@ -56,7 +56,7 @@ const Login: React.FC = () => {
     if (query.failMsg) {
       Toast.fail(decodeURIComponent(query.failMsg));
     }
-  })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
