@@ -1,19 +1,30 @@
 import React from 'react';
+import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-import {SortableElement, SortableHandle} from 'react-sortable-hoc';
-
-export interface CategoryItemProps {
-  title: string;
-  icon: string;
+import { CategoryItem as ICategoryItemProps } from '../../../types/category';
+export interface CategoryItemProps extends ICategoryItemProps {
+  onDelete?: (category: ICategoryItemProps) => void;
 }
 
 const DragHandle = SortableHandle(() => (<span className="icon iconfont-base icon-sort"></span>));
 
-const CategoryItem: React.FC<CategoryItemProps> = ({ title, icon }) => {
+const CategoryItem: React.FC<CategoryItemProps> = props => {
+  const { id, title, icon, categoryType, onDelete } = props;
+
   return (
     <li className="category-item">
-      <div className="operation-icon-wrapper" onClick={() => { console.log('删除') }}>
-      <span className="icon iconfont-base icon-minus"></span>
+      <div
+        className="operation-icon-wrapper"
+        onClick={() => {
+          onDelete && onDelete({
+            id,
+            categoryType,
+            title,
+            icon
+          });
+        }}
+      >
+        <span className="icon iconfont-base icon-minus"></span>
       </div>
       <div className="category-icon-wrapper">
         <span className={`icon iconfont icon-${icon}`}></span>
