@@ -154,7 +154,6 @@ const Bookkeeping = () => {
                     console.log('data1: ', data);
                     console.log('tab: ', tab);
                     console.log('category: ', category);
-
                   }}
                   style={{ position: 'fixed', bottom: 0, zIndex: 1 }}
                 />

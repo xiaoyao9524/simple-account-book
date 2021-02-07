@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { UserInfo } from '../../types/user';
 
 import moment, { Moment } from 'moment';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
 import TabBar from '../../components/TabBar';
@@ -149,7 +149,7 @@ const mobileNoticBar = (
 );
 
 const Home = () => {
-  const location = useLocation();
+  // const location = useLocation();
   const isMobile = useSelector<IStoreState, boolean>(state => state.system.isMobile);
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
 

@@ -9,7 +9,6 @@ import CategoryItem, { CategoryItemProps } from './components/CategoryItem';
 import { IStoreState } from '../../store/reducers';
 import { CategoryItem as ICategoryItemProps } from '../../types/category';
 
-// import iconList from '../../utils/iconList';
 import './style.scss';
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
@@ -22,23 +21,17 @@ const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
   const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.expenditureIcons);
   const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.incomeIcons);
+  const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
 
-  const [currentIcons, setCurrentIcons] = useState(tab === '支出' ? [...expenditureIcons] : [...incomeIcons]);
-  // const [items, setItems] = useState<CategoryItemProps[]>([
-  //   { title: '餐饮', icon: 'canyin' },
-  //   { title: '水果', icon: 'shuiguo' },
-  //   { title: '蔬菜', icon: 'shucai' },
-  //   { title: '零食', icon: 'lingshi' },
-  //   { title: '茶', icon: 'cha' },
-  //   { title: '烟酒', icon: 'yanjiu' }
-  // ])
+  useEffect(() => {
+    setCurrentIcons(tab === '支出' ? [...expenditureIcons] : [...incomeIcons]);
+  }, [tab])
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     const newItems = arrayMove(currentIcons, oldIndex, newIndex);
     setCurrentIcons(newItems);
     console.log(`新的${tab}列表: `, newItems);
   };
-
 
   return (
     <div className="category-setting">

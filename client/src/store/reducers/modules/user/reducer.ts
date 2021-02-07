@@ -6,7 +6,6 @@ import {
 } from './actionTypes';
 import { IUserState } from './types';
 import { UserInfo } from '../../../../types/user';
-import { CategoryItem } from '../../../../types/category';
 
 const defaultState: IUserState = {
   userInfo: {
@@ -17,8 +16,7 @@ const defaultState: IUserState = {
       incomeIcons: [], // 收入
     }
   },
-  token: '',
-  
+  token: ''
 };
 
 export default (state = defaultState, action: UserActions) => {

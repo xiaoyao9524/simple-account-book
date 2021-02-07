@@ -56,7 +56,7 @@ const Login: React.FC = () => {
     if (query.failMsg) {
       Toast.fail(decodeURIComponent(query.failMsg));
     }
-  }, [])
+  })
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();

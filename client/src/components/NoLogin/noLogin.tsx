@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC } from 'react'
 import {Button} from 'antd-mobile';
 import {useHistory, useLocation} from 'react-router-dom';
 
