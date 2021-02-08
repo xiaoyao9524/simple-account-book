@@ -6,7 +6,7 @@ import arrayMove from 'array-move';
 import { SegmentedControl, Toast, WingBlank, Button } from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import NavBar from '../../components/NavBar/navBar';
-import CategoryItem, { CategoryItemProps } from './components/CategoryItem';
+import CategoryItem from './components/CategoryItem';
 
 /** types */
 import { IStoreState } from '../../store/reducers';
@@ -48,11 +48,12 @@ const CategorySetting = () => {
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
     setCurrentNoSelectIcons(tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab])
 
   useEffect(() => {
     _getAllCategoryList();
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   /** function start */
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
@@ -217,7 +218,8 @@ const CategorySetting = () => {
       </div>
 
 
-      <div className="category-list-wrapper">
+      {
+        currentNoSelectIcons.length ? (<div className="category-list-wrapper">
         <h3 className="title">更多类别</h3>
         <ul className="more-category-list">
           {
@@ -235,7 +237,8 @@ const CategorySetting = () => {
           }
 
         </ul>
-      </div>
+      </div>) : null
+      }
 
     </div>
   )
