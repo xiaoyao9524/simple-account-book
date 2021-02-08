@@ -1,7 +1,6 @@
 import { Service } from 'egg';
-import {
-  SignupRequestProps
-} from '../types/admin';
+
+import { SignupRequestProps } from '../types/admin';
 
 const md5 = require('md5');
 
@@ -13,6 +12,11 @@ interface queryUserParams {
 interface InsertUserProps extends SignupRequestProps {
   expenditureList: string;
   incomeList: string;
+}
+
+interface UpdateCategoryParams {
+  expenditureList: number[];
+  incomeList: number[];
 }
 
 class UserService extends Service {
@@ -56,6 +60,28 @@ class UserService extends Service {
       };
       
       const result = await ctx.model.User.create(insertData);
+
+      return result;
+    } catch (err) {
+      console.log('err: ', err);
+      return null;
+    }
+  }
+
+  // 更新某user详情类别列表
+  async updateCategoryList (id: number, newCategory: UpdateCategoryParams) {
+    const { ctx } = this;
+    const { expenditureList, incomeList } = newCategory;
+    
+    try {
+      const result = await ctx.model.User.update({
+        expenditureList: expenditureList.join(','),
+        incomeList: incomeList.join(',')
+      }, {
+        where: {
+          id
+        }
+      })
 
       return result;
     } catch (err) {

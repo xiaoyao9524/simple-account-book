@@ -49,7 +49,7 @@ class CategoryService extends Service {
       return null;
     }
   }
-
+  // 根据id数组获取类别数据，如果没有id，则获取默认类别
   async getCategoryList(ids?: number[]) {
     const { ctx } = this;
     /**
@@ -89,6 +89,7 @@ class CategoryService extends Service {
     }
   }
 
+  /** test */
   /**插入默认数据 */
   async insertDefaultCategory(categoryDetail: { title: string; icon: string }) {
     const { ctx } = this;
