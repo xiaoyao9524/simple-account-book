@@ -4,7 +4,7 @@ export interface UserInfo {
   username: string;
   avatar?: string;
   category: {
-    expenditureIcons: CategoryItem[];
-    incomeIcons: CategoryItem[];
+    expenditureList: CategoryItem[];
+    incomeList: CategoryItem[];
   };
 }

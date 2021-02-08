@@ -142,21 +142,50 @@ class AdminController extends BaseController {
 
     const {username, avatar} = user;
 
-    // const categoryList = await ctx.service.category.getCategoryList(user.categoryList.split(',').map(i => Number(i)));
-    const expenditureIcons = await ctx.service.category.getCategoryList(user.expenditureList.split(',').map(i => Number(i)));
-    const incomeIcons = await ctx.service.category.getCategoryList(user.incomeList.split(',').map(i => Number(i)));
+    const expenditureIds = user.expenditureList.split(',').map(i => Number(i));
+    let expenditureList = await ctx.service.category.getCategoryList(expenditureIds);
 
-    if (!expenditureIcons || !incomeIcons) {
-      this.error('获取失败');
+    if (!expenditureList) {
+      this.error('获取支出列表失败');
       return
+    } else {
+      const _expenditureList: CategoryItemProps[] = [];
+
+      for (let id of expenditureIds) {
+        const item = expenditureList.find(i => i.id === id);
+
+        if (item) {
+          _expenditureList.push(item);
+        }
+      }
+      expenditureList = _expenditureList;
+    }
+
+    const incomeIds = user.incomeList.split(',').map(i => Number(i));
+    let incomeList = await ctx.service.category.getCategoryList(incomeIds);
+
+    if (!incomeList) {
+      this.error('获取收入列表失败');
+      return
+    } else {
+      const _incomeList: CategoryItemProps[] = [];
+
+      for (let id of incomeIds) {
+        const item = incomeList.find(i => i.id === id);
+
+        if (item) {
+          _incomeList.push(item);
+        }
+      }
+      incomeList = _incomeList;
     }
 
     const ret = {
       username,
       avatar,
       category: {
-        incomeIcons,
-        expenditureIcons
+        expenditureList,
+        incomeList
       }
     }
 

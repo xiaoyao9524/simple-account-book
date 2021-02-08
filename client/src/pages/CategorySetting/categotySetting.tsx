@@ -30,8 +30,8 @@ const SortableContainer = sortableContainer(({ children }: any) => {
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
   // store中的数据
-  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.expenditureIcons);
-  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.incomeIcons);
+  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.expenditureList);
+  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(state => state.user.userInfo.category.incomeList);
 
   // 当前操作的数据
   const [currentExpenditureList, setCurrentExpenditureList] = useState([...expenditureIcons]);

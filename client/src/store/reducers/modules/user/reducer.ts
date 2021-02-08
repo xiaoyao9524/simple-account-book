@@ -12,8 +12,8 @@ const defaultState: IUserState = {
     username: '',
     avatar: '',
     category: {
-      expenditureIcons: [], // 支出
-      incomeIcons: [], // 收入
+      expenditureList: [], // 支出
+      incomeList: [], // 收入
     }
   },
   token: ''
