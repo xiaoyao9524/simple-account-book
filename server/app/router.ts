@@ -11,6 +11,7 @@ export default (app: Application) => {
   // 分类相关
   router.post('/api/category/insert', controller.category.insert);
   router.post('/api/category/getAllCategoryList', controller.category.getAllCategoryList)
+  router.post('/api/category/updateCategory', controller.category.updateCategory);
 
   /** 特殊controller */
   router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);

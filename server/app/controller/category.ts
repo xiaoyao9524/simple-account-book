@@ -9,6 +9,7 @@ import { classifyCategory } from '../util/category';
 import { incomeIcons } from '../data/categoryList';
 
 class CategoryController extends BaseController {
+  /** 新增类别 */
   async insert() {
     const { ctx, app } = this;
 
@@ -42,6 +43,7 @@ class CategoryController extends BaseController {
     });
   }
 
+  /** 获取某用户所有的类别 */
   async getAllCategoryList() {
     const { ctx } = this;
 
@@ -56,23 +58,26 @@ class CategoryController extends BaseController {
       return;
     }
 
-    /*
-    const expenditureList: CategoryItemProps[] = [];
-    const incomeList: CategoryItemProps[] = [];
-
-    for (let item of allCategoryList) {
-      if (item.categoryType === 0) {
-        incomeList.push(item);
-      } else {
-        expenditureList.push(item);
-      }
-    }
-*/
     const { expenditureList, incomeList } = classifyCategory(allCategoryList);
     this.success({
       expenditureList,
       incomeList
     });
+  }
+
+  /** 更新某用户当前类别 */
+  async updateCategory () {
+    const { ctx, app } = this;
+    const validateResult = await ctx.validate(
+      app.rules.category.updateCategory,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    this.success('校验成功')
   }
 
   /**test */

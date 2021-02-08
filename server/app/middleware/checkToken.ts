@@ -15,8 +15,10 @@ export default function checkToken(): any {
 
     const cookieToken = ctx.cookies.get('token');
     const headersToken = ctx.request.headers['token'];
-
     const token = cookieToken || headersToken;
+
+    console.log('token-222: ', token);
+    
 
     if (!token) {
       ctx.status = 200;
@@ -30,6 +32,7 @@ export default function checkToken(): any {
 
     try {
       const tokenParse = ctx.decodeToken();
+      
 
       const { username } = tokenParse;
 
@@ -57,7 +60,7 @@ export default function checkToken(): any {
       ctx.cookies.set('token', null);
       ctx.body = {
         status: 1002,
-        message: 'token已失效',
+        message: 'token已失效(解析失败)',
       };
     }
   };

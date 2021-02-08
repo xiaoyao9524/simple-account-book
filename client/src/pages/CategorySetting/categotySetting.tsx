@@ -177,8 +177,12 @@ const CategorySetting = () => {
 
   // 保存
   function handlerSave () {
-    console.log('支出：', currentExpenditureList);
-    console.log('收入: ', currentIncomeList);
+    const ret = {
+      expenditureList: currentExpenditureList.map(i => i.id),
+      incomeList: currentIncomeList.map(i => i.id)
+    }
+
+    console.log('ret: ', ret);
   }
 
   /** function end */
