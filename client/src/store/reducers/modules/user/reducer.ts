@@ -3,7 +3,9 @@ import {
   SET_USER_INFO,
   SET_TOKEN,
   SET_USER_DATA_BY_LOCAL,
+  UPDATE_USER_CATEGORY
 } from './actionTypes';
+
 import { IUserState } from './types';
 import { UserInfo } from '../../../../types/user';
 
@@ -51,7 +53,10 @@ export default (state = defaultState, action: UserActions) => {
       } catch (err) {
         newState = JSON.parse(JSON.stringify(defaultState));
       }
-      break;
+      break
+    case UPDATE_USER_CATEGORY:
+      newState.userInfo.category = action.category;
+      break
   }
   return newState;
 };

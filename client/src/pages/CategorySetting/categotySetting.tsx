@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import arrayMove from 'array-move';
 
 /** components */
@@ -14,8 +14,10 @@ import { CategoryItem as ICategoryItemProps } from '../../types/category';
 import { AllCategoryListResult } from "../../types/category";
 
 /** request */
-import { getAllCategoryList } from '../../api/category';
+import { getAllCategoryList, updateCategory } from '../../api/category';
 
+/** action */
+import { getUpdateUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
 /** style */
 import './style.scss';
 
@@ -45,6 +47,7 @@ const CategorySetting = () => {
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<ICategoryItemProps[]>([]);
 
+  const dispatch = useDispatch();
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
     setCurrentNoSelectIcons(tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]);
@@ -60,7 +63,6 @@ const CategorySetting = () => {
     const newItems = arrayMove(currentIcons, oldIndex, newIndex);
     setCurrentIcons(newItems);
     tab === '支出' ? setCurrentExpenditureList(newItems) : setCurrentIncomeList(newItems);
-    console.log(`新的${tab}列表: `, newItems);
   };
 
   async function _getAllCategoryList() {
@@ -105,7 +107,6 @@ const CategorySetting = () => {
 
   // 处理添加
   function handlerAdd (category: ICategoryItemProps) {
-    console.log('添加: ', category);
     if (tab === '支出') {
       const newList = [...currentExpenditureList];
       const newNoSelectList = [...noSelectExpenditureList];
@@ -176,13 +177,23 @@ const CategorySetting = () => {
   }
 
   // 保存
-  function handlerSave () {
-    const ret = {
+  async function handlerSave () {
+    const params = {
       expenditureList: currentExpenditureList.map(i => i.id),
       incomeList: currentIncomeList.map(i => i.id)
     }
 
-    console.log('ret: ', ret);
+    try {
+      const res = await updateCategory(params);
+
+      if (res.data.status === 200) {
+        dispatch(getUpdateUserCategoryAction(res.data.data));
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch (err) {
+      Toast.fail(err.message);
+    }
   }
 
   /** function end */

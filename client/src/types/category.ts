@@ -15,3 +15,16 @@ export interface AllCategoryListResult {
 }
 
 export type GetAllCategoryListResult = BaseResult<AllCategoryListResult>;
+
+// 更新类别传参
+export interface UpdateCategoryParams {
+  expenditureList: number[];
+  incomeList: number[];
+}
+
+// 更新类别返回
+export interface UpdateCategoryResultData {
+  expenditureList: CategoryItem[];
+  incomeList: CategoryItem[];
+}
+export type UpdateCategoryResult = BaseResult<UpdateCategoryResultData>;

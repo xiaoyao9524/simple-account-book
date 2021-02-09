@@ -1,9 +1,12 @@
 import {
-  SET_USER_INFO, 
+  SET_USER_INFO,
   SET_TOKEN,
-  SET_USER_DATA_BY_LOCAL
+  SET_USER_DATA_BY_LOCAL,
+  UPDATE_USER_CATEGORY
 } from './actionTypes';
-import {UserInfo} from '../../../../types/user';
+
+import { UserInfo } from '../../../../types/user';
+import { UpdateCategoryResultData } from "../../../../types/category";
 
 // 设置token
 export interface SetTokenAction {
@@ -22,6 +25,15 @@ export interface SetUserDataByLocalStorage {
   type: SET_USER_DATA_BY_LOCAL;
 }
 
-type UserActions = SetTokenAction | SetUserInfoAction | SetUserDataByLocalStorage;
+export interface UpdateUserCategoryAction {
+  type: UPDATE_USER_CATEGORY;
+  category: UpdateCategoryResultData;
+}
 
- export default UserActions;
+type UserActions =
+  | SetTokenAction
+  | SetUserInfoAction
+  | SetUserDataByLocalStorage
+  | UpdateUserCategoryAction;
+
+export default UserActions;
