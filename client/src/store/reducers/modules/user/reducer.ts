@@ -56,6 +56,7 @@ export default (state = defaultState, action: UserActions) => {
       break
     case UPDATE_USER_CATEGORY:
       newState.userInfo.category = action.category;
+      localStorage.setItem('userInfo', JSON.stringify(newState.userInfo));
       break
   }
   return newState;
