@@ -26,7 +26,7 @@ export default (state = defaultState, action: UserActions) => {
     ...state,
   };
 
-  switch (action.type) { // 
+  switch (action.type) {
     case SET_USER_INFO:
       newState.userInfo = action.userInfo;
       localStorage.setItem('userInfo', JSON.stringify(action.userInfo));

@@ -3,7 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import arrayMove from 'array-move';
 
 /** components */
-import { SegmentedControl, Toast, WingBlank, Button } from 'antd-mobile';
+import {
+  SegmentedControl,
+  Toast,
+  WingBlank,
+  Button,
+  Modal,
+  WhiteSpace,
+  PickerView
+} from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import NavBar from '../../components/NavBar/navBar';
 import CategoryItem from './components/CategoryItem';
@@ -29,6 +37,29 @@ const SortableContainer = sortableContainer(({ children }: any) => {
   return <ul className="current-category-list">{children}</ul>;
 });
 
+function closest(el: HTMLElement, selector: string) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector; // || el.mozMatchesSelector || el.msMatchesSelector;
+
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement as HTMLElement;
+  }
+  return null;
+}
+
+const season = [
+  {
+    label: '春l',
+    value: '春v',
+  },
+  {
+    label: '夏l',
+    value: '夏v',
+  },
+];
+
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
   // store中的数据
@@ -47,6 +78,23 @@ const CategorySetting = () => {
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<ICategoryItemProps[]>([]);
 
+  /** 测试弹窗 */
+  const [show, setShow] = useState(false);
+  const [val, setVal] = useState(['春v']);
+
+  const onWrapTouchStart = (e: any) => {
+    console.log('e: ', e);
+
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
+  }
+  /** 测试弹窗 end */
   const dispatch = useDispatch();
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
@@ -106,7 +154,7 @@ const CategorySetting = () => {
   }
 
   // 处理添加
-  function handlerAdd (category: ICategoryItemProps) {
+  function handlerAdd(category: ICategoryItemProps) {
     if (tab === '支出') {
       const newList = [...currentExpenditureList];
       const newNoSelectList = [...noSelectExpenditureList];
@@ -135,16 +183,16 @@ const CategorySetting = () => {
   }
 
   // 处理删除
-  function handlerDel ({id}: ICategoryItemProps) {
+  function handlerDel({ id }: ICategoryItemProps) {
     if (tab === '支出') {
-      
+
       const newList = [...currentExpenditureList];
 
       const newNoSelectList = [...noSelectExpenditureList];
 
       const category = newList.find(val => val.id === id);
       const delIndex = newList.findIndex((val) => val.id === id);
-      
+
 
       if (category && delIndex >= 0) {
         newList.splice(delIndex, 1);
@@ -159,7 +207,7 @@ const CategorySetting = () => {
     } else {
       const newList = [...currentIncomeList];
       const newNoSelectList = [...noSelectIncomeList];
-      
+
       const category = newList.find(val => val.id === id);
       const delIndex = newList.findIndex((val) => val.id === id);
 
@@ -177,7 +225,7 @@ const CategorySetting = () => {
   }
 
   // 保存
-  async function handlerSave () {
+  async function handlerSave() {
     const params = {
       expenditureList: currentExpenditureList.map(i => i.id),
       incomeList: currentIncomeList.map(i => i.id)
@@ -217,9 +265,9 @@ const CategorySetting = () => {
       <div className="category-list-wrapper">
         <SortableContainer onSortEnd={onSortEnd} useDragHandle>
           {currentIcons.map((item, index) => (
-            <CategoryItem 
-              key={`item-${item.title}`} 
-              index={index} 
+            <CategoryItem
+              key={`item-${item.title}`}
+              index={index}
               {...item}
               onDelete={category => {
                 handlerDel(category);
@@ -229,32 +277,58 @@ const CategorySetting = () => {
         </SortableContainer>
         <WingBlank style={{ marginTop: 10 }}>
           <Button type="primary" onClick={handlerSave}>保存</Button>
+          <Button type="primary" onClick={() => {
+            setShow(true);
+          }}>新增</Button>
         </WingBlank>
       </div>
 
 
       {
         currentNoSelectIcons.length ? (<div className="category-list-wrapper">
-        <h3 className="title">更多类别</h3>
-        <ul className="more-category-list">
-          {
-            currentNoSelectIcons.map(item => (
-              <li className="category-item" key={item.id}>
-                <div className="operation-icon-wrapper" onClick={() => { handlerAdd(item) }}>
-                  <span className={'icon iconfont-base icon-add'}></span>
-                </div>
-                <div className="category-icon-wrapper">
-                  <span className={`icon iconfont icon-${item.icon}`}></span>
-                </div>
-                <p className="category-title">{item.title}</p>
-              </li>
-            ))
-          }
+          <h3 className="title">更多类别</h3>
+          <ul className="more-category-list">
+            {
+              currentNoSelectIcons.map(item => (
+                <li className="category-item" key={item.id}>
+                  <div className="operation-icon-wrapper" onClick={() => { handlerAdd(item) }}>
+                    <span className={'icon iconfont-base icon-add'}></span>
+                  </div>
+                  <div className="category-icon-wrapper">
+                    <span className={`icon iconfont icon-${item.icon}`}></span>
+                  </div>
+                  <p className="category-title">{item.title}</p>
+                </li>
+              ))
+            }
 
-        </ul>
-      </div>) : null
+          </ul>
+        </div>) : null
       }
 
+      {/* 新增类别弹窗 */}
+      <WhiteSpace />
+      <Modal
+        visible={show}
+        transparent
+        maskClosable={false}
+        onClose={() => {
+          setShow(false);
+        }}
+        title="新增类别"
+        footer={[{ text: 'Ok', onPress: () => { console.log('ok'); setShow(false) } }]}
+        wrapProps={{ onTouchStart: onWrapTouchStart }}
+      >
+        <PickerView
+          onChange={(val: string[]) => {
+            console.log('val: ', val);
+            setVal(val)
+          }}
+          value={val}
+          data={season}
+          cascade={false}
+        />
+      </Modal>
     </div>
   )
 }
