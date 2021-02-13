@@ -102,6 +102,8 @@ const expenditureIcons = [
   { title: '其它', icon: 'qita' }
 ];
 
+const testList = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+
 const Bookkeeping = () => {
   const [tab, setTab] = useState<tabs>('收入');
 
@@ -160,6 +162,24 @@ const Bookkeeping = () => {
           />
       }
 
+      <h3>图标测试{testList.length}</h3>
+      <div className="icon-box">
+        <ul className="icon-list">
+          {
+            testList.map(i => (
+              <li
+                className={`icon-item`} key={i}
+                
+              >
+                <div className="icon-container">
+                  <span className={`icon iconfont icon-${i}`}></span>
+                </div>
+                <p className="title">{i}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   )
 }
