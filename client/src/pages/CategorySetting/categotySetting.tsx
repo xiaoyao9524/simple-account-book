@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import arrayMove from 'array-move';
 
 /** components */
@@ -246,6 +247,8 @@ const CategorySetting = () => {
 
   /** function end */
 
+  const history = useHistory();
+
   return (
     <div className="category-setting">
       <NavBar style={{ position: 'fixed', top: 0, zIndex: 5, width: '100%' }}>类别设置</NavBar>
@@ -278,7 +281,9 @@ const CategorySetting = () => {
         <WingBlank style={{ marginTop: 10 }}>
           <Button type="primary" onClick={handlerSave}>保存</Button>
           <Button type="primary" onClick={() => {
-            setShow(true);
+            history.push('/insertCategory', {
+              type: tab
+            });
           }}>新增</Button>
         </WingBlank>
       </div>
