@@ -4,8 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 /** components */
 import {
   List,
-  InputItem,
-  WhiteSpace
+  InputItem
 } from "antd-mobile";
 import NavBar from '../../components/NavBar'
 
