@@ -1,6 +1,6 @@
 .insert-category {
   .icon-list-wrapper {
-    padding-top: 90px;
+    padding: 90px 0 48px 0;
     .icon-list-item {
       .icon-title {
         padding: 10px 0 10px 10px;
@@ -16,8 +16,6 @@
         .icon-item {
           padding: 4px;
           margin: 5px 4px;
-          // margin-bottom: 10px;
-          // margin-right: 5px;
           text-align: center;
           width: 70px;
           height: 70px;
@@ -28,8 +26,24 @@
             line-height: 70px;
             
           }
+          &.active {
+            background: #1890ff;
+            .icon {
+              color: #fff;
+            }
+          }
         }
       }
     }
+  }
+
+  .save-btn-wrapper {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 5;
+    // padding: 0 10px;
+    width: 100%;
+    background: #fff;
   }
 }

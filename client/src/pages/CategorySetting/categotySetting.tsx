@@ -237,6 +237,7 @@ const CategorySetting = () => {
 
       if (res.data.status === 200) {
         dispatch(getUpdateUserCategoryAction(res.data.data));
+        Toast.success('保存成功', 1, () => {}, false);
       } else {
         Toast.fail(res.data.message);
       }
@@ -280,7 +281,10 @@ const CategorySetting = () => {
         </SortableContainer>
         <WingBlank style={{ marginTop: 10 }}>
           <Button type="primary" onClick={handlerSave}>保存</Button>
-          <Button type="primary" onClick={() => {
+          <Button 
+          type="primary"
+          style={{marginTop: 10}}
+          onClick={() => {
             history.push('/insertCategory', {
               type: tab
             });

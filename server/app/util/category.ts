@@ -17,3 +17,18 @@ export function classifyCategory (categoryList: CategoryItemProps[]) {
     incomeList
   }
 }
+
+// 根据id列表排序类别
+export function sortCategoryList (idList: number[], categoryList: CategoryItemProps[]): CategoryItemProps[] {
+  const ret: CategoryItemProps[] = [];
+
+  for (let id of idList) {
+    const item = categoryList.find(i => i.id === id);
+
+    if (item) {
+      ret.push(item);
+    }
+  }
+
+  return ret;
+}

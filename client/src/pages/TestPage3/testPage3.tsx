@@ -24,7 +24,7 @@ const incomeIcons = [
   // 住👇
   { title: '住房', icon: 'zhufang' },
   { title: '水费', icon: 'shuifei' },
-  { title: '电费', icon: 'dianfeifuwu' },
+  { title: '电费', icon: 'dianfei' },
   { title: '网费', icon: 'wangluo' },
 
   { title: '缴费', icon: 'jiaofei' },
@@ -102,7 +102,7 @@ const expenditureIcons = [
   { title: '其它', icon: 'qita' }
 ];
 
-const testList = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+const testList = ["", "", "", "", "", "qita"]
 
 const Bookkeeping = () => {
   const [tab, setTab] = useState<tabs>('收入');

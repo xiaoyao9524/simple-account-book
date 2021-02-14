@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from "react-router-dom";
 
+import useForm from 'rc-form-hooks';
 /** components */
 import {
   List,
-  InputItem
+  InputItem,
+  Button,
+  Toast
 } from "antd-mobile";
 import NavBar from '../../components/NavBar'
 
-/** components */
-import {
-
-} from 'antd-mobile';
-
 /** style */
 import './style.scss';
-
-const Item = List.Item;
-const Brief = Item.Brief
 
 interface ILocalState {
   type?: '支出' | '收入';
 }
 
-const expenditure = [
+const iconList = [
   {
     title: '娱乐',
     list: [
@@ -78,10 +73,10 @@ const expenditure = [
     title: '购物',
     list: [
       'fushi',
-      'lvxing',
       'gouwu',
       'taobao',
       'jingdong',
+      'xianyu',
       'chaoshi',
       'riyongpin',
       'liwu'
@@ -94,7 +89,8 @@ const expenditure = [
       'dianfei',
       'wangluo',
       'huafei',
-      'meirong'
+      'meirong',
+      'lvxing'
     ]
   },
   {
@@ -135,7 +131,10 @@ const expenditure = [
       'lijin',
       'juanzeng',
       'zhuanzhang',
-      'caipiao'
+      'caipiao',
+      'gongzi',
+      'licai',
+      'jianzhi'
     ]
   }
 ]
@@ -152,19 +151,60 @@ const InsertCategory = () => {
     }
   })
 
-  const categoryType = useState<0 | 1>(state.type === '收入' ? 0 : 1);
+  const [currentIcon, setCurrentIcon] = useState(iconList[0].list[0]);
+
+  const [categoryType] = useState<0 | 1>(state.type === '收入' ? 0 : 1);
+
+  const {
+    getFieldDecorator,
+    getFieldError,
+    validateFields
+  } = useForm<{
+    title: string;
+  }>();
+
+  async function handlerSave(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      const result = await validateFields();
+      const { title } = result;
+
+      const params = {
+        title,
+        categoryType,
+        icon: currentIcon
+      }
+
+      console.log('params: ', params);
+
+    } catch (err) {
+      Toast.fail(err.message);
+    }
+  }
 
   return (
     <div className="insert-category">
       <NavBar style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 5 }}>新增类别</NavBar>
       <List style={{ position: 'fixed', top: 45, left: 0, width: '100%', zIndex: 5 }}>
-        <InputItem
-          clear
-          placeholder="请输入类别名称"
-        >类别名称</InputItem>
+        {
+          getFieldDecorator('title', {
+            initialValue: '',
+            rules: [
+              {required: true, message: '必须输入类别名称'},
+              {type: 'string', min: 1, max: 4, message: '类别名称不要超过四个汉字'}
+            ]
+          })(
+            <InputItem
+              clear
+              placeholder="类别名称(不超过四个汉字)"
+              error={getFieldError('title').length > 0}
+            >类别名称</InputItem>
+          )
+        }
       </List>
+
       <ul className="icon-list-wrapper">
-        {expenditure.map(i => (
+        {iconList.map(i => (
           <li key={i.title} className="icon-list-item">
             <h3 className="icon-title">{i.title}</h3>
             <ul className="icon-list">
@@ -172,8 +212,8 @@ const InsertCategory = () => {
                 i.list.map(icon => (
                   <li
                     key={icon}
-                    className="icon-item"
-                    onClick={() => { console.log(icon) }}
+                    className={`icon-item ${currentIcon === icon ? 'active' : ''}`}
+                    onClick={() => { setCurrentIcon(icon) }}
                   >
                     <span className={`icon iconfont icon-${icon}`}></span>
                   </li>
@@ -183,6 +223,14 @@ const InsertCategory = () => {
           </li>
         ))}
       </ul>
+
+      <div className="save-btn-wrapper">
+        <Button 
+          type="primary" 
+          style={{ borderRadius: 0 }}
+          onClick={handlerSave}
+        >保存</Button>
+      </div>
     </div>
   )
 }

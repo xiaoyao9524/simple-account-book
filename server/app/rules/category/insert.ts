@@ -5,7 +5,8 @@ const rules = {
   ],
   title: [
     {required: true, message: '必须输入类别名称'},
-    {type: 'string', message: '类别名称格式不正确'}
+    {type: 'string', message: '类别名称格式不正确'},
+    {min: 1, max: 4, message: '类别名称不要超过四个汉字'}
   ],
   icon: [
     {required: true, message: '必须选择图标类型'},
