@@ -16,6 +16,21 @@ export interface AllCategoryListResult {
 
 export type GetAllCategoryListResult = BaseResult<AllCategoryListResult>;
 
+/** 新增类别 */
+// 传参
+export interface InsertCategoryProps {
+  categoryType: 0 | 1;
+  title: string;
+  icon: string;
+}
+
+// 返回
+export type InsertCategoryResultProps = BaseResult<{
+  expenditureList: CategoryItem[];
+  incomeList: CategoryItem[];
+}>
+
+
 // 更新类别传参
 export interface UpdateCategoryParams {
   expenditureList: number[];

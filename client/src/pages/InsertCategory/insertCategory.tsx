@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from "react-router-dom";
+import {useDispatch} from 'react-redux'
 
 import useForm from 'rc-form-hooks';
 /** components */
@@ -11,6 +12,14 @@ import {
 } from "antd-mobile";
 import NavBar from '../../components/NavBar'
 
+/** type */
+import { InsertCategoryProps } from "../../types/category";
+
+/** request */
+import { insertCategory } from "../../api/category";
+
+/** dispatch */
+import { getUpdateUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
 /** style */
 import './style.scss';
 
@@ -145,6 +154,8 @@ const InsertCategory = () => {
 
   const state = location.state;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!state || !state.type) {
       history.replace('/');
@@ -163,7 +174,7 @@ const InsertCategory = () => {
     title: string;
   }>();
 
-  async function handlerSave(e: React.FormEvent) {
+  async function handlerSaveClick (e: React.FormEvent) {
     e.preventDefault();
     try {
       const result = await validateFields();
@@ -176,7 +187,26 @@ const InsertCategory = () => {
       }
 
       console.log('params: ', params);
+      handlerSave(params);
 
+    } catch (err) {
+      Toast.fail(err.message);
+    }
+  }
+
+  async function handlerSave (data: InsertCategoryProps) {
+    try {
+      const res = await insertCategory(data);
+
+      if (res.data.status === 200) {
+        
+        dispatch(getUpdateUserCategoryAction(res.data.data));
+
+        history.goBack();
+        
+      } else {
+        Toast.fail(res.data.message);
+      }
     } catch (err) {
       Toast.fail(err.message);
     }
@@ -228,7 +258,7 @@ const InsertCategory = () => {
         <Button 
           type="primary" 
           style={{ borderRadius: 0 }}
-          onClick={handlerSave}
+          onClick={handlerSaveClick}
         >保存</Button>
       </div>
     </div>

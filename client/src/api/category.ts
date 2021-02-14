@@ -1,6 +1,8 @@
 import request from '../utils/axios';
 import { 
     GetAllCategoryListResult,
+    InsertCategoryProps,
+    InsertCategoryResultProps,
     UpdateCategoryParams,
     UpdateCategoryResult
 } from "../types/category";
@@ -11,6 +13,15 @@ export const getAllCategoryList = () => (
     request<GetAllCategoryListResult>({
         method: 'post',
         url: '/api/category/getAllCategoryList'
+    })
+)
+
+// 新增类别
+export const insertCategory = (data: InsertCategoryProps) => (
+    request<InsertCategoryResultProps>({
+        method: 'post',
+        url: '/api/category/insert',
+        data
     })
 )
 
