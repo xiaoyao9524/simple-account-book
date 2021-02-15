@@ -24,7 +24,6 @@ class CategoryService extends Service {
       return null;
     }
   }
-
   // 获取某用户下全部的类别，包含该用户移除的类别（所有默认的 + 该用户新建的）
   async getAllCategoryList (pid: number) {
     const { ctx } = this;
@@ -86,6 +85,23 @@ class CategoryService extends Service {
       return ret;
     } catch (err) {
       return null;
+    }
+  }
+  // 删除类别
+  async deleteCategory (id: number) {
+    const { ctx } = this;
+    try {
+      const result = await ctx.model.Category.destroy({
+        where: {
+          id
+        }
+      })
+
+      console.log('删除类别Res: ', result);
+      return result;
+    } catch (err) {
+      console.log(err.message);
+      return null
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import { IStoreState } from '../../store/reducers';
 import { UserInfo } from '../../types/user';
 import { CategoryItem } from '../../types/category';
@@ -97,6 +98,7 @@ const incomeIcons = [
 ];
 */
 const Bookkeeping = () => {
+  const history = useHistory();
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
   const expenditureIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.expenditureList);
   const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.incomeList);
@@ -143,6 +145,20 @@ const Bookkeeping = () => {
                     </li>
                   ))
                 }
+                <li
+                      className={`icon-item`} 
+                      onClick={() => {
+                        history.push('/categorySetting', {
+                          tab
+                        })
+                      }}
+                    >
+
+                      <div className="icon-container">
+                        <span className="icon iconfont-base icon-shezhi"></span>
+                      </div>
+                      <p className="title">设置</p>
+                    </li>
               </ul>
             </div>
 

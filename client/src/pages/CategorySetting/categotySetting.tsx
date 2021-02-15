@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import arrayMove from 'array-move';
 
 /** components */
@@ -9,9 +9,7 @@ import {
   Toast,
   WingBlank,
   Button,
-  Modal,
-  WhiteSpace,
-  PickerView
+  Modal
 } from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
 import NavBar from '../../components/NavBar/navBar';
@@ -23,43 +21,23 @@ import { CategoryItem as ICategoryItemProps } from '../../types/category';
 import { AllCategoryListResult } from "../../types/category";
 
 /** request */
-import { getAllCategoryList, updateCategory } from '../../api/category';
+import { getAllCategoryList, updateCategory, deleteCategory } from '../../api/category';
 
 /** action */
-import { getUpdateUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
+import { getUpdateUserCategoryAction, getDeleteOneCtegoryAction } from "../../store/reducers/modules/user/actionCreator";
 /** style */
 import './style.scss';
 
+const alert = Modal.alert;
 
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
 
+
+
 const SortableContainer = sortableContainer(({ children }: any) => {
   return <ul className="current-category-list">{children}</ul>;
 });
-
-function closest(el: HTMLElement, selector: string) {
-  const matchesSelector = el.matches || el.webkitMatchesSelector; // || el.mozMatchesSelector || el.msMatchesSelector;
-
-  while (el) {
-    if (matchesSelector.call(el, selector)) {
-      return el;
-    }
-    el = el.parentElement as HTMLElement;
-  }
-  return null;
-}
-
-const season = [
-  {
-    label: '春l',
-    value: '春v',
-  },
-  {
-    label: '夏l',
-    value: '夏v',
-  },
-];
 
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
@@ -79,23 +57,6 @@ const CategorySetting = () => {
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<ICategoryItemProps[]>([]);
 
-  /** 测试弹窗 */
-  const [show, setShow] = useState(false);
-  const [val, setVal] = useState(['春v']);
-
-  const onWrapTouchStart = (e: any) => {
-    console.log('e: ', e);
-
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  }
-  /** 测试弹窗 end */
   const dispatch = useDispatch();
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
@@ -237,7 +198,7 @@ const CategorySetting = () => {
 
       if (res.data.status === 200) {
         dispatch(getUpdateUserCategoryAction(res.data.data));
-        Toast.success('保存成功', 1, () => {}, false);
+        Toast.success('保存成功', 1, () => { }, false);
       } else {
         Toast.fail(res.data.message);
       }
@@ -246,9 +207,52 @@ const CategorySetting = () => {
     }
   }
 
+  // 删除弹窗
+  const showAlert = (item: ICategoryItemProps) => {
+    console.log('删除: ', item);
+    
+    const alertInstance = alert('删除', `确认删除“${item.title}”吗？`, [
+      { text: '取消' },
+      { text: '确认', onPress: async() => {
+        try {
+          const res = await deleteCategory({id: item.id});
+
+          console.log('res: ', res);
+          
+          if (res.data.status === 200) {
+            Toast.success(res.data.message);
+            dispatch(getDeleteOneCtegoryAction(item));
+            _getAllCategoryList();
+          } else {
+            Toast.fail(res.data.message);
+          }
+
+        } catch (err) {
+          Toast.fail(err.message);
+        }
+        alertInstance.close();
+      }, style: 'warning'},
+    ]);
+    // setTimeout(() => {
+    //   // 可以调用close方法以在外部close
+    //   console.log('auto close');
+    //   alertInstance.close();
+    // }, 500000);
+  };
+
   /** function end */
 
   const history = useHistory();
+  const location = useLocation();
+  const state = location.state as { tab?: tabs }
+
+  useEffect(() => {
+
+    if (state?.tab) {
+      setTab(state.tab);
+    }
+  }, [state?.tab])
+
 
   return (
     <div className="category-setting">
@@ -281,14 +285,14 @@ const CategorySetting = () => {
         </SortableContainer>
         <WingBlank style={{ marginTop: 10 }}>
           <Button type="primary" onClick={handlerSave}>保存</Button>
-          <Button 
-          type="primary"
-          style={{marginTop: 10}}
-          onClick={() => {
-            history.push('/insertCategory', {
-              type: tab
-            });
-          }}>新增</Button>
+          <Button
+            type="primary"
+            style={{ marginTop: 10 }}
+            onClick={() => {
+              history.push('/insertCategory', {
+                type: tab
+              });
+            }}>新增</Button>
         </WingBlank>
       </div>
 
@@ -307,82 +311,28 @@ const CategorySetting = () => {
                     <span className={`icon iconfont icon-${item.icon}`}></span>
                   </div>
                   <p className="category-title">{item.title}</p>
+                  <div className="del-btn-wrapper">
+                    {
+                      item.isDefault === 1 ? null : (
+                        <Button
+                          type="warning"
+                          inline
+                          size="small"
+                          onClick={() => { showAlert(item) }}
+                        >删除</Button>
+                      )
+                    }
+                  </div>
                 </li>
               ))
             }
-
           </ul>
         </div>) : null
       }
 
-      {/* 新增类别弹窗 */}
-      <WhiteSpace />
-      <Modal
-        visible={show}
-        transparent
-        maskClosable={false}
-        onClose={() => {
-          setShow(false);
-        }}
-        title="新增类别"
-        footer={[{ text: 'Ok', onPress: () => { console.log('ok'); setShow(false) } }]}
-        wrapProps={{ onTouchStart: onWrapTouchStart }}
-      >
-        <PickerView
-          onChange={(val: string[]) => {
-            console.log('val: ', val);
-            setVal(val)
-          }}
-          value={val}
-          data={season}
-          cascade={false}
-        />
-      </Modal>
+
     </div>
   )
 }
 
 export default CategorySetting;
-
-// category表
-/*
-[
-  {
-    id: 1,
-    title: '默认1',
-    icon: 'xxx',
-    isDefault: 1
-  },
-  {
-    id: 2,
-    title: '默认2',
-    icon: 'xxx',
-    isDefault: 1
-  },
-  {
-    id: 3,
-    title: '自定义555',
-    icon: 'xxx',
-    isDefault: 0
-  }
-];
-
-// category-sort表
-[
-  {
-    pid: 'admin',
-    cid: 1,
-    sort: 1
-  },
-  {
-    pid: 'admin',
-    cid: 2,
-    sort: 2
-  },
-  {
-    pid: 'admin',
-    cid: 3,
-    sort: 3
-  },
-]
-*/

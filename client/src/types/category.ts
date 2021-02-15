@@ -3,7 +3,8 @@ import { BaseResult } from "./base";
 // 分类数据结构
 export interface CategoryItem {
   readonly id: number;
-  categoryType: number; // 收入0 支出 1
+  categoryType: 0 | 1; // 收入0 支出 1
+  isDefault: 0 | 1; // 0为自定义添加，1为默认，无法删除
   title: string;
   icon: string;
 }
@@ -43,3 +44,11 @@ export interface UpdateCategoryResultData {
   incomeList: CategoryItem[];
 }
 export type UpdateCategoryResult = BaseResult<UpdateCategoryResultData>;
+
+/** 删除类别 */
+// 删除类别传参
+export interface DeleteCategoryParams {
+  id: number;
+}
+
+export type DeleteCategoryResult = BaseResult<null>;

@@ -4,7 +4,9 @@ import {
     InsertCategoryProps,
     InsertCategoryResultProps,
     UpdateCategoryParams,
-    UpdateCategoryResult
+    UpdateCategoryResult,
+    DeleteCategoryParams,
+    DeleteCategoryResult
 } from "../types/category";
 
 
@@ -30,6 +32,15 @@ export const updateCategory = (data: UpdateCategoryParams) => (
     request<UpdateCategoryResult>({
         method: 'post',
         url: '/api/category/updateCategory',
+        data
+    })
+)
+
+// 删除类别
+export const deleteCategory = (data: DeleteCategoryParams) => (
+    request<DeleteCategoryResult>({
+        method: 'delete',
+        url: '/api/category/deleteCategory',
         data
     })
 )

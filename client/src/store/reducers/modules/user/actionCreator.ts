@@ -3,15 +3,17 @@ import {
   SET_TOKEN,
   SET_USER_INFO,
   SET_USER_DATA_BY_LOCAL,
-  UPDATE_USER_CATEGORY
+  UPDATE_USER_CATEGORY,
+  DELETE_ONE_CATEGORY
 } from './actionTypes';
 
 import { UserInfo } from '../../../../types/user';
-import { UpdateCategoryResultData } from "../../../../types/category";
+import { UpdateCategoryResultData, CategoryItem } from "../../../../types/category";
 
 import {
   SetUserInfoAction,
   SetUserDataByLocalStorage,
+  DeleteOneCategoryAction
 } from './actionInterfaces';
 
 export const getSetTokenAction = (token: string) => ({
@@ -32,6 +34,11 @@ export const getSetUserDataByLocalAction = (): SetUserDataByLocalStorage => ({
 
 export const getUpdateUserCategoryAction = (category: UpdateCategoryResultData) => ({
   type: UPDATE_USER_CATEGORY,
+  category
+})
+
+export const getDeleteOneCtegoryAction = (category: CategoryItem): DeleteOneCategoryAction => ({
+  type: DELETE_ONE_CATEGORY,
   category
 })
 

@@ -9,7 +9,7 @@ export interface CategoryItemProps extends ICategoryItemProps {
 const DragHandle = SortableHandle(() => (<span className="icon iconfont-base icon-sort"></span>));
 
 const CategoryItem: React.FC<CategoryItemProps> = props => {
-  const { id, title, icon, categoryType, onDelete } = props;
+  const { id, title, icon, categoryType,isDefault, onDelete } = props;
 
   return (
     <li className="category-item">
@@ -20,6 +20,7 @@ const CategoryItem: React.FC<CategoryItemProps> = props => {
             id,
             categoryType,
             title,
+            isDefault,
             icon
           });
         }}

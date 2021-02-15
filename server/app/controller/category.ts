@@ -227,6 +227,31 @@ class CategoryController extends BaseController {
     console.timeEnd('更新类别时间统计');
   }
 
+  /** 删除类别 */
+  async deleteCategory() {
+    const { ctx, app } = this;
+    
+    const validateResult = await ctx.validate(
+      app.rules.category.deleteCategory,
+      ctx.request.body
+    );
+    
+    if (!validateResult) {
+      return;
+    }
+
+    const { id }: { id: number } = ctx.request.body;
+
+    const delRes = await ctx.service.category.deleteCategory(id);
+
+    if (!delRes) {
+      this.error('删除失败');
+      return
+    }
+
+    this.success(null);
+  }
+
   /**test */
   async getCategoryList() {
     const { ctx } = this;

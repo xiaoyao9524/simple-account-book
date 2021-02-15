@@ -2,11 +2,12 @@ import {
   SET_USER_INFO,
   SET_TOKEN,
   SET_USER_DATA_BY_LOCAL,
-  UPDATE_USER_CATEGORY
+  UPDATE_USER_CATEGORY,
+  DELETE_ONE_CATEGORY
 } from './actionTypes';
 
 import { UserInfo } from '../../../../types/user';
-import { UpdateCategoryResultData } from "../../../../types/category";
+import { UpdateCategoryResultData, CategoryItem } from '../../../../types/category';
 
 // 设置token
 export interface SetTokenAction {
@@ -30,10 +31,16 @@ export interface UpdateUserCategoryAction {
   category: UpdateCategoryResultData;
 }
 
+export interface DeleteOneCategoryAction {
+  type: DELETE_ONE_CATEGORY;
+  category: CategoryItem;
+}
+
 type UserActions =
   | SetTokenAction
   | SetUserInfoAction
   | SetUserDataByLocalStorage
-  | UpdateUserCategoryAction;
+  | UpdateUserCategoryAction
+  | DeleteOneCategoryAction;
 
 export default UserActions;

@@ -3,11 +3,13 @@ import {
   SET_USER_INFO,
   SET_TOKEN,
   SET_USER_DATA_BY_LOCAL,
-  UPDATE_USER_CATEGORY
+  UPDATE_USER_CATEGORY,
+  DELETE_ONE_CATEGORY
 } from './actionTypes';
 
 import { IUserState } from './types';
 import { UserInfo } from '../../../../types/user';
+import { CategoryItem } from '../../../../types/category';
 
 const defaultState: IUserState = {
   userInfo: {
@@ -57,6 +59,33 @@ export default (state = defaultState, action: UserActions) => {
     case UPDATE_USER_CATEGORY:
       newState.userInfo.category = action.category;
       localStorage.setItem('userInfo', JSON.stringify(newState.userInfo));
+      break
+    case DELETE_ONE_CATEGORY:
+      const { category } = action;
+
+      let newList: CategoryItem[] = [];
+
+      const isIncome = category.categoryType === 0;
+      if (isIncome) {
+        newList = [...newState.userInfo.category.incomeList];
+      } else {
+        newList = [...newState.userInfo.category.expenditureList];
+      }
+
+      const delIndex = newList.findIndex(i => i.id === category.id);
+      console.log('delIndex: ', delIndex);
+
+      if (delIndex >= 0) {
+        newList.splice(delIndex, 1);
+      }
+
+      if (isIncome) {
+        newState.userInfo.category.incomeList = newList;
+      } else {
+        newState.userInfo.category.expenditureList = newList;
+      }
+      localStorage.setItem('userInfo', JSON.stringify(newState.userInfo));
+      
       break
   }
   return newState;
