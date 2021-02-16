@@ -72,13 +72,14 @@ class CategoryService extends Service {
       });
 
       const ret =  result.map((item) => {
-        const { id, categoryType, title, icon } = item;
+        const { id, categoryType, title, icon, isDefault } = item;
 
         return {
           id,
           categoryType,
           title,
           icon,
+          isDefault
         };
       });
 

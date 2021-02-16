@@ -1,3 +1,4 @@
+import Item from 'antd-mobile/lib/popover/Item';
 import React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
@@ -10,6 +11,8 @@ const DragHandle = SortableHandle(() => (<span className="icon iconfont-base ico
 
 const CategoryItem: React.FC<CategoryItemProps> = props => {
   const { id, title, icon, categoryType,isDefault, onDelete } = props;
+  console.log('isDefault: ', isDefault);
+  
 
   return (
     <li className="category-item">
@@ -30,7 +33,7 @@ const CategoryItem: React.FC<CategoryItemProps> = props => {
       <div className="category-icon-wrapper">
         <span className={`icon iconfont icon-${icon}`}></span>
       </div>
-      <p className="category-title">{title}</p>
+      <p className="category-title">{title} {isDefault === 0 ? <span>（自定义）</span> : ''}</p>
       <div className="drag-sort-wrapper">
         <DragHandle />
       </div>

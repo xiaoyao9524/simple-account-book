@@ -57,6 +57,10 @@ const CategorySetting = () => {
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<ICategoryItemProps[]>([]);
 
+  console.log('currentIcons: ', currentIcons);
+  console.log('currentNoSelectIcons: ', currentNoSelectIcons);
+
+
   const dispatch = useDispatch();
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
@@ -210,34 +214,31 @@ const CategorySetting = () => {
   // 删除弹窗
   const showAlert = (item: ICategoryItemProps) => {
     console.log('删除: ', item);
-    
+
     const alertInstance = alert('删除', `确认删除“${item.title}”吗？`, [
       { text: '取消' },
-      { text: '确认', onPress: async() => {
-        try {
-          const res = await deleteCategory({id: item.id});
+      {
+        text: '确认', onPress: async () => {
+          try {
+            const res = await deleteCategory({ id: item.id });
 
-          console.log('res: ', res);
-          
-          if (res.data.status === 200) {
-            Toast.success(res.data.message);
-            dispatch(getDeleteOneCtegoryAction(item));
-            _getAllCategoryList();
-          } else {
-            Toast.fail(res.data.message);
+            console.log('res: ', res);
+
+            if (res.data.status === 200) {
+              Toast.success(res.data.message);
+              dispatch(getDeleteOneCtegoryAction(item));
+              _getAllCategoryList();
+            } else {
+              Toast.fail(res.data.message);
+            }
+
+          } catch (err) {
+            Toast.fail(err.message);
           }
-
-        } catch (err) {
-          Toast.fail(err.message);
-        }
-        alertInstance.close();
-      }, style: 'warning'},
+          alertInstance.close();
+        }, style: 'warning'
+      },
     ]);
-    // setTimeout(() => {
-    //   // 可以调用close方法以在外部close
-    //   console.log('auto close');
-    //   alertInstance.close();
-    // }, 500000);
   };
 
   /** function end */
@@ -247,7 +248,6 @@ const CategorySetting = () => {
   const state = location.state as { tab?: tabs }
 
   useEffect(() => {
-
     if (state?.tab) {
       setTab(state.tab);
     }
@@ -295,7 +295,6 @@ const CategorySetting = () => {
             }}>新增</Button>
         </WingBlank>
       </div>
-
 
       {
         currentNoSelectIcons.length ? (<div className="category-list-wrapper">
