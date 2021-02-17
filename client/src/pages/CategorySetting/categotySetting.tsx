@@ -57,10 +57,6 @@ const CategorySetting = () => {
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<ICategoryItemProps[]>([]);
 
-  console.log('currentIcons: ', currentIcons);
-  console.log('currentNoSelectIcons: ', currentNoSelectIcons);
-
-
   const dispatch = useDispatch();
   useEffect(() => {
     setCurrentIcons(tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]);
@@ -213,16 +209,12 @@ const CategorySetting = () => {
 
   // 删除弹窗
   const showAlert = (item: ICategoryItemProps) => {
-    console.log('删除: ', item);
-
     const alertInstance = alert('删除', `确认删除“${item.title}”吗？`, [
       { text: '取消' },
       {
         text: '确认', onPress: async () => {
           try {
             const res = await deleteCategory({ id: item.id });
-
-            console.log('res: ', res);
 
             if (res.data.status === 200) {
               Toast.success(res.data.message);

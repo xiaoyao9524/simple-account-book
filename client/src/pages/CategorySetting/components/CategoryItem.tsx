@@ -11,8 +11,6 @@ const DragHandle = SortableHandle(() => (<span className="icon iconfont-base ico
 
 const CategoryItem: React.FC<CategoryItemProps> = props => {
   const { id, title, icon, categoryType,isDefault, onDelete } = props;
-  console.log('isDefault: ', isDefault);
-  
 
   return (
     <li className="category-item">

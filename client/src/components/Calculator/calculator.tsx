@@ -170,7 +170,7 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   }
 
   // 判断选择的日期是否为今天
-  const dateIsToday = date?.format('YYYY/MM/DD') === moment().format('YYYY/MM/DD');
+  const dateIsToday = date?.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD');
 
   return (
     <div className="calculator" style={style || void 0}>
@@ -223,7 +223,7 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
             {
               dateIsToday ? (
                 <><span className="icon iconfont icon-rili"></span>&nbsp;今天</>
-              ) : date.format('YYYY/MM/DD')
+              ) : date.format('YYYY-MM-DD')
             }
 
           </Button>
