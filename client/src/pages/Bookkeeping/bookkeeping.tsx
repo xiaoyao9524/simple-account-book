@@ -3,13 +3,18 @@ import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { IStoreState } from '../../store/reducers';
 import { UserInfo } from '../../types/user';
-import { CategoryItem } from '../../types/category';
+
 
 import { SegmentedControl } from 'antd-mobile';
 import NavBar from '../../components/NavBar';
 import NoLogin from '../../components/NoLogin/noLogin';
 
 import Calculator from '../../components/Calculator/calculator';
+
+/** type */
+import { CategoryItem } from '../../types/category';
+
+/** style */
 import './style.scss';
 
 type tabs = '支出' | '收入';
@@ -104,7 +109,7 @@ const Bookkeeping = () => {
   const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.incomeList);
   const [tab, setTab] = useState<tabs>('支出');
 
-  const [category, setCategory] = useState<string | null>(null);
+  const [category, setCategory] = useState<CategoryItem>(tab === '支出' ? expenditureIcons[0] : incomeIcons[0]);
 
   const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
   return (
@@ -121,7 +126,7 @@ const Bookkeeping = () => {
                 selectedIndex={tabList.indexOf(tab)}
                 onChange={e => {
                   const tab: tabs = e.nativeEvent.value;
-                  setCategory(null);
+                  setCategory(tab === '支出' ? expenditureIcons[0] : incomeIcons[0]);
                   setTab(tab);
                 }}
               />
@@ -132,9 +137,9 @@ const Bookkeeping = () => {
                 {
                   currentIcons.map(i => (
                     <li
-                      className={`icon-item ${i.title === category ? 'active' : ''}`} key={i.title}
+                      className={`icon-item ${i.title === category.title ? 'active' : ''}`} key={i.title}
                       onClick={() => {
-                        setCategory(i.title)
+                        setCategory(i)
                       }}
                     >
 
@@ -146,19 +151,18 @@ const Bookkeeping = () => {
                   ))
                 }
                 <li
-                      className={`icon-item`} 
-                      onClick={() => {
-                        history.push('/categorySetting', {
-                          tab
-                        })
-                      }}
-                    >
-
-                      <div className="icon-container">
-                        <span className="icon iconfont-base icon-shezhi"></span>
-                      </div>
-                      <p className="title">设置</p>
-                    </li>
+                  className={`icon-item`}
+                  onClick={() => {
+                    history.push('/categorySetting', {
+                      tab
+                    })
+                  }}
+                >
+                  <div className="icon-container">
+                    <span className="icon iconfont-base icon-shezhi"></span>
+                  </div>
+                  <p className="title">设置</p>
+                </li>
               </ul>
             </div>
 

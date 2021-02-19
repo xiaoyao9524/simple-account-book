@@ -14,6 +14,9 @@ export default (app: Application) => {
   router.post('/api/category/updateCategory', controller.category.updateCategory);
   router.delete('/api/category/deleteCategory', controller.category.deleteCategory);
 
+  /** 记账相关 */
+  router.post('/api/bill/insertBill', controller.bill.insertBill);
+
   /** 特殊controller */
   // router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);
   router.post('/api/category/getCategoryList', controller.category.getCategoryList);
