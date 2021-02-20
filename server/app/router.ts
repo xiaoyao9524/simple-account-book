@@ -16,6 +16,7 @@ export default (app: Application) => {
 
   /** 记账相关 */
   router.post('/api/bill/insertBill', controller.bill.insertBill);
+  router.post('/api/bill/getBillListByDate', controller.bill.getBillListByDate);
 
   /** 特殊controller */
   // router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);

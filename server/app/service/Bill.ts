@@ -14,15 +14,29 @@ class BillService extends Service {
         uId: tokenParse.id,
         price: Number(Number(billItem.price).toFixed(2))
       };
-
-      console.log('insertData: ', insertData);
       
 
       const result = await ctx.model.Bill.create(insertData);
 
       return result;
     } catch (err) {
-      console.log('err: ', err);
+      return null;
+    }
+  }
+
+  // 按照时间范围查找列表
+  async getBillListByDate(date: string) {
+    const { ctx } = this;
+    try {
+      const result = await ctx.model.Bill.findAll({
+        where: {
+          billTime: [date]
+        }
+      })
+
+      return result;
+    } catch (err) {
+      console.log(err.message);
       return null;
     }
   }

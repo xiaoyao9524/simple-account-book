@@ -16,11 +16,30 @@ class BillController extends BaseController {
 
     const insertRes = await ctx.service.bill.insertBill(ctx.request.body);
 
+    console.log('insertRes-33333333333: ', insertRes);
+    
+
     if (!insertRes) {
       return this.error('插入失败')
     }
     
     this.success(insertRes);
+  }
+
+
+
+  async getBillListByDate () {
+    const { ctx } = this;
+
+    const params: {date: string} = {...ctx.request.body };
+    
+    const list = await ctx.service.bill.getBillListByDate(params.date);
+
+    if (!list) {
+      return this.error('获取失败')
+    }
+
+    this.success(list);
   }
 }
 
