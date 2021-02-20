@@ -31,9 +31,10 @@ class BillController extends BaseController {
   async getBillListByDate () {
     const { ctx } = this;
 
-    const params: {date: string} = {...ctx.request.body };
+    const params: {startDate: string, endDate: string} = {...ctx.request.body };
+    const { startDate, endDate } = params;
     
-    const list = await ctx.service.bill.getBillListByDate(params.date);
+    const list = await ctx.service.bill.getBillListByDate(startDate, endDate);
 
     if (!list) {
       return this.error('获取失败')

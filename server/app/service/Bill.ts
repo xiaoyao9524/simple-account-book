@@ -2,6 +2,7 @@ import { Service } from 'egg';
 
 import { TokenParseProps } from '../types/base';
 import { IBillItem } from '../types/bill';
+import { Op } from "sequelize";
 
 class BillService extends Service {
   // 新增类别
@@ -25,12 +26,14 @@ class BillService extends Service {
   }
 
   // 按照时间范围查找列表
-  async getBillListByDate(date: string) {
+  async getBillListByDate(startDate: string, endDate: string) {
     const { ctx } = this;
     try {
       const result = await ctx.model.Bill.findAll({
         where: {
-          billTime: [date]
+          billTime: {
+            [Op.between]: [startDate, endDate]
+          }
         }
       })
 
