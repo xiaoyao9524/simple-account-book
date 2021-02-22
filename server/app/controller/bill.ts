@@ -1,5 +1,7 @@
 import BaseController from './BaseController';
 import { getMonthLastDay } from "../util/base";
+import { InsertBillRequestProps } from "../types/bill";
+import { TokenParseProps } from '../types/base';
 
 class BillController extends BaseController {
   /** 新增记账 */
@@ -15,6 +17,19 @@ class BillController extends BaseController {
       return;
     }
 
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+    const requestData: InsertBillRequestProps = {...ctx.request.body};
+
+    /** 查询新增的分类是否存在 */
+    const insertCategory = await ctx.service.category.getCategoryById(requestData.categoryId);
+
+    console.log('insertCategory: ', insertCategory);
+
+    if (!insertCategory || (insertCategory.pid !== tokenParse.id)) {
+      this.error('选择的分类不存在！');
+      return;
+    }
+
     const insertRes = await ctx.service.bill.insertBill(ctx.request.body);
 
     if (!insertRes) {
@@ -23,8 +38,6 @@ class BillController extends BaseController {
     
     this.success(insertRes);
   }
-
-
 
   async getBillListByDate () {
     const { ctx, app } = this;

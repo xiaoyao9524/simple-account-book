@@ -48,7 +48,7 @@ export class Category extends Model<Category> {
     type: DataType.INTEGER,
     comment: '创建者'
   })
-  pid: string;
+  pid: number;
 
   @Column({
     type: DataType.DATE(6),

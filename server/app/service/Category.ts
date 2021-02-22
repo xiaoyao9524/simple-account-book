@@ -105,6 +105,19 @@ class CategoryService extends Service {
       return null
     }
   }
+  /** 根据id获取单个分类 */
+  async getCategoryById(id: number) {
+    const { ctx } = this;
+    
+    try {
+      const result = await ctx.model.Category.findById(id);
+
+      return result;
+    } catch (err) {
+      console.log(err.message);
+      return null;
+    }
+  }
 
   /** test */
   /**插入默认数据 */
