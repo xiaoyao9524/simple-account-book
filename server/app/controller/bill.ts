@@ -23,10 +23,11 @@ class BillController extends BaseController {
     /** 查询新增的分类是否存在 */
     const insertCategory = await ctx.service.category.getCategoryById(requestData.categoryId);
 
-    console.log('insertCategory: ', insertCategory);
-
-    if (!insertCategory || (insertCategory.pid !== tokenParse.id)) {
+    if (!insertCategory) {
       this.error('选择的分类不存在！');
+      return
+    } else if ((insertCategory.isDefault === 0 && (insertCategory.pid !== tokenParse.id))){
+      this.error('必须选择自己创建的的分类！');
       return;
     }
 
