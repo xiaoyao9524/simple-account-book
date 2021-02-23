@@ -4,7 +4,8 @@ import {
     RegisterResponseProps,
     LoginRequestProps,
     LoginResponseProps,
-    userInfoProps
+    userInfoProps,
+    LogoutResponseProps
 } from '../types/admin';
 
 // 注册
@@ -30,6 +31,14 @@ export function getUserInfo () {
     return request<userInfoProps>({
         method: 'post',
         url: '/api/admin/getUserInfo'
+    })
+}
+
+// 登出用户
+export function logout () {
+    return request<LogoutResponseProps>({
+        method: 'post',
+        url: '/api/admin/logout'
     })
 }
 

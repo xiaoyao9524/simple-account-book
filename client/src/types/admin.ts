@@ -24,5 +24,7 @@ export type LoginResponseProps = BaseResult<{
   token: string;
 }>;
 
+export type LogoutResponseProps = BaseResult<null>;
+
 // 获取用户信息返回
 export type userInfoProps = BaseResult<UserInfo>;

@@ -7,10 +7,11 @@ export default (app: Application) => {
   router.post('/api/admin/register', controller.admin.register);
   router.post('/api/admin/login', controller.admin.login);
   router.post('/api/admin/getUserInfo', controller.admin.getUserInfo);
+  router.post('/api/admin/logout', controller.admin.logout);
 
   // 分类相关
   router.post('/api/category/insert', controller.category.insert);
-  router.post('/api/category/getAllCategoryList', controller.category.getAllCategoryList)
+  router.post('/api/category/getAllCategoryList', controller.category.getAllCategoryList);
   router.post('/api/category/updateCategory', controller.category.updateCategory);
   router.delete('/api/category/deleteCategory', controller.category.deleteCategory);
 

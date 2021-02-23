@@ -1,16 +1,21 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {IStoreState} from '../../store/reducers';
 import {UserInfo} from '../../types/user';
-import {useHistory} from 'react-router-dom';
 import defaultAvatar from '../../static/image/default-avatar.jpg';
 import NavBar from '../../components/NavBar';
 import TabBar from '../../components/TabBar';
-import {testReq} from '../../api/admin';
+import {
+  logout, 
+  testReq
+} from '../../api/admin';
 import './style.scss';
 
 import {
-  List
+  List,
+  Button,
+  Toast
 } from 'antd-mobile';
 
 const { Item } = List;
@@ -25,6 +30,23 @@ const My: React.FC = () => {
     
     console.log('test-data: ', data);
     
+  }
+
+  async function _logout () {
+    try {
+      const res = await logout();
+
+      if (res.data.status === 200) {
+        Toast.success('退出成功');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+        history.replace('/login');
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch (err) {
+      Toast.fail(err.message);
+    }
   }
 
   return (
@@ -66,6 +88,9 @@ const My: React.FC = () => {
           history.push('/categorySetting')
         }} >类别设置</Item>
         <Item arrow="horizontal" onClick={test}>关于简单记账</Item>
+        <Item>
+          <Button onClick={_logout} type="warning">退出登录</Button>
+        </Item>
       </List>
 
       <TabBar />

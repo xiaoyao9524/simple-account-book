@@ -97,7 +97,7 @@ const Login: React.FC = () => {
       if (userInfoData.status === 200) {
         dispatch(getSetUserInfoAction(userInfoData.data));
 
-        history.replace(decodeURIComponent(query.redirect) || '/');
+        history.replace(query.redirect ? decodeURIComponent(query.redirect) : '/');
 
       } else {
         Toast.fail(userInfoData.message);

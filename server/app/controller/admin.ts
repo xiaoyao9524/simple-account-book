@@ -192,6 +192,22 @@ class AdminController extends BaseController {
     this.success({...ret})
 
   }
+
+  async logout () {
+    const { ctx, app } = this;
+
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
+    ctx.cookies.set('token', null, {
+      maxAge: app.config.tokenExpiresMS,
+    });
+
+    app.redis.del(
+      `user_${tokenParse.username}_token`
+    );
+
+    this.success(null, '退出成功');
+  }
 }
 
 export default AdminController;
