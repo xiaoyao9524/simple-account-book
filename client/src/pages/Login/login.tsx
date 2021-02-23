@@ -179,7 +179,7 @@ const Login: React.FC = () => {
           <Button type="primary" onClick={onSubmit}>登录</Button>
         </Item>
 
-        <Item>
+        <Item className="" style={{marginTop: 160}}>
           <NavLink to={`/register?redirect=${query.redirect}`} style={{ float: 'right', color: '#108ee9' }}>
             注册
           </NavLink>
