@@ -35,13 +35,16 @@ import {
 
 import './style.scss';
 
-const { getSetTokenAction, getSetUserInfoAction } = userActionCreator;
+const { 
+  getSetTokenAction, 
+  getSetUserInfoAction 
+} = userActionCreator;
 
 const Item = List.Item;
 
 const Login: React.FC = () => {
-
   const dispatch = useDispatch();
+
   const {
     getFieldDecorator,
     getFieldError,
