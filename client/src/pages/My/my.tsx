@@ -88,7 +88,7 @@ const My: React.FC = () => {
           history.push('/categorySetting')
         }} >类别设置</Item>
         <Item arrow="horizontal" onClick={test}>关于简单记账</Item>
-        <Item>
+        <Item  style={{marginTop: 160}}>
           <Button onClick={_logout} type="warning">退出登录</Button>
         </Item>
       </List>

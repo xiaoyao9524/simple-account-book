@@ -67,7 +67,32 @@ class BillController extends BaseController {
       return this.error('获取失败')
     }
 
-    this.success(list);
+    const result = list.map(async item => {
+      const {
+        id,
+        categoryId,
+        categoryType,
+        price,
+        billTime,
+        remark
+      } = item;
+
+      const category = await ctx.service.category.getCategoryById(categoryId);
+
+      console.log('category: ', category);
+      
+
+      return {
+        id,
+        category,
+        categoryType,
+        price,
+        billTime,
+        remark
+      }
+    })
+
+    this.success(result);
   }
 }
 

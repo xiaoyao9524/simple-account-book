@@ -71,7 +71,7 @@ const Login: React.FC = () => {
         Toast.fail(err.message);
       })
   }
-  
+
   // 获取token
   async function handlerLogin(signinForm: LoginRequestProps) {
     try {
@@ -183,7 +183,7 @@ const Login: React.FC = () => {
           <Button type="primary" onClick={onSubmit}>登录</Button>
         </Item>
 
-        <Item className="" style={{marginTop: 160}}>
+        <Item className="">
           <NavLink to={`/register?redirect=${query.redirect}`} style={{ float: 'right', color: '#108ee9' }}>
             注册
           </NavLink>
