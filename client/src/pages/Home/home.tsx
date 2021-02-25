@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 
 import { IStoreState } from '../../store/reducers';
 import { useSelector } from 'react-redux';
 import { UserInfo } from '../../types/user';
+import { BillItem } from "../../types/bill";
 
 import moment, { Moment } from 'moment';
 // import { useLocation } from 'react-router-dom';
 
-import { NoticeBar, SwipeAction, List, DatePicker } from 'antd-mobile';
+import { getBillListByDate } from "../../api/bill";
+
+import { NoticeBar, SwipeAction, List, DatePicker, Toast } from 'antd-mobile';
 import TabBar from '../../components/TabBar';
 import NoLogin from '../../components/NoLogin';
 
@@ -148,7 +151,50 @@ const mobileNoticBar = (
   </NoticeBar>
 );
 
-const Home = () => {
+interface BillListItem {
+  date: string;
+  list: BillItem[];
+};
+
+interface IBillBeforeList {
+  [key: string]: BillItem[];
+}
+
+function handlerList (list: BillItem[]) {
+  const obj:IBillBeforeList  = {};
+
+  for (let item of list) {
+    if (obj[item.billTime]) {
+      obj[item.billTime].push(item);
+    } else {
+      obj[item.billTime] = [item];
+    }
+  }
+
+  const keys = Object.keys(obj);
+  console.log('keys: ', keys);
+  
+
+  const ret: BillListItem[] = keys.map(key => ({
+    date: key,
+    list: obj[key]
+  })).sort((a, b) => {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  })
+
+  // const ret: BillListItem[] = [];
+
+  // for (let key of keys) {
+  //   ret.push({
+  //     date: key,
+  //     list: obj[key]
+  //   })
+  // }
+
+  return ret;
+}
+
+const Home: FC = () => {
   // const location = useLocation();
   const isMobile = useSelector<IStoreState, boolean>(state => state.system.isMobile);
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
@@ -156,6 +202,32 @@ const Home = () => {
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [year, month] = date.format('YYYY-MM').split('-');
+
+  console.log('year: ', year, month);
+
+  useEffect(() => {
+    getBillList();
+  }, [year, month]);
+  
+
+  async function getBillList () {
+    try {
+      const res = await getBillListByDate({
+        date: `${year}-${month}`
+      });
+
+      if (res.data.status === 200) {
+        console.log('res: ', res.data.data);
+        console.log('list: ', handlerList(res.data.data.list));
+        
+        
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch(err) {
+      Toast.fail(err.message);
+    }
+  }
 
   return (
     <div className="home">

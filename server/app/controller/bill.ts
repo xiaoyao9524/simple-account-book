@@ -1,7 +1,8 @@
 import BaseController from './BaseController';
-import { getMonthLastDay } from "../util/base";
-import { InsertBillRequestProps } from "../types/bill";
+import { getMonthLastDay } from '../util/base';
+import { InsertBillRequestProps, BillListItem } from '../types/bill';
 import { TokenParseProps } from '../types/base';
+import { CategoryItemProps } from "../types/category";
 
 class BillController extends BaseController {
   /** 新增记账 */
@@ -18,15 +19,20 @@ class BillController extends BaseController {
     }
 
     const tokenParse: TokenParseProps = ctx.state.tokenParse;
-    const requestData: InsertBillRequestProps = {...ctx.request.body};
+    const requestData: InsertBillRequestProps = { ...ctx.request.body };
 
     /** 查询新增的分类是否存在 */
-    const insertCategory = await ctx.service.category.getCategoryById(requestData.categoryId);
+    const insertCategory = await ctx.service.category.getCategoryById(
+      requestData.categoryId
+    );
 
     if (!insertCategory) {
       this.error('选择的分类不存在！');
-      return
-    } else if ((insertCategory.isDefault === 0 && (insertCategory.pid !== tokenParse.id))){
+      return;
+    } else if (
+      insertCategory.isDefault === 0 &&
+      insertCategory.pid !== tokenParse.id
+    ) {
       this.error('必须选择自己创建的的分类！');
       return;
     }
@@ -34,13 +40,13 @@ class BillController extends BaseController {
     const insertRes = await ctx.service.bill.insertBill(ctx.request.body);
 
     if (!insertRes) {
-      return this.error('插入失败')
+      return this.error('插入失败');
     }
-    
+
     this.success(insertRes);
   }
 
-  async getBillListByDate () {
+  async getBillListByDate() {
     const { ctx, app } = this;
 
     const validateResult = await ctx.validate(
@@ -52,7 +58,7 @@ class BillController extends BaseController {
       return;
     }
 
-    const params: {date: string} = { ...ctx.request.body };
+    const params: { date: string } = { ...ctx.request.body };
     const { date } = params;
 
     const startDate = `${date}-01`;
@@ -60,26 +66,35 @@ class BillController extends BaseController {
     const [year, month] = date.split('-');
 
     const endDate = `${year}-${month}-${getMonthLastDay(date)}`;
-    
+
     const list = await ctx.service.bill.getBillListByDate(startDate, endDate);
 
+    console.log('list: ', list);
+    
+
     if (!list) {
-      return this.error('获取失败')
+      return this.error('获取失败');
     }
 
-    const result = list.map(async item => {
-      const {
-        id,
-        categoryId,
-        categoryType,
-        price,
-        billTime,
-        remark
-      } = item;
 
-      const category = await ctx.service.category.getCategoryById(categoryId);
 
-      console.log('category: ', category);
+    const categoryIds =  Array.from(new Set([...list.map((i) => i.categoryId)]));
+    console.log('categoryIds: ', categoryIds);
+    
+    const categoryList = await ctx.service.category.getCategoryList(categoryIds);
+
+    console.log('category: ', categoryList);
+
+    if (!categoryList) {
+      return this.error('分类获取失败');
+    }
+
+    const result: BillListItem[] = list.map((item) => {
+      const { id, categoryId, categoryType, price, billTime, remark } = item;
+
+      const category =  categoryList.find(item => item.id === categoryId) as CategoryItemProps;
+
+      console.log('category-222: ', id, category);
       
 
       return {
@@ -88,11 +103,13 @@ class BillController extends BaseController {
         categoryType,
         price,
         billTime,
-        remark
-      }
-    })
+        remark,
+      };
+    });
 
-    this.success(result);
+    this.success({
+      list: result
+    });
   }
 }
 

@@ -1,12 +1,12 @@
 import { Service } from 'egg';
 
 import { TokenParseProps } from '../types/base';
-import { IBillItem } from '../types/bill';
+import { InsertBillRequestProps } from '../types/bill';
 import { Op } from "sequelize";
 
 class BillService extends Service {
   // 新增类别
-  async insertBill(billItem: IBillItem) {
+  async insertBill(billItem: InsertBillRequestProps) {
     const { ctx } = this;
     const tokenParse: TokenParseProps = ctx.state.tokenParse;
     try {
