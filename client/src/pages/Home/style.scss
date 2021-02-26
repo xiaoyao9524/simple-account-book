@@ -25,4 +25,17 @@
       }
     }
   }
+
+  .book-list-wrapper {
+    .bill-item-header {
+      display: flex;
+      justify-content: center;
+      .date {
+        flex: 1;
+      }
+      .price-total {
+        flex: 0 0 auto;
+      }
+    }
+  }
 }

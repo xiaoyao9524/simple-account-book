@@ -172,8 +172,6 @@ function handlerList (list: BillItem[]) {
   }
 
   const keys = Object.keys(obj);
-  console.log('keys: ', keys);
-  
 
   const ret: BillListItem[] = keys.map(key => ({
     date: key,
@@ -181,15 +179,6 @@ function handlerList (list: BillItem[]) {
   })).sort((a, b) => {
     return new Date(a.date).getTime() - new Date(b.date).getTime();
   })
-
-  // const ret: BillListItem[] = [];
-
-  // for (let key of keys) {
-  //   ret.push({
-  //     date: key,
-  //     list: obj[key]
-  //   })
-  // }
 
   return ret;
 }
@@ -201,10 +190,10 @@ const Home: FC = () => {
 
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [incomePrice, setIncomePrice] = useState(0);
+  const [expenditurePrice, setExpenditurePrice] = useState(0);
   const [list, setList] = useState<BillListItem[]>([]);
   const [year, month] = date.format('YYYY-MM').split('-');
-
-  console.log('year: ', year, month);
 
   useEffect(() => {
     getBillList();
@@ -218,9 +207,18 @@ const Home: FC = () => {
       });
 
       if (res.data.status === 200) {
-        console.log('res: ', res.data.data);
+        let incomePrice = 0;
+        let expenditurePrice = 0;
+        for (let item of res.data.data.list) {
+          if (item.categoryType === 0) {
+            incomePrice += item.price;
+          } else {
+            expenditurePrice += item.price;
+          }
+        }
+        setIncomePrice(incomePrice);
+        setExpenditurePrice(expenditurePrice);
         const list = handlerList(res.data.data.list);
-        console.log('list: ', list);
         
         setList(list);
       } else {
@@ -248,11 +246,11 @@ const Home: FC = () => {
                 </li>
                 <li className="header-item">
                   <p className="title">收入</p>
-                  <p className="value">12345.67</p>
+                  <p className="value">{incomePrice.toFixed(2)}</p>
                 </li>
                 <li className="header-item">
                   <p className="title">支出</p>
-                  <p className="value">12345.67</p>
+                  <p className="value">{expenditurePrice.toFixed(2)}</p>
                 </li>
               </ul>
             </header>
@@ -262,7 +260,12 @@ const Home: FC = () => {
                 list.map(billItem => (
                   <List
                     key={billItem.date}
-                    renderHeader={() => billItem.date}
+                    renderHeader={() => (
+                      <div className="bill-item-header">
+                        <p className="date">{billItem.date}</p>
+                        <p className="price-total">{billItem.list.map(i => i.categoryType === 0 ? i.price : -i.price).reduce((total, num) => (total + num))}</p>
+                      </div>
+                    )}
                     className="my-list"
                   >
                     {
