@@ -201,6 +201,7 @@ const Home: FC = () => {
 
   const [date, setDate] = useState<Moment>(moment());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [list, setList] = useState<BillListItem[]>([]);
   const [year, month] = date.format('YYYY-MM').split('-');
 
   console.log('year: ', year, month);
@@ -218,9 +219,10 @@ const Home: FC = () => {
 
       if (res.data.status === 200) {
         console.log('res: ', res.data.data);
-        console.log('list: ', handlerList(res.data.data.list));
+        const list = handlerList(res.data.data.list);
+        console.log('list: ', list);
         
-        
+        setList(list);
       } else {
         Toast.fail(res.data.message);
       }
@@ -257,14 +259,14 @@ const Home: FC = () => {
 
             <div className="book-list-wrapper">
               {
-                list.map(bookItem => (
+                list.map(billItem => (
                   <List
-                    key={bookItem.id}
-                    renderHeader={() => bookItem.date}
+                    key={billItem.date}
+                    renderHeader={() => billItem.date}
                     className="my-list"
                   >
                     {
-                      bookItem.list.map(item => (
+                      billItem.list.map(item => (
                         <SwipeAction
                           key={item.id}
                           style={{ backgroundColor: 'gray' }}
@@ -283,10 +285,10 @@ const Home: FC = () => {
                           ]}
                         >
                           <List.Item
-                            extra={`${item.type === '收入' ? '-' : ''}${item.price}`}
+                            extra={`${item.categoryType === 1 ? '-' : ''}${item.price}`}
                             onClick={e => console.log(e)}
                           >
-                            {item.category}
+                            {item.category.title}
                           </List.Item>
                         </SwipeAction>
                       ))
