@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 import { UserInfo } from '../../types/user';
 import { BillItem } from "../../types/bill";
 
-import moment, { Moment } from 'moment';
+// import moment, { Moment } from 'moment';
+import dayjs, {Dayjs} from 'dayjs'
 // import { useLocation } from 'react-router-dom';
 
 import { getBillListByDate } from "../../api/bill";
@@ -188,7 +189,7 @@ const Home: FC = () => {
   const isMobile = useSelector<IStoreState, boolean>(state => state.system.isMobile);
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
 
-  const [date, setDate] = useState<Moment>(moment());
+  const [date, setDate] = useState<Dayjs>(dayjs());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [incomePrice, setIncomePrice] = useState(0);
   const [expenditurePrice, setExpenditurePrice] = useState(0);
@@ -291,7 +292,7 @@ const Home: FC = () => {
                             extra={`${item.categoryType === 1 ? '-' : ''}${item.price}`}
                             onClick={e => console.log(e)}
                           >
-                            {item.category.title}
+                            {item.remark || item.category.title}
                           </List.Item>
                         </SwipeAction>
                       ))
@@ -307,7 +308,7 @@ const Home: FC = () => {
               visible={datePickerVisible}
               value={date.toDate()}
               onOk={date => {
-                setDate(moment(date));
+                setDate(dayjs(date));
                 setDatePickerVisible(false);
               }}
               onDismiss={() => {
