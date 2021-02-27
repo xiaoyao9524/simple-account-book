@@ -110,7 +110,11 @@ class CategoryService extends Service {
     const { ctx } = this;
     
     try {
-      const result = await ctx.model.Category.findById(id);
+      const result = await ctx.model.Category.findById(id, {
+        attributes: {
+          exclude: ['pid', 'createTime', 'updateTime']
+        }
+      });
 
       return result;
     } catch (err) {

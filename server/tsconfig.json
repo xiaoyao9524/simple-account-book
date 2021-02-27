@@ -10,6 +10,8 @@
     "charset": "utf8",
     "allowJs": false,
     "pretty": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "noEmitOnError": false,
     "noUnusedLocals": true,
     "noUnusedParameters": false,

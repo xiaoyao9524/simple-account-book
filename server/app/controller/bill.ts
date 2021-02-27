@@ -3,6 +3,7 @@ import { getMonthLastDay } from '../util/base';
 import { InsertBillRequestProps, BillListItem } from '../types/bill';
 import { TokenParseProps } from '../types/base';
 import { CategoryItemProps } from "../types/category";
+import dayjs from 'dayjs';
 
 class BillController extends BaseController {
   /** 新增记账 */
@@ -42,8 +43,30 @@ class BillController extends BaseController {
     if (!insertRes) {
       return this.error('插入失败');
     }
+    /**
+     "id": 10,
+        "categoryId": 59,
+        "categoryType": 0,
+        "price": 240,
+        "billTime": "2021-02-27T00:00:00.000Z",
+        "remark": "美国末日2",
+     */
 
-    this.success(insertRes);
+     const { id, categoryId, categoryType, price, billTime } = insertRes;
+
+     const category = await ctx.service.category.getCategoryById(categoryId);
+
+     if (!category) {
+       return this.error('插入成功但是查询分类失败');
+     }
+
+    this.success({
+      id, 
+      categoryType, 
+      category, 
+      price, 
+      billTime: dayjs(billTime).format('YYYY-MM-DD')
+    });
   }
 
   async getBillListByDate() {

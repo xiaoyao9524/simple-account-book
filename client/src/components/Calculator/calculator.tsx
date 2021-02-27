@@ -46,17 +46,20 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   const { onConfirm, style } = props;
   const [date, setDate] = useState<Dayjs>(dayjs());
   const [remark, setRemark] = useState('');
+  // 当前的金额
   const [firstPrice, setFirstPrice] = useState<string>('0');
+  // 加或减的金额
   const [secondPrice, setSecondPrice] = useState<string>('');
+  // 符号
   const [calculation, setCalculation] = useState<calculationType>(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    setData: (data, dateFormat: string = dayjs().format('YYYY-')) => {
+    setData: (data) => {
       let { date, price, remark } = data;
 
       if (date !== undefined) {
-        setDate((typeof date === 'string' ? dayjs(date, dateFormat) : date))
+        setDate((typeof date === 'string' ? dayjs(date) : date))
       }
       
       if (remark !== undefined) {
