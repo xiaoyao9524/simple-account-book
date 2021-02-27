@@ -14,7 +14,7 @@
     "@types/react-router-dom": "^5.1.5",
     "antd-mobile": "^2.3.3",
     "array-move": "^3.0.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "calendar-lite": "^0.1.0",
     "customize-cra": "^1.0.0",
     "dayjs": "^1.10.4",
