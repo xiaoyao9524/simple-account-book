@@ -54,7 +54,6 @@ const Bookkeeping = () => {
   }
 
   async function _insertBill (insertBillData: InsertBillProps) {
-    console.log('insertBillData: ', insertBillData);
     try {
       const res = await insertBill(insertBillData);
 

@@ -243,7 +243,7 @@ const CategorySetting = () => {
     if (state?.tab) {
       setTab(state.tab);
     }
-  }, [state?.tab])
+  }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (

@@ -16,7 +16,7 @@ import TabBar from '../../components/TabBar';
 import NoLogin from '../../components/NoLogin';
 
 import './style.scss';
-
+/*
 const list = [
   {
     id: 1,
@@ -145,6 +145,7 @@ const list = [
     ]
   },
 ]
+*/
 
 const mobileNoticBar = (
   <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
@@ -198,7 +199,7 @@ const Home: FC = () => {
 
   useEffect(() => {
     getBillList();
-  }, [year, month]);
+  }, [year, month]); // eslint-disable-line react-hooks/exhaustive-deps
   
 
   async function getBillList () {

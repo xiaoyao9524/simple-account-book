@@ -329,10 +329,6 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
         visible={datePickerVisible}
         value={date.toDate()}
         onOk={date => {
-          console.log(date, 222)
-          const d1 =  dayjs(date);
-          console.log('dayjs: ',d1.format(dateFormat));
-          
           setDate(dayjs(date));
           setDatePickerVisible(false);
         }}

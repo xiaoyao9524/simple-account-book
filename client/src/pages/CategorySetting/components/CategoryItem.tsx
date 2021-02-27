@@ -1,4 +1,3 @@
-import Item from 'antd-mobile/lib/popover/Item';
 import React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
