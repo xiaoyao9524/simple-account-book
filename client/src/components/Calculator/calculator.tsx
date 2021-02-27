@@ -3,9 +3,12 @@ import './index.scss';
 
 import { Button, List, DatePicker, InputItem } from 'antd-mobile';
 
-import moment, { Moment } from 'moment';
+// import moment, { Moment } from 'moment';
+import dayjs, {Dayjs} from 'dayjs';
 
 type calculationType = null | '+' | '-';
+
+const dateFormat = 'YYYY-MM-DD';
 
 // 判断一个数字是否为整数
 function checkNumberIsInt(num: number | string): boolean {
@@ -18,8 +21,8 @@ function checkNumberIsInt(num: number | string): boolean {
   return `${num}`.indexOf('.') < 0;
 }
 
-interface ICalculatorOnConfirmResult {
-  date: Moment;
+export interface ICalculatorOnConfirmResult {
+  date: string;
   remark: string;
   price: string;
 }
@@ -34,14 +37,14 @@ export interface CalculatorRefProps {
 }
 
 interface SetDataProps {
-  date?: string | Moment;
+  date?: string | Dayjs;
   remark?: string;
   price: number | string;
 }
 
 const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   const { onConfirm, style } = props;
-  const [date, setDate] = useState<Moment>(moment());
+  const [date, setDate] = useState<Dayjs>(dayjs());
   const [remark, setRemark] = useState('');
   const [firstPrice, setFirstPrice] = useState<string>('0');
   const [secondPrice, setSecondPrice] = useState<string>('');
@@ -49,11 +52,11 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    setData: (data, dateFormat: string = moment.HTML5_FMT.DATE) => {
+    setData: (data, dateFormat: string = dayjs().format('YYYY-')) => {
       let { date, price, remark } = data;
 
       if (date !== undefined) {
-        setDate((typeof date === 'string' ? moment(date, dateFormat) : date))
+        setDate((typeof date === 'string' ? dayjs(date, dateFormat) : date))
       }
       
       if (remark !== undefined) {
@@ -163,14 +166,14 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
   function handlerConfirm() {
     const price = calculationPrice();
     onConfirm && onConfirm({
-      date,
+      date: date.format(dateFormat),
       remark,
       price
     });
   }
 
   // 判断选择的日期是否为今天
-  const dateIsToday = date?.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD');
+  const dateIsToday = date?.format(dateFormat) === dayjs().format(dateFormat);
 
   return (
     <div className="calculator" style={style || void 0}>
@@ -223,7 +226,7 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
             {
               dateIsToday ? (
                 <><span className="icon iconfont icon-rili"></span>&nbsp;今天</>
-              ) : date.format('YYYY-MM-DD')
+              ) : date.format(dateFormat)
             }
 
           </Button>
@@ -323,7 +326,11 @@ const Calculator = forwardRef<CalculatorRefProps, ICalculator>((props, ref) => {
         visible={datePickerVisible}
         value={date.toDate()}
         onOk={date => {
-          setDate(moment(date));
+          console.log(date, 222)
+          const d1 =  dayjs(date);
+          console.log('dayjs: ',d1.format(dateFormat));
+          
+          setDate(dayjs(date));
           setDatePickerVisible(false);
         }}
         onDismiss={() => {

@@ -4,7 +4,8 @@ import Calculator, {CalculatorRefProps} from '../../components/Calculator/calcul
 import MyFCComponent, {RefProps} from '../../components/MyFCComponent';
 import MyClassComponent from '../../components/MyClassComponent';
 import { Button } from 'antd-mobile';
-import moment from 'moment';
+// import moment from 'moment';
+import dayjs from 'dayjs';
 
 const TestPage1: React.FC = () => {
   const fcRef = useRef<RefProps>(null);
@@ -17,7 +18,7 @@ const TestPage1: React.FC = () => {
       <Button onClick={() => {
         if (ref1.current) {
           ref1.current.setData({
-            date: moment('2020-08-22'),
+            date: dayjs('2020-08-22'),
             price: 68,
             remark: '测试设置数据'
           })

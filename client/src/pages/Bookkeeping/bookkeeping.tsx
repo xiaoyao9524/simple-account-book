@@ -9,7 +9,7 @@ import { SegmentedControl } from 'antd-mobile';
 import NavBar from '../../components/NavBar';
 import NoLogin from '../../components/NoLogin/noLogin';
 
-import Calculator from '../../components/Calculator/calculator';
+import Calculator, { ICalculatorOnConfirmResult } from '../../components/Calculator/calculator';
 
 /** type */
 import { CategoryItem } from '../../types/category';
@@ -19,6 +19,14 @@ import './style.scss';
 
 type tabs = '支出' | '收入';
 const tabList = ['支出', '收入'];
+
+enum tabEnum {
+  '收入',
+  '支出'
+}
+
+console.log('tabEnum: ', tabEnum.收入);
+
 
 /*
 // 支出icons
@@ -112,6 +120,12 @@ const Bookkeeping = () => {
   const [category, setCategory] = useState<CategoryItem>(tab === '支出' ? expenditureIcons[0] : incomeIcons[0]);
 
   const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
+
+  function handlerConfirm(calculatorResult: ICalculatorOnConfirmResult) {
+    console.log('calculatorResult: ', calculatorResult);
+    console.log('tab: ', tabEnum[tab]);
+    console.log('category: ', category);
+  }
   return (
     <div className={`bookkeeping ${category === null ? '' : 'calculation-show'}`}>
       <NavBar style={{ position: 'fixed', top: 0, zIndex: 1, width: '100%' }}>记账</NavBar>
@@ -171,9 +185,7 @@ const Bookkeeping = () => {
                 null :
                 <Calculator
                   onConfirm={(data) => {
-                    console.log('data1: ', data);
-                    console.log('tab: ', tab);
-                    console.log('category: ', category);
+                    handlerConfirm(data);
                   }}
                   style={{ position: 'fixed', bottom: 0, zIndex: 1 }}
                 />
