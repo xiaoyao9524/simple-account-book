@@ -3,10 +3,12 @@ import {
   GetBillListByDateRequestProps,
   GetBillListByDateResponse,
   InsertBillProps,
-  InsertBillResponse
+  InsertBillResponse,
+  DeleteBillProps,
+  DeleteBillResponse
 } from "../types/bill";
 
-// 获取该用户下所有的类别列表，包含默认分类以及该用户删除的分类
+// 获取记账列表
 export const getBillListByDate = (data: GetBillListByDateRequestProps) => (
     request<GetBillListByDateResponse>({
         method: 'post',
@@ -16,13 +18,19 @@ export const getBillListByDate = (data: GetBillListByDateRequestProps) => (
 );
 
 // 新增记账
-/**
- 
- */
 export const insertBill = (data: InsertBillProps) => (
   request<InsertBillResponse>({
       method: 'post',
       url: '/api/bill/insertBill',
+      data
+  })
+);
+
+// 删除记账
+export const deleteBill = (data: DeleteBillProps) => (
+  request<DeleteBillResponse>({
+      method: 'delete',
+      url: '/api/bill/deleteBill ',
       data
   })
 );

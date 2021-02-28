@@ -57,7 +57,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (query.failMsg) {
-      Toast.fail(decodeURIComponent(query.failMsg));
+      Toast.fail(decodeURIComponent(query.failMsg), 1, () => {}, false);
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

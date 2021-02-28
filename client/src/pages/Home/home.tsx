@@ -9,13 +9,23 @@ import { BillItem } from "../../types/bill";
 import dayjs, {Dayjs} from 'dayjs'
 // import { useLocation } from 'react-router-dom';
 
-import { getBillListByDate } from "../../api/bill";
+import { getBillListByDate, deleteBill } from '../../api/bill';
 
-import { NoticeBar, SwipeAction, List, DatePicker, Toast } from 'antd-mobile';
+import { 
+  NoticeBar, 
+  SwipeAction, 
+  List, 
+  DatePicker, 
+  Toast,
+  Modal
+} from 'antd-mobile';
 import TabBar from '../../components/TabBar';
 import NoLogin from '../../components/NoLogin';
 
 import './style.scss';
+
+const {alert} = Modal;
+
 /*
 const list = [
   {
@@ -162,6 +172,7 @@ interface IBillBeforeList {
   [key: string]: BillItem[];
 }
 
+// 将接口数据转化为可渲染的格式
 function handlerList (list: BillItem[]) {
   const obj:IBillBeforeList  = {};
 
@@ -201,7 +212,7 @@ const Home: FC = () => {
     getBillList();
   }, [year, month]); // eslint-disable-line react-hooks/exhaustive-deps
   
-
+  // 获取列表
   async function getBillList () {
     try {
       const res = await getBillListByDate({
@@ -227,6 +238,24 @@ const Home: FC = () => {
         Toast.fail(res.data.message);
       }
     } catch(err) {
+      Toast.fail(err.message);
+    }
+  }
+
+  async function handlerDelete (item: BillItem) {
+    try {
+      const res = await deleteBill({
+        id: item.id
+      });
+
+      if (res.data.status === 200) {
+        Toast.success('删除成功', 1, () => {}, false);
+        getBillList();
+      } else {
+        Toast.fail(res.data.message);
+      }
+
+    } catch (err) {
       Toast.fail(err.message);
     }
   }
@@ -284,7 +313,14 @@ const Home: FC = () => {
                             },
                             {
                               text: '删除',
-                              onPress: () => console.log('delete'),
+                              onPress: () => {
+                                alert('删除', '你确定要删除该项吗？', [
+                                  { text: '取消' },
+                                  { text: '确定', onPress: () => {
+                                    handlerDelete(item);
+                                  } },
+                                ])
+                              },
                               style: { backgroundColor: '#F4333C', color: 'white' },
                             },
                           ]}

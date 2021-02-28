@@ -29,4 +29,13 @@ export interface InsertBillProps {
   remark?: string;
 }
 
+// 新增记账返回
 export type InsertBillResponse = BaseResult<BillItem>
+
+// 删除记账传参
+export interface DeleteBillProps {
+  id: number;
+}
+
+// 删除记账返回
+export type DeleteBillResponse = BaseResult<null>;
