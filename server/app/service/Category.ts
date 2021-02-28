@@ -97,8 +97,7 @@ class CategoryService extends Service {
           id
         }
       })
-
-      console.log('删除类别Res: ', result);
+      
       return result;
     } catch (err) {
       console.log(err.message);

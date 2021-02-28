@@ -34,8 +34,6 @@ class CategoryController extends BaseController {
       return;
     }
 
-    console.log('insertRes: ', insertRes);
-
     // 2、添加到用户表类别
     const userInfo = await ctx.service.user.getUser({
       id: ctx.state.tokenParse.id,
@@ -71,15 +69,11 @@ class CategoryController extends BaseController {
       newCategoryParams.expenditureList = newList;
     }
 
-    console.log('newCategoryParams: ', newCategoryParams);
-
     // 3、更新用户表收入支出列表
     const updateCategoryRes = await ctx.service.user.updateCategoryList(
       userInfo.id,
       newCategoryParams
     );
-
-    console.log('updateCategoryRes: ', updateCategoryRes);
 
     if (!updateCategoryRes) {
       this.error('更新用户信息失败！');
@@ -149,7 +143,6 @@ class CategoryController extends BaseController {
 
   /** 更新某用户当前类别 */
   async updateCategory() {
-    console.time('更新类别时间统计');
     const { ctx, app } = this;
     const validateResult = await ctx.validate(
       app.rules.category.updateCategory,
@@ -224,7 +217,6 @@ class CategoryController extends BaseController {
       expenditureList: newExpenditureList,
       incomeList: newIncomeList,
     });
-    console.timeEnd('更新类别时间统计');
   }
 
   /** 删除类别 */
@@ -257,8 +249,6 @@ class CategoryController extends BaseController {
     const { ctx } = this;
 
     const categoryList = await ctx.service.category.getCategoryList();
-
-    console.log('categoryList: ', categoryList);
 
     if (!categoryList) {
       this.error('获取分类失败');

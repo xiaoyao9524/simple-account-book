@@ -68,7 +68,7 @@ class BillController extends BaseController {
       billTime: dayjs(billTime).format('YYYY-MM-DD')
     });
   }
-
+  /** 获取记账列表 */
   async getBillListByDate() {
     const { ctx, app } = this;
 
@@ -91,10 +91,7 @@ class BillController extends BaseController {
     const endDate = `${year}-${month}-${getMonthLastDay(date)}`;
 
     const list = await ctx.service.bill.getBillListByDate(startDate, endDate);
-
-    console.log('list: ', list);
     
-
     if (!list) {
       return this.error('获取失败');
     }
@@ -102,11 +99,8 @@ class BillController extends BaseController {
 
 
     const categoryIds =  Array.from(new Set([...list.map((i) => i.categoryId)]));
-    console.log('categoryIds: ', categoryIds);
     
     const categoryList = await ctx.service.category.getCategoryList(categoryIds);
-
-    console.log('category: ', categoryList);
 
     if (!categoryList) {
       return this.error('分类获取失败');
@@ -116,9 +110,6 @@ class BillController extends BaseController {
       const { id, categoryId, categoryType, price, billTime, remark } = item;
 
       const category =  categoryList.find(item => item.id === categoryId) as CategoryItemProps;
-
-      console.log('category-222: ', id, category);
-      
 
       return {
         id,
@@ -133,6 +124,30 @@ class BillController extends BaseController {
     this.success({
       list: result
     });
+  }
+
+  // 删除记账
+  async deleteBill () {
+    const { ctx, app } = this;
+
+    const validateResult = await ctx.validate(
+      app.rules.bill.deleteBill,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    const requestBody: {id: number} = {...ctx.request.body};
+
+    const delResult = await ctx.service.bill.deleteBill(requestBody.id);
+
+    if (!delResult) {
+      return this.error('删除失败');
+    }
+
+    this.success(null);
   }
 }
 

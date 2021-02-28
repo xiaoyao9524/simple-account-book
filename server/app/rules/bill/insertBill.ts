@@ -1,12 +1,3 @@
-/**
-  {
-    categoryId: 6,
-    categoryType: 1,
-    price: '5.6',
-    billTime: '2021-02-17',
-    remark: '备注备注'
-  }
- */
 const rules = {
   categoryId: [
     { required: true, message: '必须选择记账类别' },
