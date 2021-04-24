@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { IStoreState } from '../../store/reducers';
 
 /** components */
@@ -13,7 +13,7 @@ import Calculator, { ICalculatorOnConfirmResult } from '../../components/Calcula
 import { UserInfo } from '../../types/user';
 import { CategoryItem } from '../../types/category';
 import { InsertBillProps } from "../../types/bill";
-
+import { BillItem } from "../../types/bill";
 /** request */
 import { insertBill } from "../../api/bill";
 
@@ -30,6 +30,7 @@ enum tabEnum {
 
 const Bookkeeping = () => {
   const history = useHistory();
+  const location = useLocation();
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
   const expenditureIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.expenditureList);
   const incomeIcons = useSelector<IStoreState, CategoryItem[]>(state => state.user.userInfo.category.incomeList);
@@ -38,6 +39,16 @@ const Bookkeeping = () => {
   const [category, setCategory] = useState<CategoryItem>(tab === '支出' ? expenditureIcons[0] : incomeIcons[0]);
 
   const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
+
+  // 检测是否有编辑的数据
+  useEffect(() => {
+    const editData = location.state as BillItem | null;
+    console.log('editData: ', editData);
+    if (editData) {
+      console.log('编辑: ', editData);
+    }
+  }, [location.state])
+
 
   function handlerConfirm(calculatorResult: ICalculatorOnConfirmResult) {
     const { price, date, remark } = calculatorResult;
@@ -53,7 +64,7 @@ const Bookkeeping = () => {
     _insertBill(insertBillData);
   }
 
-  async function _insertBill (insertBillData: InsertBillProps) {
+  async function _insertBill(insertBillData: InsertBillProps) {
     try {
       const res = await insertBill(insertBillData);
 

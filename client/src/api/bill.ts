@@ -30,7 +30,7 @@ export const insertBill = (data: InsertBillProps) => (
 export const deleteBill = (data: DeleteBillProps) => (
   request<DeleteBillResponse>({
       method: 'delete',
-      url: '/api/bill/deleteBill ',
+      url: '/api/bill/deleteBill',
       data
   })
 );

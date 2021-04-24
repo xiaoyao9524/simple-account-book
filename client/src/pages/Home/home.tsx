@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 
 import { IStoreState } from '../../store/reducers';
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import { UserInfo } from '../../types/user';
 import { BillItem } from "../../types/bill";
 
@@ -198,6 +199,7 @@ function handlerList (list: BillItem[]) {
 
 const Home: FC = () => {
   // const location = useLocation();
+  const history = useHistory();
   const isMobile = useSelector<IStoreState, boolean>(state => state.system.isMobile);
   const userInfo = useSelector<IStoreState, UserInfo>(state => state.user.userInfo);
 
@@ -207,6 +209,8 @@ const Home: FC = () => {
   const [expenditurePrice, setExpenditurePrice] = useState(0);
   const [list, setList] = useState<BillListItem[]>([]);
   const [year, month] = date.format('YYYY-MM').split('-');
+
+
 
   useEffect(() => {
     getBillList();
@@ -242,6 +246,11 @@ const Home: FC = () => {
     }
   }
 
+  async function handlerEdit (item: BillItem) {
+    console.log('edit: ', item);
+    history.push('/bookkeeping', item);
+  }
+
   async function handlerDelete (item: BillItem) {
     try {
       const res = await deleteBill({
@@ -263,7 +272,9 @@ const Home: FC = () => {
   return (
     <div className="home">
       {
-        userInfo.username === '' ? <NoLogin /> : (
+        userInfo.username === '' ? (
+          <NoLogin />
+        ) : (
           <div>
             {isMobile ? null : mobileNoticBar}
             <header className="head-container">
@@ -308,7 +319,7 @@ const Home: FC = () => {
                           right={[
                             {
                               text: '编辑',
-                              onPress: () => console.log('edit'),
+                              onPress: () => (handlerEdit(item)),
                               style: { backgroundColor: '#1890ff', color: 'white' },
                             },
                             {
