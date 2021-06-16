@@ -251,7 +251,6 @@ const Home: FC = () => {
   }
 
   async function handlerEdit(item: BillItem) {
-    console.log('edit: ', item);
     history.push('/bookkeeping', item);
   }
 
