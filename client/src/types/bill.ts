@@ -1,5 +1,5 @@
 import { BaseResult } from './base';
-import { CategoryItem } from "./category";
+import { CategoryItem } from './category';
 
 export interface BillItem {
   readonly id: number;
@@ -17,8 +17,7 @@ export interface GetBillListByDateRequestProps {
 
 export type GetBillListByDateResponse = BaseResult<{
   list: BillItem[];
-}>
-
+}>;
 
 // 新增记账传参
 export interface InsertBillProps {
@@ -29,8 +28,12 @@ export interface InsertBillProps {
   remark?: string;
 }
 
+export interface UpdateBillProps extends InsertBillProps {
+  id: number;
+}
+
 // 新增记账返回
-export type InsertBillResponse = BaseResult<BillItem>
+export type InsertBillResponse = BaseResult<BillItem>;
 
 // 删除记账传参
 export interface DeleteBillProps {

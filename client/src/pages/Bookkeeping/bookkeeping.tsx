@@ -15,7 +15,7 @@ import Calculator, {
 /** type */
 import { UserInfo } from '../../types/user';
 import { CategoryItem } from '../../types/category';
-import { InsertBillProps } from '../../types/bill';
+import { InsertBillProps, UpdateBillProps } from '../../types/bill';
 import { BillItem } from '../../types/bill';
 /** request */
 import { insertBill } from '../../api/bill';
@@ -43,6 +43,8 @@ const Bookkeeping = () => {
   const incomeIcons = useSelector<IStoreState, CategoryItem[]>(
     (state) => state.user.userInfo.category.incomeList
   );
+
+  const currentId = useRef<number | null>(null);
   const [tab, setTab] = useState<tabs>('支出');
 
   const calculatorInstance = useRef<CalculatorRefProps>(null);
@@ -64,7 +66,7 @@ const Bookkeeping = () => {
   function handlerConfirm(calculatorResult: ICalculatorOnConfirmResult) {
     const { price, date, remark } = calculatorResult;
 
-    const insertBillData = {
+    const billDetail = {
       categoryType: tabEnum[tab],
       categoryId: category.id,
       price,
@@ -72,7 +74,15 @@ const Bookkeeping = () => {
       remark,
     };
 
-    _insertBill(insertBillData);
+    console.log('currentId: ', currentId.current);
+    if (currentId.current) {
+      _updateBill({
+        ...billDetail,
+        id: currentId.current,
+      });
+    } else {
+      _insertBill(billDetail);
+    }
   }
 
   async function _insertBill(insertBillData: InsertBillProps) {
@@ -89,8 +99,13 @@ const Bookkeeping = () => {
     }
   }
 
+  async function _updateBill(billDetail: UpdateBillProps) {
+    console.log('update: ', billDetail);
+  }
+
   function setData(data: BillItem) {
-    const { categoryType, category } = data;
+    const { id, categoryType, category } = data;
+    currentId.current = id;
     setTab(categoryType === 1 ? '支出' : '收入');
     setCategory(category);
 
