@@ -17,6 +17,9 @@ export default function checkToken(): any {
     const headersToken = ctx.request.headers['token'];
     const token = cookieToken || headersToken;
 
+    console.log('check-token: ', token);
+    
+
     if (!token) {
       ctx.status = 200;
       ctx.statusText = '用户未登录';
@@ -29,7 +32,6 @@ export default function checkToken(): any {
 
     try {
       const tokenParse = ctx.decodeToken();
-      
 
       const { username } = tokenParse;
 

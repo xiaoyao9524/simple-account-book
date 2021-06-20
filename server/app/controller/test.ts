@@ -79,6 +79,25 @@ class TestController extends BaseController {
       }
     }
   }
+
+  async testDelay () {
+    const {ctx} = this;
+
+    const delTime = 3000;
+
+    await delay(delTime);
+
+    ctx.body = {
+      status: 200,
+      message: '测试延迟：' + delTime,
+    }
+  }
+}
+
+function delay (delTime = 3000) {
+  return new Promise<void>(res => {
+    setTimeout(res, delTime);
+  });
 }
 
 export default TestController;

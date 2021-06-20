@@ -222,12 +222,12 @@ class CategoryController extends BaseController {
   /** 删除类别 */
   async deleteCategory() {
     const { ctx, app } = this;
-    
+
     const validateResult = await ctx.validate(
       app.rules.category.deleteCategory,
       ctx.request.body
     );
-    
+
     if (!validateResult) {
       return;
     }
@@ -238,7 +238,7 @@ class CategoryController extends BaseController {
 
     if (!delRes) {
       this.error('删除失败');
-      return
+      return;
     }
 
     this.success(null);

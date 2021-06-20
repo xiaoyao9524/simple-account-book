@@ -1,5 +1,6 @@
-import { CategoryItemProps } from "./category";
-// 新增传参
+import { CategoryItemProps } from './category';
+
+// 新增记账传参
 export interface InsertBillRequestProps {
   categoryId: number;
   categoryType: number;
@@ -8,6 +9,12 @@ export interface InsertBillRequestProps {
   remark?: string;
 }
 
+// 更新记账传参
+export interface UpdateBillRequestProps extends InsertBillRequestProps {
+  readonly id: number;
+}
+
+// 分类列表项
 export interface BillListItem {
   readonly id: number;
   category: CategoryItemProps;

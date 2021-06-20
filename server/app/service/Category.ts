@@ -24,23 +24,24 @@ class CategoryService extends Service {
       return null;
     }
   }
+
   // 获取某用户下全部的类别，包含该用户移除的类别（所有默认的 + 该用户新建的）
-  async getAllCategoryList (pid: number) {
+  async getAllCategoryList(pid: number) {
     const { ctx } = this;
-    
+
     try {
       const result = await ctx.model.Category.findAll({
         where: {
           [Op.or]: [
             {
-              isDefault: 1
+              isDefault: 1,
             },
             {
-              pid
-            }
-          ]
-        }
-      })
+              pid,
+            },
+          ],
+        },
+      });
 
       return result;
     } catch (err) {
@@ -48,6 +49,7 @@ class CategoryService extends Service {
       return null;
     }
   }
+
   // 根据id数组获取类别数据，如果没有id，则获取默认类别
   async getCategoryList(ids?: number[]) {
     const { ctx } = this;
@@ -71,7 +73,7 @@ class CategoryService extends Service {
         where,
       });
 
-      const ret =  result.map((item) => {
+      const ret = result.map((item) => {
         const { id, categoryType, title, icon, isDefault } = item;
 
         return {
@@ -79,7 +81,7 @@ class CategoryService extends Service {
           categoryType,
           title,
           icon,
-          isDefault
+          isDefault,
         };
       });
 
@@ -88,31 +90,15 @@ class CategoryService extends Service {
       return null;
     }
   }
+
   // 删除类别
-  async deleteCategory (id: number) {
+  async deleteCategory(id: number) {
     const { ctx } = this;
     try {
       const result = await ctx.model.Category.destroy({
         where: {
-          id
-        }
-      })
-      
-      return result;
-    } catch (err) {
-      console.log(err.message);
-      return null
-    }
-  }
-  /** 根据id获取单个分类 */
-  async getCategoryById(id: number) {
-    const { ctx } = this;
-    
-    try {
-      const result = await ctx.model.Category.findById(id, {
-        attributes: {
-          exclude: ['pid', 'createTime', 'updateTime']
-        }
+          id,
+        },
       });
 
       return result;
@@ -122,8 +108,25 @@ class CategoryService extends Service {
     }
   }
 
-  /** test */
-  /**插入默认数据 */
+  /** 根据id获取单个分类 */
+  async getCategoryById(id: number) {
+    const { ctx } = this;
+
+    try {
+      const result = await ctx.model.Category.findById(id, {
+        attributes: {
+          exclude: ['createTime', 'updateTime'],
+        },
+      });
+
+      return result;
+    } catch (err) {
+      console.log(err.message);
+      return null;
+    }
+  }
+
+  /** 插入默认数据 */
   async insertDefaultCategory(categoryDetail: { title: string; icon: string }) {
     const { ctx } = this;
     // const tokenParse: TokenParseProps = ctx.state.tokenParse;

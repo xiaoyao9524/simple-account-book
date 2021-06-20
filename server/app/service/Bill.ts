@@ -1,7 +1,7 @@
 import { Service } from 'egg';
 
 import { TokenParseProps } from '../types/base';
-import { InsertBillRequestProps } from '../types/bill';
+import { InsertBillRequestProps, UpdateBillRequestProps } from '../types/bill';
 import { Op } from 'sequelize';
 
 class BillService extends Service {
@@ -55,6 +55,38 @@ class BillService extends Service {
       return result;
     } catch (err) {
       console.error(err.message);
+      return null;
+    }
+  }
+
+  // 根据id查找对应记账项
+  async findBillItemById(id: number) {
+    const { ctx } = this;
+    try {
+      const result = await ctx.model.Bill.findById(id);
+
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  // 更新记账项
+  async updateBillItem(billItem: UpdateBillRequestProps) {
+    const { ctx } = this;
+    const { id, ...billDetail } = billItem;
+    try {
+      const result = await ctx.model.Bill.update({
+        ...billDetail,
+        price: Math.abs(Number(billItem.price))
+      }, {
+        where: {
+          id
+        }
+      });
+
+      return result;
+    } catch (err) {
       return null;
     }
   }

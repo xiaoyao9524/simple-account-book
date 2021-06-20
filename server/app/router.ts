@@ -19,6 +19,7 @@ export default (app: Application) => {
   router.post('/api/bill/insertBill', controller.bill.insertBill);
   router.post('/api/bill/getBillListByDate', controller.bill.getBillListByDate);
   router.del('/api/bill/deleteBill', controller.bill.deleteBill);
+  router.post('/api/bill/updateBill', controller.bill.updateBill);
 
   /** 特殊controller */
   // router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);
@@ -30,4 +31,5 @@ export default (app: Application) => {
   router.post('/api/test/testGet', controller.test.testGet);
   router.post('/api/test/testDel', controller.test.testDel);
   router.post('/api/test/testValidate', controller.test.testValidate);
+  router.post('/api/test/testDelay', controller.test.testDelay);
 };
