@@ -18,7 +18,7 @@ import { CategoryItem } from '../../types/category';
 import { InsertBillProps, UpdateBillProps } from '../../types/bill';
 import { BillItem } from '../../types/bill';
 /** request */
-import { insertBill } from '../../api/bill';
+import { insertBill, updateBill } from '../../api/bill';
 
 /** style */
 import './style.scss';
@@ -74,7 +74,6 @@ const Bookkeeping = () => {
       remark,
     };
 
-    console.log('currentId: ', currentId.current);
     if (currentId.current) {
       _updateBill({
         ...billDetail,
@@ -100,7 +99,22 @@ const Bookkeeping = () => {
   }
 
   async function _updateBill(billDetail: UpdateBillProps) {
-    console.log('update: ', billDetail);
+    try {
+      const res = await updateBill(billDetail);
+
+      if (res.data.status === 200) {
+        if (res.data.data) {
+          Toast.success(res.data.message);
+          history.goBack();
+        } else {
+          Toast.fail(res.data.message);
+        }
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch (err) {
+      Toast.fail(err.message);
+    }
   }
 
   function setData(data: BillItem) {

@@ -5,7 +5,9 @@ import {
   InsertBillProps,
   InsertBillResponse,
   DeleteBillProps,
-  DeleteBillResponse
+  DeleteBillResponse,
+  UpdateBillProps,
+  UpdateBillResponse
 } from "../types/bill";
 
 // 获取记账列表
@@ -31,6 +33,15 @@ export const deleteBill = (data: DeleteBillProps) => (
   request<DeleteBillResponse>({
       method: 'delete',
       url: '/api/bill/deleteBill',
+      data
+  })
+);
+
+// 更新记账
+export const updateBill = (data: UpdateBillProps) => (
+  request<UpdateBillResponse>({
+      method: 'post',
+      url: '/api/bill/updateBill',
       data
   })
 );

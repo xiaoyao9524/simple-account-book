@@ -28,12 +28,17 @@ export interface InsertBillProps {
   remark?: string;
 }
 
+// 新增记账返回
+export type InsertBillResponse = BaseResult<BillItem>;
+
+// 更新记账传参
 export interface UpdateBillProps extends InsertBillProps {
   id: number;
 }
 
-// 新增记账返回
-export type InsertBillResponse = BaseResult<BillItem>;
+// 更新记账返回
+export type UpdateBillResponse = BaseResult<boolean>;
+
 
 // 删除记账传参
 export interface DeleteBillProps {
