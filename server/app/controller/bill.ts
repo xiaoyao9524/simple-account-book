@@ -219,7 +219,7 @@ class BillController extends BaseController {
         const [resultNum] = result;
 
         if (resultNum > 0) {
-          this.success('更新成功');
+          this.success(true);
           return;
         }
       }
