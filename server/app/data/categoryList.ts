@@ -74,7 +74,7 @@ export const expenditureIcons: CategoryDetail[] = [
 ];
 
 // 收入icons
-export const incomeIcons = [ 
+export const incomeIcons = [
   { title: '工资', icon: 'gongzi' },
   { title: '闲鱼', icon: 'xianyu' },
   { title: '理财', icon: 'licai' },

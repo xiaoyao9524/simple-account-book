@@ -244,7 +244,7 @@ class CategoryController extends BaseController {
     this.success(null);
   }
 
-  /**test */
+  /** test */
   async getCategoryList() {
     const { ctx } = this;
 

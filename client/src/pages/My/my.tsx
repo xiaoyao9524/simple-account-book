@@ -72,7 +72,7 @@ const My: React.FC = () => {
         <div className="account-info">
           <div className="info-item">
             <p className="title">记账总天数</p>
-            <p className="number">99999</p>
+            <p className="number">{userInfo.bookkeepingDays}</p>
           </div>
           <div className="info-item">
             <p className="title">记账总笔数</p>

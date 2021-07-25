@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { IStoreState } from '../../store/reducers';
@@ -53,7 +53,10 @@ const Bookkeeping = () => {
     tab === '支出' ? expenditureIcons[0] : incomeIcons[0]
   );
 
-  const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
+  // const currentIcons = tab === '收入' ? incomeIcons : expenditureIcons;
+  const currentIcons = useMemo(() => (
+    tab === '收入' ? incomeIcons : expenditureIcons
+  ), [tab, incomeIcons, expenditureIcons]);
 
   // 检测是否有编辑的数据
   useEffect(() => {

@@ -3,6 +3,7 @@ import BaseController from './BaseController';
 import { SignupRequestProps, LoginParams } from '../types/admin';
 import { TokenParseProps } from '../types/base';
 import { CategoryItemProps } from '../types/category';
+
 const md5 = require('md5');
 
 class AdminController extends BaseController {
@@ -140,7 +141,9 @@ class AdminController extends BaseController {
       return;
     }
 
-    const {username, avatar} = user;
+    console.log('user: ', user);
+
+    const { username, avatar, createTime } = user;
 
     const expenditureIds = user.expenditureList.split(',').map(i => Number(i));
     let expenditureList = await ctx.service.category.getCategoryList(expenditureIds);
@@ -180,16 +183,22 @@ class AdminController extends BaseController {
       incomeList = _incomeList;
     }
 
+    // 计算记账天数
+    const currentTimeStamp = new Date().getTime();
+    const userCreateTimeStamp = new Date(createTime).getTime();
+    const bookkeepingDays = Math.ceil((currentTimeStamp - userCreateTimeStamp) / 86400000);
+
     const ret = {
       username,
       avatar,
+      bookkeepingDays,
       category: {
         expenditureList,
         incomeList
       }
-    }
+    };
 
-    this.success({...ret})
+    this.success(ret);
 
   }
 
