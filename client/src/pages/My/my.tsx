@@ -76,7 +76,7 @@ const My: React.FC = () => {
           </div>
           <div className="info-item">
             <p className="title">记账总笔数</p>
-            <p className="number">99999</p>
+            <p className="number">{userInfo.bookkeepCount}</p>
           </div>
         </div>
       </header>

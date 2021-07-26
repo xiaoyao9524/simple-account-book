@@ -16,6 +16,7 @@ const defaultState: IUserState = {
     username: '',
     avatar: '',
     bookkeepingDays: 0,
+    bookkeepCount: 0,
     category: {
       expenditureList: [], // 支出
       incomeList: [], // 收入
