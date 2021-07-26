@@ -90,6 +90,22 @@ class BillService extends Service {
       return null;
     }
   }
+
+  // 获取记账总笔数
+  async getBookkeepCount (pid: number) {
+    const { ctx } = this;
+    try {
+      const result = await ctx.model.Bill.findAndCount({
+        where: {
+          uId: pid
+        }
+      });
+
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
 }
 
 export default BillService;

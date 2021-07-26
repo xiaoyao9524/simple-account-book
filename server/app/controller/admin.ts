@@ -188,10 +188,18 @@ class AdminController extends BaseController {
     const userCreateTimeStamp = new Date(createTime).getTime();
     const bookkeepingDays = Math.ceil((currentTimeStamp - userCreateTimeStamp) / 86400000);
 
+    // 计算记账笔数
+    const bookkeepCountRes = await ctx.service.bill.getBookkeepCount(id);
+    let bookkeepCount = 0;
+    if (bookkeepCountRes) {
+      bookkeepCount = bookkeepCountRes.count;
+    }
+
     const ret = {
       username,
       avatar,
       bookkeepingDays,
+      bookkeepCount,
       category: {
         expenditureList,
         incomeList
