@@ -20,6 +20,7 @@ export default (app: Application) => {
   router.post('/api/bill/getBillListByDate', controller.bill.getBillListByDate);
   router.del('/api/bill/deleteBill', controller.bill.deleteBill);
   router.post('/api/bill/updateBill', controller.bill.updateBill);
+  router.post('/api/bill/getBillListByCategoryId', controller.bill.getBillListByCategoryId);
 
   /** 特殊controller */
   // router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);

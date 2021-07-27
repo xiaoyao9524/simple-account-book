@@ -126,6 +126,25 @@ class CategoryService extends Service {
     }
   }
 
+  // 根据用户id查询该用户所有的分类id(非默认的)
+  async getAllCategoryIdByUserId (userId: number) {
+    const { ctx } = this;
+
+    try {
+      const result = await ctx.model.Category.findAll({
+        where: {
+          isDefault: 0,
+          pid: userId
+        },
+        attributes: [ 'id' ]
+      });
+
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
+
   /** 插入默认数据 */
   async insertDefaultCategory(categoryDetail: { title: string; icon: string }) {
     const { ctx } = this;

@@ -72,6 +72,7 @@ class BillController extends BaseController {
       billTime: dayjs(billTime).format('YYYY-MM-DD'),
     });
   }
+
   /** 获取记账列表 */
   async getBillListByDate() {
     const { ctx, app } = this;
@@ -131,6 +132,49 @@ class BillController extends BaseController {
       list: result,
     });
   }
+
+  // 删除分类前根据分类id查找对应的记账数据
+  async getBillListByCategoryId () {
+    const { ctx, app } = this;
+    
+    const validateResult = await ctx.validate(
+      app.rules.bill.getBillListByCategoryId,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
+    const requuestParams = ctx.request.body;
+
+    // 先检查传入的分类id是不是该用户的
+    const categoryItem = await ctx.service.category.getCategoryById(requuestParams.categoryId);
+
+    if (!categoryItem) {
+      this.error('要删除的分类不存在');
+      return;
+    }
+
+    if (categoryItem.isDefault !== 0) {
+      this.error('不能删除默认分类');
+      return;
+    } else if (categoryItem.pid !== tokenParse.id) {
+      // 只能删除自己的分类
+      this.error('删除失败');
+      return;
+    }
+
+    // 分类可删除，获取该分类下的记账信息
+
+    this.success({
+      msg: '成功',
+      categoryItem
+    });
+  }
+
   // 删除记账
   async deleteBill() {
     const { ctx, app } = this;
