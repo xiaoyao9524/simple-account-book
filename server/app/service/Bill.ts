@@ -106,6 +106,23 @@ class BillService extends Service {
       return null;
     }
   }
+
+  // 根据分类id获取记账记录
+  async getBillListByCategoryId (categoryId: number) {
+    const { ctx } = this;
+
+    try {
+      const result = await ctx.model.Bill.findAll({
+        where: {
+          categoryId
+        }
+      });
+
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
 }
 
 export default BillService;

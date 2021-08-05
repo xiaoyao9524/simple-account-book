@@ -168,11 +168,23 @@ class BillController extends BaseController {
     }
 
     // 分类可删除，获取该分类下的记账信息
+    const billList = await ctx.service.bill.getBillListByCategoryId(categoryItem.id);
 
+    // 说明该分类下有记账信息，需要让用户确认是否全部删除
     this.success({
-      msg: '成功',
-      categoryItem
+      billList: billList ? billList : []
     });
+    
+    /*
+    const delRes = await ctx.service.category.deleteCategory(categoryItem.id);
+
+    if (!delRes) {
+      this.error('删除失败');
+      return;
+    }
+
+    this.success(null, '删除成功');
+    */
   }
 
   // 删除记账
