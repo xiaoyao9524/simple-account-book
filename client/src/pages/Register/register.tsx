@@ -152,7 +152,7 @@ const Register: React.FC = () => {
           <p className={'error'}>{errors.username?.map(i => i.message).join('、')}</p>
 
           {getFieldDecorator('password', {
-            initialValue: '123456',
+            initialValue: '',
             rules: [
               { required: true, message: '请输入密码' },
               { validator: validatePassword }
@@ -171,7 +171,7 @@ const Register: React.FC = () => {
           <p className={'error'}>{errors.password?.map(i => i.message).join('、')}</p>
 
           {getFieldDecorator('confirmPassword', {
-            initialValue: '123456',
+            initialValue: '',
             rules: [
               { required: true, message: '请再次输入密码' },
               { validator: validateConfirmPassword }

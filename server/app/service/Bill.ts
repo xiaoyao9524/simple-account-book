@@ -25,11 +25,12 @@ class BillService extends Service {
   }
 
   // 按照时间范围查找列表
-  async getBillListByDate(startDate: string, endDate: string) {
+  async getBillListByDate(uId: number, startDate: string, endDate: string) {
     const { ctx } = this;
     try {
       const result = await ctx.model.Bill.findAll({
         where: {
+          uId,
           billTime: {
             [Op.between]: [startDate, endDate],
           },

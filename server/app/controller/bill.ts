@@ -86,16 +86,18 @@ class BillController extends BaseController {
       return;
     }
 
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
     const params: { date: string } = { ...ctx.request.body };
     const { date } = params;
 
     const startDate = `${date}-01`;
 
-    const [year, month] = date.split('-');
+    const [ year, month ] = date.split('-');
 
     const endDate = `${year}-${month}-${getMonthLastDay(date)}`;
 
-    const list = await ctx.service.bill.getBillListByDate(startDate, endDate);
+    const list = await ctx.service.bill.getBillListByDate(tokenParse.id, startDate, endDate);
 
     if (!list) {
       return this.error('获取失败');
