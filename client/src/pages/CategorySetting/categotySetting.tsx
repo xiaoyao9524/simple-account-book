@@ -18,6 +18,7 @@ import { AllCategoryListResult } from '../../types/category';
 import {
   getAllCategoryList,
   updateCategory,
+  getBillListByCategoryId,
   deleteCategory,
 } from '../../api/category';
 
@@ -235,7 +236,7 @@ const CategorySetting = () => {
     }
   }
 
-  // 删除分类
+  // 点击删除分类 => 确认
   const handlerDeleteCategory = useCallback(
     async (
       item: ICategoryItemProps,
@@ -244,6 +245,20 @@ const CategorySetting = () => {
       }
     ) => {
       try {
+        const billListRes = await getBillListByCategoryId({
+          categoryId: item.id
+        });
+
+        if (billListRes.data.status === 200) {
+          const { billList } = billListRes.data.data;
+          if (billList.length) {
+            
+            return
+          }
+        } else {
+          Toast.fail(billListRes.data.message);
+        }
+
         const res = await deleteCategory({ id: item.id });
 
         if (res.data.status === 200) {

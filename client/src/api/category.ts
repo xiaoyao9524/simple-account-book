@@ -5,6 +5,7 @@ import {
     InsertCategoryResultProps,
     UpdateCategoryParams,
     UpdateCategoryResult,
+    GetBillListByCategoryIdResult,
     DeleteCategoryParams,
     DeleteCategoryResult
 } from "../types/category";
@@ -32,6 +33,17 @@ export const updateCategory = (data: UpdateCategoryParams) => (
     request<UpdateCategoryResult>({
         method: 'post',
         url: '/api/category/updateCategory',
+        data
+    })
+)
+
+// 删除类别前查找该分类下是否有记账记录
+export const getBillListByCategoryId = (data: {
+    categoryId: number
+}) => (
+    request<GetBillListByCategoryIdResult>({
+        method: 'post',
+        url: '/api/bill/getBillListByCategoryId',
         data
     })
 )
