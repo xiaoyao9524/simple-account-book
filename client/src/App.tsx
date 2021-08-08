@@ -15,6 +15,7 @@ import Bookkeeping from './pages/Bookkeeping';
 import My from './pages/My';
 import CategorySetting from './pages/CategorySetting';
 import InsertCategory from './pages/InsertCategory';
+import DeleteCategoryAndBill from './pages/DeleteCategoryAndBill';
 
 // store
 import { setSystemInfoAction } from './store/reducers/modules/system/actionCreators';
@@ -63,6 +64,7 @@ const App: React.FC = () => {
             <Route path="/my" component={My} />
             <Route path="/categorySetting" component={CategorySetting} />
             <Route path="/insertCategory" component={InsertCategory} />
+            <Route path="/deleteCategoryAndBill" component={DeleteCategoryAndBill} />
             {/* 测试页面 */}
             <Route path="/Counter" component={Counter} />
             <Route path="/Counter2" component={Counter2} />

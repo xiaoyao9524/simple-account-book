@@ -271,6 +271,9 @@ const Home: FC = () => {
     }
   }
 
+  console.log('js: ', JSON.stringify(list));
+  
+
   return (
     <div className="home">
       {userInfo.username === '' ? (

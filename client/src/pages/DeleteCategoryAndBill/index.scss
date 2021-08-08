@@ -1,0 +1,22 @@
+.delete-category-and-bill {
+  padding-bottom: 47px;
+  .book-list-wrapper {
+    .bill-item-header {
+      display: flex;
+      .date {
+        flex: 1;
+      }
+      .price-total {
+        flex: 0 0 auto;
+      }
+    }
+  }
+
+  .btn-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+  }
+}
