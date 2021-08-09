@@ -41,6 +41,160 @@ const list = [
         billTime: '2021-08-05',
         remark: '午饭',
       },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
+      {
+        id: 2,
+        category: {
+          id: 2,
+          categoryType: 1,
+          title: '餐饮',
+          icon: 'canyin',
+          isDefault: 1,
+        },
+        categoryType: 1,
+        price: 15,
+        billTime: '2021-08-05',
+        remark: '午饭',
+      },
     ],
   },
 ];
@@ -76,9 +230,9 @@ const DeleteCategoryAndBill: FC = () => {
                 ))}
               </List>
             ))}
-            <WingBlank className="btn-wrapper">
+            <div className="btn-wrapper">
               <Button type="warning">删除全部</Button>
-            </WingBlank>
+            </div>
           </div>
     </div>
   )

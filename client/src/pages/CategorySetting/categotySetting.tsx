@@ -78,12 +78,15 @@ const CategorySetting = () => {
     setCurrentNoSelectIcons(
       tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab]);
+  }, [
+    tab,
+    currentExpenditureList,
+    currentIncomeList,
+    noSelectExpenditureList,
+    noSelectIncomeList,
+  ]);
 
-  useEffect(() => {
-    _getAllCategoryList();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  
 
   /** function start */
   const onSortEnd = ({
@@ -100,7 +103,38 @@ const CategorySetting = () => {
       : setCurrentIncomeList(newItems);
   };
 
-  async function _getAllCategoryList() {
+  // 处理列表的显示
+  const handlerListData = useCallback(
+    (category: AllCategoryListResult) => {
+      const { expenditureList, incomeList } = category;
+
+      // 当前分类id列表
+      const currentExpenditureIdList = currentExpenditureList.map((i) => i.id);
+      const currentIncomeIdList = currentIncomeList.map((i) => i.id);
+      // 不是当前分类列表
+      const noSelectExpenditureList: ICategoryItemProps[] = [];
+      const noSelectIncomeList: ICategoryItemProps[] = [];
+
+      for (let item of expenditureList) {
+        if (!currentExpenditureIdList.includes(item.id)) {
+          noSelectExpenditureList.push(item);
+        }
+      }
+      setNoSelectExpenditureList(noSelectExpenditureList);
+      for (let item of incomeList) {
+        if (!currentIncomeIdList.includes(item.id)) {
+          noSelectIncomeList.push(item);
+        }
+      }
+      setNoSelectIncomeList(noSelectIncomeList);
+      setCurrentNoSelectIcons(
+        tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
+      );
+    },
+    [currentExpenditureList, currentIncomeList, tab]
+  );
+
+  const _getAllCategoryList = useCallback(async () => {
     try {
       const res = await getAllCategoryList();
 
@@ -112,35 +146,11 @@ const CategorySetting = () => {
     } catch (err) {
       Toast.fail(err.message);
     }
-  }
+  }, [handlerListData]);
 
-  // 处理列表的显示
-  function handlerListData(category: AllCategoryListResult) {
-    const { expenditureList, incomeList } = category;
-
-    // 当前分类id列表
-    const currentExpenditureIdList = currentExpenditureList.map((i) => i.id);
-    const currentIncomeIdList = currentIncomeList.map((i) => i.id);
-    // 不是当前分类列表
-    const noSelectExpenditureList: ICategoryItemProps[] = [];
-    const noSelectIncomeList: ICategoryItemProps[] = [];
-
-    for (let item of expenditureList) {
-      if (!currentExpenditureIdList.includes(item.id)) {
-        noSelectExpenditureList.push(item);
-      }
-    }
-    setNoSelectExpenditureList(noSelectExpenditureList);
-    for (let item of incomeList) {
-      if (!currentIncomeIdList.includes(item.id)) {
-        noSelectIncomeList.push(item);
-      }
-    }
-    setNoSelectIncomeList(noSelectIncomeList);
-    setCurrentNoSelectIcons(
-      tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
-    );
-  }
+  useEffect(() => {
+    _getAllCategoryList();
+  }, [_getAllCategoryList]);
 
   // 处理添加
   function handlerAdd(category: ICategoryItemProps) {
@@ -175,45 +185,61 @@ const CategorySetting = () => {
     }
   }
 
-  // 处理删除
-  function handlerDel({ id }: ICategoryItemProps) {
-    if (tab === '支出') {
-      const newList = [...currentExpenditureList];
+  // 点击删除， 从当前列表中删除分类
+  const handlerDel = useCallback(
+    async ({ id }: ICategoryItemProps) => {
+      // 弹窗提示如果删除分类，那么需要首先删除该分类下所有记账信息
+      if (tab === '支出') {
+        const newList = [...currentExpenditureList];
 
-      const newNoSelectList = [...noSelectExpenditureList];
+        const newNoSelectList = [...noSelectExpenditureList];
 
-      const category = newList.find((val) => val.id === id);
-      const delIndex = newList.findIndex((val) => val.id === id);
+        const category = newList.find((val) => val.id === id);
+        const delIndex = newList.findIndex((val) => val.id === id);
 
-      if (category && delIndex >= 0) {
-        newList.splice(delIndex, 1);
-        newNoSelectList.unshift(category);
+        if (category && delIndex >= 0) {
+          newList.splice(delIndex, 1);
+          newNoSelectList.unshift(category);
 
-        setCurrentExpenditureList(newList);
-        setNoSelectExpenditureList(newNoSelectList);
+          setCurrentExpenditureList(newList);
+          setNoSelectExpenditureList(newNoSelectList);
 
-        setCurrentIcons([...newList]);
-        setCurrentNoSelectIcons([...newNoSelectList]);
+          setCurrentIcons([...newList]);
+          setCurrentNoSelectIcons([...newNoSelectList]);
+        }
+      } else {
+        const newList = [...currentIncomeList];
+        const newNoSelectList = [...noSelectIncomeList];
+
+        const category = newList.find((val) => val.id === id);
+        const delIndex = newList.findIndex((val) => val.id === id);
+
+        if (category && delIndex >= 0) {
+          newList.splice(delIndex, 1);
+          newNoSelectList.unshift(category);
+
+          setCurrentIncomeList(newList);
+          setNoSelectIncomeList(newNoSelectList);
+
+          setCurrentIcons([...newList]);
+          setCurrentNoSelectIcons([...newNoSelectList]);
+        }
       }
-    } else {
-      const newList = [...currentIncomeList];
-      const newNoSelectList = [...noSelectIncomeList];
+    },
+    [
+      currentExpenditureList,
+      currentIncomeList,
+      noSelectIncomeList,
+      noSelectExpenditureList,
+      currentExpenditureList,
+      tab,
+    ]
+  );
 
-      const category = newList.find((val) => val.id === id);
-      const delIndex = newList.findIndex((val) => val.id === id);
+  // 确认删除某分类
+  const handlerConfirmDeleteCategory = useCallback(() => {
 
-      if (category && delIndex >= 0) {
-        newList.splice(delIndex, 1);
-        newNoSelectList.unshift(category);
-
-        setCurrentIncomeList(newList);
-        setNoSelectIncomeList(newNoSelectList);
-
-        setCurrentIcons([...newList]);
-        setCurrentNoSelectIcons([...newNoSelectList]);
-      }
-    }
-  }
+  }, []);
 
   // 保存
   async function handlerSave() {
@@ -246,14 +272,13 @@ const CategorySetting = () => {
     ) => {
       try {
         const billListRes = await getBillListByCategoryId({
-          categoryId: item.id
+          categoryId: item.id,
         });
 
         if (billListRes.data.status === 200) {
           const { billList } = billListRes.data.data;
           if (billList.length) {
-            
-            return
+            return;
           }
         } else {
           Toast.fail(billListRes.data.message);
@@ -351,7 +376,7 @@ const CategorySetting = () => {
         </WingBlank>
       </div>
 
-      {currentNoSelectIcons.length && (
+      {currentNoSelectIcons.length > 0 && (
         <div className="category-list-wrapper">
           <h3 className="title">更多类别</h3>
           <ul className="more-category-list">
