@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import arrayMove from 'array-move';
@@ -41,7 +41,7 @@ const SortableContainer = sortableContainer(({ children }: any) => {
 
 const CategorySetting = () => {
   const [tab, setTab] = useState<tabs>('支出');
-  // store
+  // 当前用户已有的分类(store)
   const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(
     (state) => state.user.userInfo.category.expenditureList
   );
@@ -49,22 +49,30 @@ const CategorySetting = () => {
     (state) => state.user.userInfo.category.incomeList
   );
 
-  // 当前操作的数据
+  // 当前用户所有的分类(接口获取，包括启用的和未启用的) 
+  const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<ICategoryItemProps[]>([]);
+  const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<ICategoryItemProps[]>([]);
+
+  // 备份store中的数据（不能直接操作store中的数据）
   const [currentExpenditureList, setCurrentExpenditureList] = useState([
-    ...expenditureIcons,
+    ...expenditureIcons
   ]);
   const [currentIncomeList, setCurrentIncomeList] = useState([...incomeIcons]);
 
   // 当前未选择的数据
+  /** !memo */
   const [noSelectExpenditureList, setNoSelectExpenditureList] = useState<
     ICategoryItemProps[]
   >([]);
+  /** !memo */
   const [noSelectIncomeList, setNoSelectIncomeList] = useState<
     ICategoryItemProps[]
   >([]);
 
   // 当前显示的数据
+  /** !memo */
   const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
+  /** !memo */
   const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<
     ICategoryItemProps[]
   >([]);
@@ -88,7 +96,7 @@ const CategorySetting = () => {
 
   
 
-  /** function start */
+  /** 拖拽排序结束回调 */
   const onSortEnd = ({
     oldIndex,
     newIndex,
@@ -103,7 +111,7 @@ const CategorySetting = () => {
       : setCurrentIncomeList(newItems);
   };
 
-  // 处理列表的显示
+  // 转换列表数据
   const handlerListData = useCallback(
     (category: AllCategoryListResult) => {
       const { expenditureList, incomeList } = category;
@@ -134,11 +142,14 @@ const CategorySetting = () => {
     [currentExpenditureList, currentIncomeList, tab]
   );
 
-  const _getAllCategoryList = useCallback(async () => {
+  // 获取当前用户分类数据
+  const fetchAllCategoryList = useCallback(async () => {
     try {
       const res = await getAllCategoryList();
 
       if (res.data.status === 200) {
+        console.log('分类数据: ', res.data.data);
+        
         handlerListData(res.data.data);
       } else {
         Toast.fail(res.data.message);
@@ -149,8 +160,8 @@ const CategorySetting = () => {
   }, [handlerListData]);
 
   useEffect(() => {
-    _getAllCategoryList();
-  }, [_getAllCategoryList]);
+    fetchAllCategoryList();
+  }, [fetchAllCategoryList]);
 
   // 处理添加
   function handlerAdd(category: ICategoryItemProps) {
@@ -289,7 +300,7 @@ const CategorySetting = () => {
         if (res.data.status === 200) {
           Toast.success(res.data.message);
           dispatch(getDeleteOneCtegoryAction(item));
-          _getAllCategoryList();
+          fetchAllCategoryList();
         } else {
           Toast.fail(res.data.message);
         }
@@ -315,8 +326,6 @@ const CategorySetting = () => {
     ]);
   };
 
-  /** function end */
-
   const history = useHistory();
   const location = useLocation();
   const state = location.state as { tab?: tabs };
@@ -326,6 +335,11 @@ const CategorySetting = () => {
       setTab(state.tab);
     }
   }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // const currentIcons = useMemo(() => {
+
+  //   return []
+  // }, []);
 
   return (
     <div className="category-setting">
