@@ -49,21 +49,33 @@ const CategorySetting = () => {
     (state) => state.user.userInfo.category.incomeList
   );
 
-  // 当前用户所有的分类(接口获取，包括启用的和未启用的) 
-  const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<ICategoryItemProps[]>([]);
-  const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<ICategoryItemProps[]>([]);
-
-  // 备份store中的数据（不能直接操作store中的数据）
+  // 组件中操作的数据，还起到备份store中数据的作用，避免直接操作store中的数据
   const [currentExpenditureList, setCurrentExpenditureList] = useState([
     ...expenditureIcons
   ]);
   const [currentIncomeList, setCurrentIncomeList] = useState([...incomeIcons]);
 
+  // 当前用户所有的分类(接口获取，包括启用的和未启用的) 
+  const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<ICategoryItemProps[]>([]);
+  const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<ICategoryItemProps[]>([]);
+
+  const noSelectedList = useMemo<ICategoryItemProps[]>(() => {
+    const isExpenditrue = tab === '支出';
+    const allCategoryIds = (isExpenditrue ? allExpenditureCategoryList : allIncomeCategoryList).map(item => item.id);
+    
+    const noSelectedList: ICategoryItemProps[] = [];
+
+    return noSelectedList;
+  }, []);
+
   // 当前未选择的数据
   /** !memo */
-  const [noSelectExpenditureList, setNoSelectExpenditureList] = useState<
-    ICategoryItemProps[]
-  >([]);
+  // const [noSelectExpenditureList, setNoSelectExpenditureList] = useState<
+  //   ICategoryItemProps[]
+  // >([]);
+  // const noSelectExpenditureList = useMemo(() => {
+
+  // }, []);
   /** !memo */
   const [noSelectIncomeList, setNoSelectIncomeList] = useState<
     ICategoryItemProps[]
