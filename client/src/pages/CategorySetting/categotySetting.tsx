@@ -59,14 +59,26 @@ const CategorySetting = () => {
   const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<ICategoryItemProps[]>([]);
   const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<ICategoryItemProps[]>([]);
 
-  const noSelectedList = useMemo<ICategoryItemProps[]>(() => {
+  // 当前显示的列表（选中的和未选的）
+  const currentCategory = useMemo<{
+    selectedCategory: ICategoryItemProps[];
+    noSelectedCategory: ICategoryItemProps[];
+  }>(() => {
     const isExpenditrue = tab === '支出';
-    const allCategoryIds = (isExpenditrue ? allExpenditureCategoryList : allIncomeCategoryList).map(item => item.id);
-    
-    const noSelectedList: ICategoryItemProps[] = [];
+    const currentCategoryIds = (isExpenditrue ? currentExpenditureList : currentIncomeList).map(item => item.id);
 
-    return noSelectedList;
-  }, []);
+    const noSelectedCategory: ICategoryItemProps[] = (isExpenditrue ? allExpenditureCategoryList : allIncomeCategoryList).filter(item => (
+      !currentCategoryIds.includes(item.id)
+    ));
+
+    return {
+      selectedCategory: isExpenditrue ? currentExpenditureList : currentIncomeList,
+      noSelectedCategory
+    };
+  }, [tab, currentExpenditureList, currentIncomeList, allExpenditureCategoryList, allIncomeCategoryList]);
+
+  console.log('currentCategory: ', currentCategory);
+  
 
   // 当前未选择的数据
   /** !memo */
@@ -77,20 +89,21 @@ const CategorySetting = () => {
 
   // }, []);
   /** !memo */
-  const [noSelectIncomeList, setNoSelectIncomeList] = useState<
-    ICategoryItemProps[]
-  >([]);
+  // const [noSelectIncomeList, setNoSelectIncomeList] = useState<
+  //   ICategoryItemProps[]
+  // >([]);
 
   // 当前显示的数据
   /** !memo */
-  const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
+  // const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
   /** !memo */
-  const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<
-    ICategoryItemProps[]
-  >([]);
+  // const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<
+  //   ICategoryItemProps[]
+  // >([]);
 
   const dispatch = useDispatch();
 
+  /*
   useEffect(() => {
     setCurrentIcons(
       tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]
@@ -105,7 +118,7 @@ const CategorySetting = () => {
     noSelectExpenditureList,
     noSelectIncomeList,
   ]);
-
+*/
   
 
   /** 拖拽排序结束回调 */
@@ -116,16 +129,17 @@ const CategorySetting = () => {
     oldIndex: number;
     newIndex: number;
   }) => {
-    const newItems = arrayMove(currentIcons, oldIndex, newIndex);
-    setCurrentIcons(newItems);
-    tab === '支出'
-      ? setCurrentExpenditureList(newItems)
-      : setCurrentIncomeList(newItems);
+    // const newItems = arrayMove(currentIcons, oldIndex, newIndex);
+    // setCurrentIcons(newItems);
+    // tab === '支出'
+    //   ? setCurrentExpenditureList(newItems)
+    //   : setCurrentIncomeList(newItems);
   };
 
   // 转换列表数据
   const handlerListData = useCallback(
     (category: AllCategoryListResult) => {
+      /*
       const { expenditureList, incomeList } = category;
 
       // 当前分类id列表
@@ -150,26 +164,35 @@ const CategorySetting = () => {
       setCurrentNoSelectIcons(
         tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
       );
+      */
     },
     [currentExpenditureList, currentIncomeList, tab]
   );
 
-  // 获取当前用户分类数据
+  // 获取当前用户分类数据(所有的，包括默认分类和用户自定义分类)
   const fetchAllCategoryList = useCallback(async () => {
     try {
       const res = await getAllCategoryList();
 
       if (res.data.status === 200) {
         console.log('分类数据: ', res.data.data);
+
+        const {
+          expenditureList,
+          incomeList
+        } = res.data.data;
+
+        setAllExpenditureCategoryList(expenditureList);
+        setAllIncomeCategoryList(incomeList);
         
-        handlerListData(res.data.data);
+        // handlerListData(res.data.data);
       } else {
         Toast.fail(res.data.message);
       }
     } catch (err) {
       Toast.fail(err.message);
     }
-  }, [handlerListData]);
+  }, []);
 
   useEffect(() => {
     fetchAllCategoryList();
@@ -177,6 +200,7 @@ const CategorySetting = () => {
 
   // 处理添加
   function handlerAdd(category: ICategoryItemProps) {
+    /*
     if (tab === '支出') {
       const newList = [...currentExpenditureList];
       const newNoSelectList = [...noSelectExpenditureList];
@@ -206,56 +230,31 @@ const CategorySetting = () => {
       setNoSelectIncomeList(newNoSelectList);
       setCurrentNoSelectIcons([...newNoSelectList]);
     }
+    */
   }
 
   // 点击删除， 从当前列表中删除分类
   const handlerDel = useCallback(
     async ({ id }: ICategoryItemProps) => {
-      // 弹窗提示如果删除分类，那么需要首先删除该分类下所有记账信息
-      if (tab === '支出') {
-        const newList = [...currentExpenditureList];
+      const isExpenditure = tab === '支出';
 
-        const newNoSelectList = [...noSelectExpenditureList];
+      const currentSelectedCategoryList = isExpenditure ? [...currentExpenditureList] : [...currentIncomeList];
+      const currentSelectedCategoryIds = currentSelectedCategoryList.map(i => i.id);
 
-        const category = newList.find((val) => val.id === id);
-        const delIndex = newList.findIndex((val) => val.id === id);
+      const delIndex = currentSelectedCategoryIds.indexOf(id);
 
-        if (category && delIndex >= 0) {
-          newList.splice(delIndex, 1);
-          newNoSelectList.unshift(category);
-
-          setCurrentExpenditureList(newList);
-          setNoSelectExpenditureList(newNoSelectList);
-
-          setCurrentIcons([...newList]);
-          setCurrentNoSelectIcons([...newNoSelectList]);
-        }
-      } else {
-        const newList = [...currentIncomeList];
-        const newNoSelectList = [...noSelectIncomeList];
-
-        const category = newList.find((val) => val.id === id);
-        const delIndex = newList.findIndex((val) => val.id === id);
-
-        if (category && delIndex >= 0) {
-          newList.splice(delIndex, 1);
-          newNoSelectList.unshift(category);
-
-          setCurrentIncomeList(newList);
-          setNoSelectIncomeList(newNoSelectList);
-
-          setCurrentIcons([...newList]);
-          setCurrentNoSelectIcons([...newNoSelectList]);
-        }
+      if (delIndex > -1) {
+        currentSelectedCategoryList.splice(delIndex, 1);
       }
+
+      isExpenditure ? 
+        setCurrentExpenditureList(currentSelectedCategoryList) : 
+        setCurrentIncomeList(currentSelectedCategoryList);
     },
     [
-      currentExpenditureList,
-      currentIncomeList,
-      noSelectIncomeList,
-      noSelectExpenditureList,
-      currentExpenditureList,
       tab,
+      currentExpenditureList,
+      currentIncomeList
     ]
   );
 
@@ -373,7 +372,7 @@ const CategorySetting = () => {
 
       <div className="category-list-wrapper">
         <SortableContainer onSortEnd={onSortEnd} useDragHandle>
-          {currentIcons.map((item, index) => (
+          {currentCategory.selectedCategory.map((item, index) => (
             <CategoryItem
               key={`item-${item.title}`}
               index={index}
@@ -402,11 +401,11 @@ const CategorySetting = () => {
         </WingBlank>
       </div>
 
-      {currentNoSelectIcons.length > 0 && (
+      {currentCategory.noSelectedCategory.length > 0 && (
         <div className="category-list-wrapper">
           <h3 className="title">更多类别</h3>
           <ul className="more-category-list">
-            {currentNoSelectIcons.map((item) => (
+            {currentCategory.noSelectedCategory.map((item) => (
               <li className="category-item" key={item.id}>
                 <div
                   className="operation-icon-wrapper"
