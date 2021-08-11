@@ -40,6 +40,11 @@ const SortableContainer = sortableContainer(({ children }: any) => {
 });
 
 const CategorySetting = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+  const state = location.state as { tab?: tabs };
+
   const [tab, setTab] = useState<tabs>('支出');
   // 当前用户已有的分类(store)
   const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(
@@ -77,97 +82,26 @@ const CategorySetting = () => {
     };
   }, [tab, currentExpenditureList, currentIncomeList, allExpenditureCategoryList, allIncomeCategoryList]);
 
-  console.log('currentCategory: ', currentCategory);
-  
-
-  // 当前未选择的数据
-  /** !memo */
-  // const [noSelectExpenditureList, setNoSelectExpenditureList] = useState<
-  //   ICategoryItemProps[]
-  // >([]);
-  // const noSelectExpenditureList = useMemo(() => {
-
-  // }, []);
-  /** !memo */
-  // const [noSelectIncomeList, setNoSelectIncomeList] = useState<
-  //   ICategoryItemProps[]
-  // >([]);
-
-  // 当前显示的数据
-  /** !memo */
-  // const [currentIcons, setCurrentIcons] = useState<ICategoryItemProps[]>([]);
-  /** !memo */
-  // const [currentNoSelectIcons, setCurrentNoSelectIcons] = useState<
-  //   ICategoryItemProps[]
-  // >([]);
-
-  const dispatch = useDispatch();
-
-  /*
-  useEffect(() => {
-    setCurrentIcons(
-      tab === '支出' ? [...currentExpenditureList] : [...currentIncomeList]
-    );
-    setCurrentNoSelectIcons(
-      tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
-    );
-  }, [
-    tab,
-    currentExpenditureList,
-    currentIncomeList,
-    noSelectExpenditureList,
-    noSelectIncomeList,
-  ]);
-*/
-  
-
   /** 拖拽排序结束回调 */
-  const onSortEnd = ({
+  const onSortEnd = useCallback(({
     oldIndex,
     newIndex,
   }: {
     oldIndex: number;
     newIndex: number;
   }) => {
-    // const newItems = arrayMove(currentIcons, oldIndex, newIndex);
-    // setCurrentIcons(newItems);
-    // tab === '支出'
-    //   ? setCurrentExpenditureList(newItems)
-    //   : setCurrentIncomeList(newItems);
-  };
+    const isExpenditure = tab === '支出';
 
-  // 转换列表数据
-  const handlerListData = useCallback(
-    (category: AllCategoryListResult) => {
-      /*
-      const { expenditureList, incomeList } = category;
+    const newItems = arrayMove(
+      isExpenditure ? currentExpenditureList : currentIncomeList,
+      oldIndex,
+      newIndex
+    );
 
-      // 当前分类id列表
-      const currentExpenditureIdList = currentExpenditureList.map((i) => i.id);
-      const currentIncomeIdList = currentIncomeList.map((i) => i.id);
-      // 不是当前分类列表
-      const noSelectExpenditureList: ICategoryItemProps[] = [];
-      const noSelectIncomeList: ICategoryItemProps[] = [];
-
-      for (let item of expenditureList) {
-        if (!currentExpenditureIdList.includes(item.id)) {
-          noSelectExpenditureList.push(item);
-        }
-      }
-      setNoSelectExpenditureList(noSelectExpenditureList);
-      for (let item of incomeList) {
-        if (!currentIncomeIdList.includes(item.id)) {
-          noSelectIncomeList.push(item);
-        }
-      }
-      setNoSelectIncomeList(noSelectIncomeList);
-      setCurrentNoSelectIcons(
-        tab === '支出' ? [...noSelectExpenditureList] : [...noSelectIncomeList]
-      );
-      */
-    },
-    [currentExpenditureList, currentIncomeList, tab]
-  );
+    isExpenditure ? 
+      setCurrentExpenditureList(newItems):
+      setCurrentIncomeList(newItems);
+  }, [tab, currentExpenditureList, currentIncomeList]);
 
   // 获取当前用户分类数据(所有的，包括默认分类和用户自定义分类)
   const fetchAllCategoryList = useCallback(async () => {
@@ -175,8 +109,6 @@ const CategorySetting = () => {
       const res = await getAllCategoryList();
 
       if (res.data.status === 200) {
-        console.log('分类数据: ', res.data.data);
-
         const {
           expenditureList,
           incomeList
@@ -184,8 +116,6 @@ const CategorySetting = () => {
 
         setAllExpenditureCategoryList(expenditureList);
         setAllIncomeCategoryList(incomeList);
-        
-        // handlerListData(res.data.data);
       } else {
         Toast.fail(res.data.message);
       }
@@ -199,39 +129,19 @@ const CategorySetting = () => {
   }, [fetchAllCategoryList]);
 
   // 处理添加
-  function handlerAdd(category: ICategoryItemProps) {
-    /*
-    if (tab === '支出') {
-      const newList = [...currentExpenditureList];
-      const newNoSelectList = [...noSelectExpenditureList];
+  const handlerAdd = useCallback((category: ICategoryItemProps) => {
+      // 这里只要把要添加的分类添加到当前分类列表中就可以
+      const isExpenditure = tab === '支出';
 
-      const delIndex = newNoSelectList.findIndex(
-        (val) => val.id === category.id
-      );
+      const currentSelectedCategoryList = isExpenditure ? [...currentExpenditureList] : [...currentIncomeList];
 
-      newNoSelectList.splice(delIndex, 1);
-      newList.unshift(category);
-      setCurrentExpenditureList(newList);
-      setCurrentIcons([...newList]);
-      setNoSelectExpenditureList(newNoSelectList);
-      setCurrentNoSelectIcons([...newNoSelectList]);
-    } else {
-      const newList = [...currentIncomeList];
-      const newNoSelectList = [...noSelectIncomeList];
+      currentSelectedCategoryList.unshift(category);
 
-      const delIndex = newNoSelectList.findIndex(
-        (val) => val.id === category.id
-      );
+      isExpenditure ? 
+        setCurrentExpenditureList(currentSelectedCategoryList) :
+        setCurrentIncomeList(currentSelectedCategoryList);
 
-      newNoSelectList.splice(delIndex, 1);
-      newList.unshift(category);
-      setCurrentIncomeList(newList);
-      setCurrentIcons([...newList]);
-      setNoSelectIncomeList(newNoSelectList);
-      setCurrentNoSelectIcons([...newNoSelectList]);
-    }
-    */
-  }
+  }, [tab, currentExpenditureList, currentIncomeList]);
 
   // 点击删除， 从当前列表中删除分类
   const handlerDel = useCallback(
@@ -337,20 +247,11 @@ const CategorySetting = () => {
     ]);
   };
 
-  const history = useHistory();
-  const location = useLocation();
-  const state = location.state as { tab?: tabs };
-
   useEffect(() => {
     if (state?.tab) {
       setTab(state.tab);
     }
   }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // const currentIcons = useMemo(() => {
-
-  //   return []
-  // }, []);
 
   return (
     <div className="category-setting">
