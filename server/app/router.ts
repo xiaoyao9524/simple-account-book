@@ -21,6 +21,7 @@ export default (app: Application) => {
   router.del('/api/bill/deleteBill', controller.bill.deleteBill);
   router.post('/api/bill/updateBill', controller.bill.updateBill);
   router.post('/api/bill/getBillListByCategoryId', controller.bill.getBillListByCategoryId);
+  router.post('/api/bill/checkBillByCategoryId', controller.bill.checkBillByCategoryId);
 
   /** 特殊controller */
   // router.post('/api/category/insertDefaultCategory', controller.category.insertDefaultCategory);

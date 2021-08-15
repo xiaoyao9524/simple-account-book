@@ -124,6 +124,23 @@ class BillService extends Service {
       return null;
     }
   }
+
+  // 根据分类id获取记账记录(只查询一条，用来检查某分类下是否有记账信息)
+  async findOneBillItemByCategoryId (categoryId: number) {
+    const { ctx } = this;
+
+    try {
+      const result = await ctx.model.Bill.findOne({
+        where: {
+          categoryId
+        }
+      });
+
+      return result;
+    } catch (err) {
+      return null;
+    }
+  }
 }
 
 export default BillService;

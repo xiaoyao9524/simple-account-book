@@ -289,6 +289,48 @@ class BillController extends BaseController {
     this.error('更新失败');
     return;
   }
+
+  // 检查某个category下有没有记账信息
+  async checkBillByCategoryId () {
+    const { ctx, app } = this;
+
+    const validateResult = await ctx.validate(
+      app.rules.bill.checkBillByCategoryId,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    // 解析token
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
+    // 根据传参获取分类
+    const { categoryId } = ctx.request.body as {categoryId: number};
+
+    const categoryData = await ctx.service.category.getCategoryById(categoryId);
+
+    // 一些必要的检查
+    if (!categoryData) {
+      this.error('要检查的分类不存在');
+      return;
+    } else if (categoryData.isDefault === 1) {
+      this.error('不能删除默认分类');
+      return;
+    } else if (categoryData.pid !== tokenParse.id) {
+      // 说明不是该用户创建的，虽然存在，但是提示不存在
+      this.error('要检查的分类不存在');
+      return;
+    }
+
+    // 根据该分类id去查找记账信息，只需要查找到一个就可以
+    const billResult = await ctx.service.bill.findOneBillItemByCategoryId(categoryId);
+
+    this.success({
+      existBill: !!billResult
+    });
+  }
 }
 
 export default BillController;
