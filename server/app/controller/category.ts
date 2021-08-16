@@ -182,36 +182,36 @@ class CategoryController extends BaseController {
     if (!newExpenditureList) {
       this.error('获取支出类别失败');
       return;
-    } else {
-      const _expenditureList: CategoryItemProps[] = [];
-
-      for (let id of expenditureList) {
-        let item = newExpenditureList.find((i) => i.id === id);
-
-        if (item) {
-          _expenditureList.push(item);
-        }
-      }
-      newExpenditureList = _expenditureList;
     }
+
+    const _expenditureList: CategoryItemProps[] = [];
+
+    for (const id of expenditureList) {
+      const item = newExpenditureList.find(i => i.id === id);
+
+      if (item) {
+        _expenditureList.push(item);
+      }
+    }
+    newExpenditureList = _expenditureList;
 
     let newIncomeList = await ctx.service.category.getCategoryList(incomeList);
 
     if (!newIncomeList) {
       this.error('获取收入类别失败');
       return;
-    } else {
-      const _incomeist: CategoryItemProps[] = [];
-
-      for (let id of incomeList) {
-        let item = newIncomeList.find((i) => i.id === id);
-
-        if (item) {
-          _incomeist.push(item);
-        }
-      }
-      newIncomeList = _incomeist;
     }
+
+    const _incomeist: CategoryItemProps[] = [];
+
+    for (const id of incomeList) {
+      const item = newIncomeList.find(i => i.id === id);
+
+      if (item) {
+        _incomeist.push(item);
+      }
+    }
+    newIncomeList = _incomeist;
 
     this.success({
       expenditureList: newExpenditureList,
@@ -259,7 +259,7 @@ class CategoryController extends BaseController {
     const incomeIcons: CategoryItemProps[] = [];
 
     if (categoryList) {
-      for (let item of categoryList) {
+      for (const item of categoryList) {
         const { categoryType } = item;
         if (categoryType === 0) {
           incomeIcons.push(item);
@@ -270,8 +270,8 @@ class CategoryController extends BaseController {
     }
 
     this.success({
-      expenditureIcons: expenditureIcons.map((i) => i.id).join(','),
-      incomeIcons: incomeIcons.map((i) => i.id).join(','),
+      expenditureIcons: expenditureIcons.map(i => i.id).join(','),
+      incomeIcons: incomeIcons.map(i => i.id).join(','),
     });
   }
 

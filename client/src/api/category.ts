@@ -6,6 +6,7 @@ import {
     UpdateCategoryParams,
     UpdateCategoryResult,
     GetBillListByCategoryIdResult,
+    CheckBillByCategoryId,
     DeleteCategoryParams,
     DeleteCategoryResult
 } from "../types/category";
@@ -45,6 +46,18 @@ export const getBillListByCategoryId = (data: {
         method: 'post',
         url: '/api/bill/getBillListByCategoryId',
         data
+    })
+)
+
+// 检查某个分类下有没有记账信息
+// 
+export const checkBillByCategoryId = (categoryId: number) => (
+    request<CheckBillByCategoryId>({
+        method: 'post',
+        url: '/api/bill/checkBillByCategoryId',
+        data: {
+            categoryId
+        }
     })
 )
 

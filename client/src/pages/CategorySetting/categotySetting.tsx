@@ -19,6 +19,7 @@ import {
   getAllCategoryList,
   updateCategory,
   getBillListByCategoryId,
+  checkBillByCategoryId,
   deleteCategory,
 } from '../../api/category';
 
@@ -56,13 +57,17 @@ const CategorySetting = () => {
 
   // 组件中操作的数据，还起到备份store中数据的作用，避免直接操作store中的数据
   const [currentExpenditureList, setCurrentExpenditureList] = useState([
-    ...expenditureIcons
+    ...expenditureIcons,
   ]);
   const [currentIncomeList, setCurrentIncomeList] = useState([...incomeIcons]);
 
-  // 当前用户所有的分类(接口获取，包括启用的和未启用的) 
-  const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<ICategoryItemProps[]>([]);
-  const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<ICategoryItemProps[]>([]);
+  // 当前用户所有的分类(接口获取，包括启用的和未启用的)
+  const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<
+    ICategoryItemProps[]
+  >([]);
+  const [allIncomeCategoryList, setAllIncomeCategoryList] = useState<
+    ICategoryItemProps[]
+  >([]);
 
   // 当前显示的列表（选中的和未选的）
   const currentCategory = useMemo<{
@@ -70,38 +75,45 @@ const CategorySetting = () => {
     noSelectedCategory: ICategoryItemProps[];
   }>(() => {
     const isExpenditrue = tab === '支出';
-    const currentCategoryIds = (isExpenditrue ? currentExpenditureList : currentIncomeList).map(item => item.id);
+    const currentCategoryIds = (
+      isExpenditrue ? currentExpenditureList : currentIncomeList
+    ).map((item) => item.id);
 
-    const noSelectedCategory: ICategoryItemProps[] = (isExpenditrue ? allExpenditureCategoryList : allIncomeCategoryList).filter(item => (
-      !currentCategoryIds.includes(item.id)
-    ));
+    const noSelectedCategory: ICategoryItemProps[] = (
+      isExpenditrue ? allExpenditureCategoryList : allIncomeCategoryList
+    ).filter((item) => !currentCategoryIds.includes(item.id));
 
     return {
-      selectedCategory: isExpenditrue ? currentExpenditureList : currentIncomeList,
-      noSelectedCategory
+      selectedCategory: isExpenditrue
+        ? currentExpenditureList
+        : currentIncomeList,
+      noSelectedCategory,
     };
-  }, [tab, currentExpenditureList, currentIncomeList, allExpenditureCategoryList, allIncomeCategoryList]);
+  }, [
+    tab,
+    currentExpenditureList,
+    currentIncomeList,
+    allExpenditureCategoryList,
+    allIncomeCategoryList,
+  ]);
 
   /** 拖拽排序结束回调 */
-  const onSortEnd = useCallback(({
-    oldIndex,
-    newIndex,
-  }: {
-    oldIndex: number;
-    newIndex: number;
-  }) => {
-    const isExpenditure = tab === '支出';
+  const onSortEnd = useCallback(
+    ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+      const isExpenditure = tab === '支出';
 
-    const newItems = arrayMove(
-      isExpenditure ? currentExpenditureList : currentIncomeList,
-      oldIndex,
-      newIndex
-    );
+      const newItems = arrayMove(
+        isExpenditure ? currentExpenditureList : currentIncomeList,
+        oldIndex,
+        newIndex
+      );
 
-    isExpenditure ? 
-      setCurrentExpenditureList(newItems):
-      setCurrentIncomeList(newItems);
-  }, [tab, currentExpenditureList, currentIncomeList]);
+      isExpenditure
+        ? setCurrentExpenditureList(newItems)
+        : setCurrentIncomeList(newItems);
+    },
+    [tab, currentExpenditureList, currentIncomeList]
+  );
 
   // 获取当前用户分类数据(所有的，包括默认分类和用户自定义分类)
   const fetchAllCategoryList = useCallback(async () => {
@@ -109,10 +121,7 @@ const CategorySetting = () => {
       const res = await getAllCategoryList();
 
       if (res.data.status === 200) {
-        const {
-          expenditureList,
-          incomeList
-        } = res.data.data;
+        const { expenditureList, incomeList } = res.data.data;
 
         setAllExpenditureCategoryList(expenditureList);
         setAllIncomeCategoryList(incomeList);
@@ -129,27 +138,44 @@ const CategorySetting = () => {
   }, [fetchAllCategoryList]);
 
   // 处理添加
-  const handlerAdd = useCallback((category: ICategoryItemProps) => {
+  const handlerAdd = useCallback(
+    (category: ICategoryItemProps) => {
       // 这里只要把要添加的分类添加到当前分类列表中就可以
       const isExpenditure = tab === '支出';
 
-      const currentSelectedCategoryList = isExpenditure ? [...currentExpenditureList] : [...currentIncomeList];
+      const currentSelectedCategoryList = isExpenditure
+        ? [...currentExpenditureList]
+        : [...currentIncomeList];
 
       currentSelectedCategoryList.unshift(category);
 
-      isExpenditure ? 
-        setCurrentExpenditureList(currentSelectedCategoryList) :
-        setCurrentIncomeList(currentSelectedCategoryList);
+      isExpenditure
+        ? setCurrentExpenditureList(currentSelectedCategoryList)
+        : setCurrentIncomeList(currentSelectedCategoryList);
+    },
+    [tab, currentExpenditureList, currentIncomeList]
+  );
 
-  }, [tab, currentExpenditureList, currentIncomeList]);
+  // 从当前列表中删除某个分类
+  const deleteCategoryItem = useCallback(
+    async (category: ICategoryItemProps) => {
+      /**
+       * 如果是默认分类，从当前列表中删除并添加到当前未选择列表
+       * 如果是自定义分类，从当前列表中删除
+       */
+      const { id, isDefault } = category;
 
-  // 点击删除， 从当前列表中删除分类
-  const handlerDel = useCallback(
-    async ({ id }: ICategoryItemProps) => {
       const isExpenditure = tab === '支出';
 
-      const currentSelectedCategoryList = isExpenditure ? [...currentExpenditureList] : [...currentIncomeList];
-      const currentSelectedCategoryIds = currentSelectedCategoryList.map(i => i.id);
+      // 当前分类列表
+      const currentSelectedCategoryList = isExpenditure
+        ? [...currentExpenditureList]
+        : [...currentIncomeList];
+
+      // 当前分类id列表
+      const currentSelectedCategoryIds = currentSelectedCategoryList.map(
+        (i) => i.id
+      );
 
       const delIndex = currentSelectedCategoryIds.indexOf(id);
 
@@ -157,21 +183,61 @@ const CategorySetting = () => {
         currentSelectedCategoryList.splice(delIndex, 1);
       }
 
-      isExpenditure ? 
-        setCurrentExpenditureList(currentSelectedCategoryList) : 
-        setCurrentIncomeList(currentSelectedCategoryList);
+      isExpenditure
+        ? setCurrentExpenditureList(currentSelectedCategoryList)
+        : setCurrentIncomeList(currentSelectedCategoryList);
     },
-    [
-      tab,
-      currentExpenditureList,
-      currentIncomeList
-    ]
+    [tab, currentExpenditureList, currentIncomeList]
+  );
+
+  // 跳转删除记账页
+  const toDelBillPage = useCallback((category: ICategoryItemProps) => {
+    const operations = [
+      {
+        text: '取消',
+        onPress: () => {},
+      },
+      {
+        text: '确认',
+        onPress: () => {
+          console.log('删除分类: ', category);
+        },
+      },
+    ];
+
+    alert('警告', '删除类别会同事删除该类别下所有记账信息', operations);
+  }, []);
+
+  // 点击删除， 检查当前分类下是否有记账信息
+  const handlerDelCategoryClick = useCallback(
+    async (category: ICategoryItemProps) => {
+      const { id } = category;
+
+      try {
+        const res = await checkBillByCategoryId(id);
+
+        if (res.data.status === 200) {
+          const { existBill } = res.data.data;
+
+          if (existBill) {
+            // 当前分类下有记账信息，跳转删除记账信息页
+            toDelBillPage(category);
+          } else {
+            // 当前分类没有记账信息，处理删除逻辑
+            deleteCategoryItem(category);
+          }
+        } else {
+          Toast.fail(res.data.message);
+        }
+      } catch (err) {
+        Toast.fail(err.message);
+      }
+    },
+    [toDelBillPage, deleteCategoryItem]
   );
 
   // 确认删除某分类
-  const handlerConfirmDeleteCategory = useCallback(() => {
-
-  }, []);
+  const handlerConfirmDeleteCategory = useCallback(() => {}, []);
 
   // 保存
   async function handlerSave() {
@@ -279,7 +345,7 @@ const CategorySetting = () => {
               index={index}
               {...item}
               onDelete={(category) => {
-                handlerDel(category);
+                handlerDelCategoryClick(category);
               }}
             />
           ))}

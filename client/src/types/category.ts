@@ -51,6 +51,11 @@ export type GetBillListByCategoryIdResult = BaseResult<{
   billList: BillItem[];
 }>;
 
+// 检查某个分类下是否有记账信息接口返回
+export type CheckBillByCategoryId = BaseResult<{
+  existBill: boolean;
+}>;
+
 /** 删除类别 */
 // 删除类别传参
 export interface DeleteCategoryParams {

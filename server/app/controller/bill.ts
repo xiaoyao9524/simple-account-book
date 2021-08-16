@@ -315,12 +315,10 @@ class BillController extends BaseController {
     if (!categoryData) {
       this.error('要检查的分类不存在');
       return;
-    } else if (categoryData.isDefault === 1) {
-      this.error('不能删除默认分类');
-      return;
-    } else if (categoryData.pid !== tokenParse.id) {
-      // 说明不是该用户创建的，虽然存在，但是提示不存在
-      this.error('要检查的分类不存在');
+    } else if (categoryData.isDefault !== 1 && categoryData.pid !== tokenParse.id) {
+      // 如果当前分类不是默认，则判断该分类是不是该用户创建的
+      // 如果不是该用户创建，虽然存在，但是提示不存在
+      this.error('要检查的分类不存在2');
       return;
     }
 

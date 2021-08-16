@@ -4,7 +4,7 @@ import { SignupRequestProps, LoginParams } from '../types/admin';
 import { TokenParseProps } from '../types/base';
 import { CategoryItemProps } from '../types/category';
 
-const md5 = require('md5');
+import md5 = require('md5');
 
 class AdminController extends BaseController {
   async register() {
@@ -91,7 +91,7 @@ class AdminController extends BaseController {
     const validateResult = await ctx.validate(loginRules, ctx.request.body);
 
     if (!validateResult) {
-      return
+      return;
     }
 
     const { username, password } = params;
@@ -150,7 +150,7 @@ class AdminController extends BaseController {
 
     if (!expenditureList) {
       this.error('获取支出列表失败');
-      return
+      return;
     } else {
       const _expenditureList: CategoryItemProps[] = [];
 
@@ -169,7 +169,7 @@ class AdminController extends BaseController {
 
     if (!incomeList) {
       this.error('获取收入列表失败');
-      return
+      return;
     } else {
       const _incomeList: CategoryItemProps[] = [];
 
