@@ -21,6 +21,7 @@ import {
   getBillListByCategoryId,
   checkBillByCategoryId,
   deleteCategory,
+  getCurrentCategoryByUserId
 } from '../../api/category';
 
 /** action */
@@ -156,40 +157,6 @@ const CategorySetting = () => {
     [tab, currentExpenditureList, currentIncomeList]
   );
 
-  // 从当前列表中删除某个分类
-  const deleteCategoryItem = useCallback(
-    async (category: ICategoryItemProps) => {
-      /**
-       * 如果是默认分类，从当前列表中删除并添加到当前未选择列表
-       * 如果是自定义分类，从当前列表中删除
-       */
-      const { id, isDefault } = category;
-
-      const isExpenditure = tab === '支出';
-
-      // 当前分类列表
-      const currentSelectedCategoryList = isExpenditure
-        ? [...currentExpenditureList]
-        : [...currentIncomeList];
-
-      // 当前分类id列表
-      const currentSelectedCategoryIds = currentSelectedCategoryList.map(
-        (i) => i.id
-      );
-
-      const delIndex = currentSelectedCategoryIds.indexOf(id);
-
-      if (delIndex > -1) {
-        currentSelectedCategoryList.splice(delIndex, 1);
-      }
-
-      isExpenditure
-        ? setCurrentExpenditureList(currentSelectedCategoryList)
-        : setCurrentIncomeList(currentSelectedCategoryList);
-    },
-    [tab, currentExpenditureList, currentIncomeList]
-  );
-
   // 跳转删除记账页
   const toDelBillPage = useCallback((category: ICategoryItemProps) => {
     const operations = [
@@ -208,6 +175,43 @@ const CategorySetting = () => {
     alert('警告', '删除类别会同事删除该类别下所有记账信息', operations);
   }, []);
 
+  // 后端删除分类完毕，重新获取用户分类信息
+  const updateCategoryList = useCallback(
+    async (category: ICategoryItemProps) => {
+      try {
+        const res = await getCurrentCategoryByUserId();
+        console.log('重新获取分类信息: ', res);
+        
+      } catch (err) {
+        Toast.fail(err.message);
+      }
+    },
+    []
+  );
+
+  // 接口请求删除某个分类
+  const fetchDeleteCategoryItem = useCallback(
+    async (category: ICategoryItemProps) => {
+      const { id } = category;
+
+      try {
+        const res = await deleteCategory({
+          id
+        });
+
+        console.log('删除分类res: ', res);
+
+        if (res.data.status === 200) {
+          updateCategoryList(category);
+        } else {
+          Toast.fail(res.data.message);
+        }
+        
+      } catch (err) {
+        Toast.fail(err.message);
+      }
+  }, [updateCategoryList]);
+
   // 点击删除， 检查当前分类下是否有记账信息
   const handlerDelCategoryClick = useCallback(
     async (category: ICategoryItemProps) => {
@@ -224,7 +228,7 @@ const CategorySetting = () => {
             toDelBillPage(category);
           } else {
             // 当前分类没有记账信息，处理删除逻辑
-            deleteCategoryItem(category);
+            fetchDeleteCategoryItem(category);
           }
         } else {
           Toast.fail(res.data.message);
@@ -233,11 +237,8 @@ const CategorySetting = () => {
         Toast.fail(err.message);
       }
     },
-    [toDelBillPage, deleteCategoryItem]
+    [toDelBillPage, fetchDeleteCategoryItem]
   );
-
-  // 确认删除某分类
-  const handlerConfirmDeleteCategory = useCallback(() => {}, []);
 
   // 保存
   async function handlerSave() {

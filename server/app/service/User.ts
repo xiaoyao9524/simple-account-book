@@ -81,7 +81,7 @@ class UserService extends Service {
         where: {
           id
         }
-      })
+      });
 
       return result;
     } catch (err) {

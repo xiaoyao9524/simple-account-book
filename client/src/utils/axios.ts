@@ -13,10 +13,10 @@ service.interceptors.response.use((response) => {
     case 1002:
       localStorage.removeItem('userInfo');
       localStorage.removeItem('token');
-      location.replace(`/login`);
-      // window.location.href = `/login?redirect=${
-      //   location.location.pathname
-      // }&failMsg=${encodeURIComponent(response.data.message)}`;
+      // location.replace(`/login`);
+      window.location.href = `/login?redirect=${
+        location.location.pathname
+      }&failMsg=${encodeURIComponent(response.data.message)}`;
       break;
   }
 

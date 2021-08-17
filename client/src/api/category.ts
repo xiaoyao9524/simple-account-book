@@ -8,7 +8,8 @@ import {
     GetBillListByCategoryIdResult,
     CheckBillByCategoryId,
     DeleteCategoryParams,
-    DeleteCategoryResult
+    DeleteCategoryResult,
+    GetCurrentCategoryByUserIdResult
 } from "../types/category";
 
 
@@ -50,7 +51,6 @@ export const getBillListByCategoryId = (data: {
 )
 
 // 检查某个分类下有没有记账信息
-// 
 export const checkBillByCategoryId = (categoryId: number) => (
     request<CheckBillByCategoryId>({
         method: 'post',
@@ -61,11 +61,19 @@ export const checkBillByCategoryId = (categoryId: number) => (
     })
 )
 
-// 删除类别
+// 删除分类
 export const deleteCategory = (data: DeleteCategoryParams) => (
     request<DeleteCategoryResult>({
         method: 'delete',
         url: '/api/category/deleteCategory',
         data
+    })
+)
+
+// 获取该用户下现有的分类
+export const getCurrentCategoryByUserId = () => (
+    request<GetCurrentCategoryByUserIdResult>({
+        method: 'post',
+        url: '/api/category/getCurrentCategoryByUserId'
     })
 )

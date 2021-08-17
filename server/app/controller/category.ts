@@ -232,16 +232,121 @@ class CategoryController extends BaseController {
       return;
     }
 
+    // 解析token
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
     const { id }: { id: number } = ctx.request.body;
 
-    const delRes = await ctx.service.category.deleteCategory(id);
+    // 获取完整的分类数据
+    const categoryData = await ctx.service.category.getCategoryById(id);
 
-    if (!delRes) {
+    if (!categoryData) {
+      this.error('要删除的分类不存在');
+      return;
+    }
+
+    // 判断该分类是不是默认分类
+    // if (categoryData.isDefault === 1) {
+    //   this.error('无法删除默认分类');
+    //   return;
+    // }
+
+    // 判断该分类是不是该用户创建的
+    if (categoryData.isDefault !== 1 && categoryData.pid !== tokenParse.id) {
+      this.error('要删除的分类不存在');
+      return;
+    }
+
+    // 如果是用户创建分类，那么去删除该条分类数据
+    let delRes: number | null = null;
+
+    if (categoryData.isDefault !== 1) {
+      delRes = await ctx.service.category.deleteCategory(id);
+
+      if (!delRes) {
+        this.error('删除失败');
+        return;
+      }
+    }
+
+    // 更新用户的分类列表
+    const userInfo = await ctx.service.user.getUser({
+      id: tokenParse.id
+    });
+
+    if (!userInfo) {
+      this.error('删除失败');
+      return;
+    }
+
+    const { expenditureList, incomeList } = userInfo;
+    const isExpenditure = categoryData.categoryType === 1;
+
+    const categoryIdList = (isExpenditure ? expenditureList : incomeList)
+      .split(',')
+      .map(i => Number(i));
+
+    const delIndex = categoryIdList.indexOf(id);
+
+    if (delIndex > -1) {
+      categoryIdList.splice(delIndex, 1);
+    }
+
+    // 如果isExpenditure为true，那么说明categoryIdList就是支出分类，否则categoryIdList就是收入分类
+    const newExpenditureList = isExpenditure ? categoryIdList : expenditureList.split(',').map(i => Number(i));
+    const newIncomeList = isExpenditure ? incomeList.split(',').map(i => Number(i)) : categoryIdList;
+
+    const updateUserCategoryRes = await ctx.service.user.updateCategoryList(tokenParse.id, {
+      expenditureList: newExpenditureList,
+      incomeList: newIncomeList
+    });
+
+    console.log('更新用户分类Res: ', updateUserCategoryRes);
+
+    if (!updateUserCategoryRes) {
+      this.error('删除失败');
+      return;
+    }
+    
+    if (!updateUserCategoryRes[0]) {
       this.error('删除失败');
       return;
     }
 
     this.success(null);
+  }
+
+  /** 获取某用户现有的分类信息 */
+  async getCurrentCategoryByUserId () {
+    const { ctx } = this;
+
+    const tokenParse: TokenParseProps = { ...ctx.state.tokenParse };
+
+    // 获取用户信息
+    const userInfo = await ctx.service.user.getUser({
+      id: tokenParse.id
+    });
+
+    if (!userInfo) {
+      this.error('该用户不存在');
+      return;
+    }
+
+    // 去获取用户分类
+    const { expenditureList, incomeList } = userInfo;
+
+    const expenditureDataList = await ctx.service.category.getCategoryList(expenditureList.split(',').map(i => Number(i)));
+    const incomeDataList = await ctx.service.category.getCategoryList(incomeList.split(',').map(i => Number(i)));
+
+    if (!expenditureDataList || !incomeDataList) {
+      this.error('获取失败');
+      return;
+    }
+
+    this.success({
+      expenditureList: expenditureDataList,
+      incomeList: incomeDataList
+    });
   }
 
   /** test */
