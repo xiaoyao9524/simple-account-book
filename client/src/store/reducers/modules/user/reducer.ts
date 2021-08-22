@@ -3,7 +3,7 @@ import {
   SET_USER_INFO,
   SET_TOKEN,
   SET_USER_DATA_BY_LOCAL,
-  UPDATE_USER_CATEGORY,
+  SET_USER_CATEGORY,
   DELETE_ONE_CATEGORY
 } from './actionTypes';
 
@@ -58,10 +58,11 @@ export default (state = defaultState, action: UserActions) => {
         newState = JSON.parse(JSON.stringify(defaultState));
       }
       break
-    case UPDATE_USER_CATEGORY:
+    case SET_USER_CATEGORY:
+      console.log('设置用户分类: ', action.category);
+      
       newState.userInfo.category = action.category;
-      localStorage.setItem('userInfo', JSON.stringify(newState.userInfo));
-      break
+      break;
     case DELETE_ONE_CATEGORY:
       const { category } = action;
 
@@ -75,7 +76,6 @@ export default (state = defaultState, action: UserActions) => {
       }
 
       const delIndex = newList.findIndex(i => i.id === category.id);
-      console.log('delIndex: ', delIndex);
 
       if (delIndex >= 0) {
         newList.splice(delIndex, 1);

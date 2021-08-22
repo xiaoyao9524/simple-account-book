@@ -64,8 +64,8 @@ export interface DeleteCategoryParams {
 
 export type DeleteCategoryResult = BaseResult<null>;
 
-// 获取该用户下现有分类接口返回
-export type GetCurrentCategoryByUserIdResult = BaseResult<{
+// 更新该用户下现有分类接口返回
+export type UpdateCurrentUserCategoryResult = BaseResult<{
   expenditureList: CategoryItem[],
   incomeList: CategoryItem[]
 }>;

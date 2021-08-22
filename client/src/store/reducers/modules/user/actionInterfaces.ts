@@ -2,6 +2,7 @@ import {
   SET_USER_INFO,
   SET_TOKEN,
   SET_USER_DATA_BY_LOCAL,
+  SET_USER_CATEGORY,
   UPDATE_USER_CATEGORY,
   DELETE_ONE_CATEGORY
 } from './actionTypes';
@@ -26,9 +27,13 @@ export interface SetUserDataByLocalStorage {
   type: SET_USER_DATA_BY_LOCAL;
 }
 
+// 设置store中的用户分类值
+export interface SetUserCategoryAction {
+  type: SET_USER_CATEGORY,
+  category: UpdateCategoryResultData
+}
 export interface UpdateUserCategoryAction {
-  type: UPDATE_USER_CATEGORY;
-  category: UpdateCategoryResultData;
+  type: UPDATE_USER_CATEGORY
 }
 
 export interface DeleteOneCategoryAction {
@@ -40,6 +45,7 @@ type UserActions =
   | SetTokenAction
   | SetUserInfoAction
   | SetUserDataByLocalStorage
+  | SetUserCategoryAction
   | UpdateUserCategoryAction
   | DeleteOneCategoryAction;
 

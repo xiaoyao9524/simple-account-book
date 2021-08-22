@@ -9,7 +9,7 @@ import {
     CheckBillByCategoryId,
     DeleteCategoryParams,
     DeleteCategoryResult,
-    GetCurrentCategoryByUserIdResult
+    UpdateCurrentUserCategoryResult
 } from "../types/category";
 
 
@@ -70,10 +70,10 @@ export const deleteCategory = (data: DeleteCategoryParams) => (
     })
 )
 
-// 获取该用户下现有的分类
-export const getCurrentCategoryByUserId = () => (
-    request<GetCurrentCategoryByUserIdResult>({
+// 更新该用户下现有的分类
+export const updateCurrentUserCategory = () => (
+    request<UpdateCurrentUserCategoryResult>({
         method: 'post',
-        url: '/api/category/getCurrentCategoryByUserId'
+        url: '/api/category/getCurrentUserCategory'
     })
 )

@@ -14,6 +14,10 @@ export type SET_USER_DATA_BY_LOCAL = typeof SET_USER_DATA_BY_LOCAL;
 export const UPDATE_USER_CATEGORY = 'UPDATE_USER_CATEGORY';
 export type UPDATE_USER_CATEGORY = typeof UPDATE_USER_CATEGORY;
 
+// store中设置用户类别的值
+export const SET_USER_CATEGORY = 'SET_USER_CATEGORY';
+export type SET_USER_CATEGORY = typeof SET_USER_CATEGORY;
+
 // 从用户类别中删除一项
 export const DELETE_ONE_CATEGORY = 'DELETE_ONE_CATEGORY';
 export type DELETE_ONE_CATEGORY = typeof DELETE_ONE_CATEGORY;

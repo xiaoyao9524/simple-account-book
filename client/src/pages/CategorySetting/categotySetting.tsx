@@ -21,14 +21,18 @@ import {
   getBillListByCategoryId,
   checkBillByCategoryId,
   deleteCategory,
-  getCurrentCategoryByUserId
+  updateCurrentUserCategory
 } from '../../api/category';
 
 /** action */
 import {
-  getUpdateUserCategoryAction,
+  // getUpdateUserCategoryAction,
   getDeleteOneCtegoryAction,
 } from '../../store/reducers/modules/user/actionCreator';
+import {
+  actionTypes as UserActionTypes
+} from '../../store/reducers/modules/user'
+
 /** style */
 import './style.scss';
 
@@ -157,7 +161,7 @@ const CategorySetting = () => {
     [tab, currentExpenditureList, currentIncomeList]
   );
 
-  // 跳转删除记账页
+  // 跳转删除记账页弹窗
   const toDelBillPage = useCallback((category: ICategoryItemProps) => {
     const operations = [
       {
@@ -178,13 +182,20 @@ const CategorySetting = () => {
   // 后端删除分类完毕，重新获取用户分类信息
   const updateCategoryList = useCallback(
     async (category: ICategoryItemProps) => {
-      try {
-        const res = await getCurrentCategoryByUserId();
-        console.log('重新获取分类信息: ', res);
+      console.log('测试dispatch更新用户信息');
+      dispatch({
+        type: UserActionTypes.UPDATE_USER_CATEGORY,
+        payload: {
+          name: 'xy'
+        }
+      })
+      // try {
+      //   const res = await updateCurrentUserCategory();
+      //   console.log('重新获取分类信息: ', res);
         
-      } catch (err) {
-        Toast.fail(err.message);
-      }
+      // } catch (err) {
+      //   Toast.fail(err.message);
+      // }
     },
     []
   );
@@ -251,7 +262,8 @@ const CategorySetting = () => {
       const res = await updateCategory(params);
 
       if (res.data.status === 200) {
-        dispatch(getUpdateUserCategoryAction(res.data.data));
+        // dispatch(getUpdateUserCategoryAction(res.data.data));
+        dispatch()
         Toast.success('保存成功', 1, () => {}, false);
       } else {
         Toast.fail(res.data.message);
