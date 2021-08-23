@@ -317,7 +317,7 @@ class CategoryController extends BaseController {
   }
 
   /** 获取某用户现有的分类信息 */
-  async getCurrentCategoryByUserId () {
+  async getCurrentUserCategory () {
     const { ctx } = this;
 
     const tokenParse: TokenParseProps = { ...ctx.state.tokenParse };
