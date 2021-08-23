@@ -19,7 +19,7 @@ import { InsertCategoryProps } from "../../types/category";
 import { insertCategory } from "../../api/category";
 
 /** dispatch */
-import { getUpdateUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
+import { getSetUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
 /** style */
 import './style.scss';
 
@@ -200,7 +200,7 @@ const InsertCategory = () => {
 
       if (res.data.status === 200) {
         
-        dispatch(getUpdateUserCategoryAction(res.data.data));
+        dispatch(getSetUserCategoryAction(res.data.data));
 
         history.goBack();
         

@@ -27,6 +27,7 @@ import {
 /** action */
 import {
   // getUpdateUserCategoryAction,
+  getSetUserCategoryAction,
   getDeleteOneCtegoryAction,
 } from '../../store/reducers/modules/user/actionCreator';
 import {
@@ -64,7 +65,15 @@ const CategorySetting = () => {
   const [currentExpenditureList, setCurrentExpenditureList] = useState([
     ...expenditureIcons,
   ]);
+
+  useEffect(() => {
+    setCurrentExpenditureList([...expenditureIcons]);
+  }, [expenditureIcons]);
+
   const [currentIncomeList, setCurrentIncomeList] = useState([...incomeIcons]);
+  useEffect(() => {
+    setCurrentIncomeList([...incomeIcons])
+  }, [incomeIcons]);
 
   // 当前用户所有的分类(接口获取，包括启用的和未启用的)
   const [allExpenditureCategoryList, setAllExpenditureCategoryList] = useState<
@@ -179,27 +188,6 @@ const CategorySetting = () => {
     alert('警告', '删除类别会同事删除该类别下所有记账信息', operations);
   }, []);
 
-  // 后端删除分类完毕，重新获取用户分类信息
-  const updateCategoryList = useCallback(
-    async (category: ICategoryItemProps) => {
-      console.log('测试dispatch更新用户信息');
-      dispatch({
-        type: UserActionTypes.UPDATE_USER_CATEGORY,
-        payload: {
-          name: 'xy'
-        }
-      })
-      // try {
-      //   const res = await updateCurrentUserCategory();
-      //   console.log('重新获取分类信息: ', res);
-        
-      // } catch (err) {
-      //   Toast.fail(err.message);
-      // }
-    },
-    []
-  );
-
   // 接口请求删除某个分类
   const fetchDeleteCategoryItem = useCallback(
     async (category: ICategoryItemProps) => {
@@ -210,10 +198,13 @@ const CategorySetting = () => {
           id
         });
 
-        console.log('删除分类res: ', res);
-
         if (res.data.status === 200) {
-          updateCategoryList(category);
+          // 删除成功，更新用户分类信息
+          dispatch({
+            type: UserActionTypes.UPDATE_USER_CATEGORY
+          })
+          // 重新获取当前用户所有的分类信息
+          fetchAllCategoryList();
         } else {
           Toast.fail(res.data.message);
         }
@@ -221,7 +212,7 @@ const CategorySetting = () => {
       } catch (err) {
         Toast.fail(err.message);
       }
-  }, [updateCategoryList]);
+  }, [dispatch, fetchAllCategoryList]);
 
   // 点击删除， 检查当前分类下是否有记账信息
   const handlerDelCategoryClick = useCallback(
@@ -262,8 +253,7 @@ const CategorySetting = () => {
       const res = await updateCategory(params);
 
       if (res.data.status === 200) {
-        // dispatch(getUpdateUserCategoryAction(res.data.data));
-        dispatch()
+        dispatch(getSetUserCategoryAction(res.data.data));
         Toast.success('保存成功', 1, () => {}, false);
       } else {
         Toast.fail(res.data.message);

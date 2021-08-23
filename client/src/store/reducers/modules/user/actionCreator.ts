@@ -1,3 +1,4 @@
+import { put, call } from 'redux-saga/effects';
 import {
    Toast
 } from 'antd-mobile';
@@ -55,8 +56,26 @@ export const getSetUserCategoryAction = (category: UpdateCategoryResultData) => 
 })
 
 // 更新用户category
-export const updateUserCategoryAction = (t: any) => {
+export function* updateUserCategoryAction (t: any)  {
   console.log('测试saga传参: ', t);
+  try {
+    const res = yield call(updateCurrentUserCategory);
+
+    console.log('res-xxxxxxxxxxx: ', res);
+    
+
+    if (res.data.status === 200) {
+      console.log('更新用户category-dispatch: ', res.data.data);
+      // dispatch(getSetUserCategoryAction(res.data.data));
+      yield put(getSetUserCategoryAction(res.data.data));
+    } else {
+      Toast.fail(res.data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    Toast.fail(err.message);
+  }
+  /*
   return async (dispatch: Dispatch) => {
     try {
       const res = await updateCurrentUserCategory();
@@ -71,7 +90,8 @@ export const updateUserCategoryAction = (t: any) => {
       console.error(err);
       Toast.fail(err.message);
     }
-  }
+    */
+  // }
 }
 
 // redux-saga示例
