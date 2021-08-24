@@ -21,6 +21,7 @@ import {
   getBillListByCategoryId,
   checkBillByCategoryId,
   deleteCategory,
+  addCategoryToCurrent,
   updateCurrentUserCategory
 } from '../../api/category';
 
@@ -153,21 +154,25 @@ const CategorySetting = () => {
 
   // 处理添加
   const handlerAdd = useCallback(
-    (category: ICategoryItemProps) => {
-      // 这里只要把要添加的分类添加到当前分类列表中就可以
-      const isExpenditure = tab === '支出';
+    async (category: ICategoryItemProps) => {
+      try {
+        const res = await addCategoryToCurrent({
+          categoryId: category.id
+        });
 
-      const currentSelectedCategoryList = isExpenditure
-        ? [...currentExpenditureList]
-        : [...currentIncomeList];
-
-      currentSelectedCategoryList.unshift(category);
-
-      isExpenditure
-        ? setCurrentExpenditureList(currentSelectedCategoryList)
-        : setCurrentIncomeList(currentSelectedCategoryList);
+        if (res.data.status === 200 && res.data.data) {
+          // 新增成功，更新用户分类信息
+          dispatch({
+            type: UserActionTypes.UPDATE_USER_CATEGORY
+          })
+        } else {
+          Toast.fail(res.data.message);
+        }
+      } catch (err) {
+        Toast.fail(err.message);
+      }
     },
-    [tab, currentExpenditureList, currentIncomeList]
+    [dispatch]
   );
 
   // 跳转删除记账页弹窗

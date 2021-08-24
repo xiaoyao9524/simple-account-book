@@ -8,6 +8,7 @@ export interface CategoryItem {
   isDefault: 0 | 1; // 0为自定义添加，1为默认，无法删除
   title: string;
   icon: string;
+  sortIndex: number; // 越小越靠前
 }
 
 // getAllCategoryList 返回
@@ -69,3 +70,11 @@ export type UpdateCurrentUserCategoryResult = BaseResult<{
   expenditureList: CategoryItem[],
   incomeList: CategoryItem[]
 }>;
+
+// 将某用户的某分类添加到当前分类中接口 请求参数
+export interface AddCategoryToCurrentRequestParams {
+  categoryId: number;
+}
+
+// 将某用户的某分类添加到当前分类中接口 返回参数
+export type AddCategoryToCurrentResponseProps = BaseResult<boolean>;

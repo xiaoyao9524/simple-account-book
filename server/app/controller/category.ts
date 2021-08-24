@@ -275,7 +275,7 @@ class CategoryController extends BaseController {
     });
 
     if (!userInfo) {
-      this.error('删除失败');
+      this.error('该用户不存在');
       return;
     }
 
@@ -335,17 +335,32 @@ class CategoryController extends BaseController {
     // 去获取用户分类
     const { expenditureList, incomeList } = userInfo;
 
-    const expenditureDataList = await ctx.service.category.getCategoryList(expenditureList.split(',').map(i => Number(i)));
-    const incomeDataList = await ctx.service.category.getCategoryList(incomeList.split(',').map(i => Number(i)));
+    const expenditureIdList = expenditureList.split(',').map(i => Number(i));
+    const expenditureDataList = await ctx.service.category.getCategoryList(expenditureIdList);
+
+    const incomeIdList = incomeList.split(',').map(i => Number(i));
+    const incomeDataList = await ctx.service.category.getCategoryList(incomeIdList);
 
     if (!expenditureDataList || !incomeDataList) {
       this.error('获取失败');
       return;
     }
 
+    // 排序
+    const expenditureRet = [ ...expenditureDataList ].map(i => ({
+      ...i,
+      sortIndex: expenditureIdList.indexOf(i.id)
+    }));
+
+    const incomeRet = [ ...incomeDataList ].map(i => ({
+      ...i,
+      sortIndex: incomeIdList.indexOf(i.id)
+    }));
+    
+
     this.success({
-      expenditureList: expenditureDataList,
-      incomeList: incomeDataList
+      expenditureList: expenditureRet.sort((a, b) => a.sortIndex - b.sortIndex),
+      incomeList: incomeRet.sort((a, b) => a.sortIndex - b.sortIndex)
     });
   }
 
@@ -409,7 +424,7 @@ class CategoryController extends BaseController {
       return;
     }
 
-    this.success('添加成功');
+    this.success(true);
   }
 
   /** test */
