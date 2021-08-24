@@ -15,6 +15,7 @@ export default (app: Application) => {
   router.post('/api/category/updateCategory', controller.category.updateCategory);
   router.delete('/api/category/deleteCategory', controller.category.deleteCategory);
   router.post('/api/category/getCurrentUserCategory', controller.category.getCurrentUserCategory);
+  router.post('/api/category/addCategoryToCurrent', controller.category.addCategoryToCurrent);
 
 
   /** 记账相关 */

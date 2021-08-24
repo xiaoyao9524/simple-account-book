@@ -75,8 +75,8 @@ class UserService extends Service {
     
     try {
       const result = await ctx.model.User.update({
-        expenditureList: expenditureList.join(','),
-        incomeList: incomeList.join(',')
+        expenditureList: Array.from(new Set(expenditureList)).join(','),
+        incomeList: Array.from(new Set(incomeList)).join(',')
       }, {
         where: {
           id

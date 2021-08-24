@@ -9,7 +9,7 @@ import { classifyCategory, sortCategoryList } from '../util/category';
 // import { incomeIcons, expenditureIcons } from '../data/categoryList';
 
 class CategoryController extends BaseController {
-  /** 新增类别 */
+  /** 创建类别 */
   async insert() {
     const { ctx, app } = this;
 
@@ -347,6 +347,69 @@ class CategoryController extends BaseController {
       expenditureList: expenditureDataList,
       incomeList: incomeDataList
     });
+  }
+
+  /** 某用户将某默认分类添加到当前分类中 */
+  async addCategoryToCurrent () {
+    const { ctx, app } = this;
+
+    const validateResult = await ctx.validate(
+      app.rules.category.addCategoryToCurrent,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    const requestParams = ctx.request.body as {categoryId: number};
+
+    const tokenParse: TokenParseProps = { ...ctx.state.tokenParse };
+
+    // 获取用户信息
+    const userInfo = await ctx.service.user.getUser({
+      id: tokenParse.id
+    });
+
+    if (!userInfo) {
+      this.error('该用户不存在');
+      return;
+    }
+
+    // 获取分类信息
+    const categoryData = await ctx.service.category.getCategoryById(requestParams.categoryId);
+
+    // 按理来说这里只有默认分类才能添加，自定义分类删除的时候已经全部删除了
+    if (!categoryData || categoryData.isDefault !== 1) {
+      this.error('该分类不存在');
+      return;
+    }
+
+    const isExpenditure = categoryData.categoryType === 1;
+
+    const categoryIdList = (isExpenditure ? userInfo.expenditureList : userInfo.incomeList).split(',').map(i => Number(i));
+
+    if (categoryIdList.includes(requestParams.categoryId)) {
+      this.error('该分类已存在');
+      return;
+    }
+
+    categoryIdList.push(requestParams.categoryId);
+
+    const expenditureList = isExpenditure ? categoryIdList : userInfo.expenditureList.split(',').map(i => Number(i));
+    const incomeList = isExpenditure ? userInfo.incomeList.split(',').map(i => Number(i)) : categoryIdList;
+
+    const result = await ctx.service.user.updateCategoryList(tokenParse.id, {
+      expenditureList,
+      incomeList
+    });
+
+    if (!result || !result[0]) {
+      this.error('添加失败');
+      return;
+    }
+
+    this.success('添加成功');
   }
 
   /** test */
