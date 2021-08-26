@@ -9,7 +9,7 @@ import {
 
 import { IUserState } from './types';
 import { UserInfo } from '../../../../types/user';
-import { CategoryItem } from '../../../../types/category';
+import { CategoryItem, CategoryItemWithSortIndex } from '../../../../types/category';
 
 const defaultState: IUserState = {
   userInfo: {
@@ -66,7 +66,7 @@ export default (state = defaultState, action: UserActions) => {
     case DELETE_ONE_CATEGORY:
       const { category } = action;
 
-      let newList: CategoryItem[] = [];
+      let newList: CategoryItemWithSortIndex[] = [];
 
       const isIncome = category.categoryType === 0;
       if (isIncome) {

@@ -8,6 +8,9 @@ export interface CategoryItem {
   isDefault: 0 | 1; // 0为自定义添加，1为默认，无法删除
   title: string;
   icon: string;
+}
+
+export interface CategoryItemWithSortIndex extends CategoryItem {
   sortIndex: number; // 越小越靠前
 }
 
@@ -29,8 +32,8 @@ export interface InsertCategoryProps {
 
 // 返回
 export type InsertCategoryResultProps = BaseResult<{
-  expenditureList: CategoryItem[];
-  incomeList: CategoryItem[];
+  expenditureList: CategoryItemWithSortIndex[];
+  incomeList: CategoryItemWithSortIndex[];
 }>
 
 
@@ -42,8 +45,8 @@ export interface UpdateCategoryParams {
 
 // 更新类别返回
 export interface UpdateCategoryResultData {
-  expenditureList: CategoryItem[];
-  incomeList: CategoryItem[];
+  expenditureList: CategoryItemWithSortIndex[];
+  incomeList: CategoryItemWithSortIndex[];
 }
 export type UpdateCategoryResult = BaseResult<UpdateCategoryResultData>;
 
@@ -67,8 +70,8 @@ export type DeleteCategoryResult = BaseResult<null>;
 
 // 更新该用户下现有分类接口返回
 export type UpdateCurrentUserCategoryResult = BaseResult<{
-  expenditureList: CategoryItem[],
-  incomeList: CategoryItem[]
+  expenditureList: CategoryItemWithSortIndex[],
+  incomeList: CategoryItemWithSortIndex[]
 }>;
 
 // 将某用户的某分类添加到当前分类中接口 请求参数

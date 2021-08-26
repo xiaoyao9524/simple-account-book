@@ -1,4 +1,4 @@
-import {CategoryItem} from './category';
+import { CategoryItemWithSortIndex } from './category';
 
 export interface UserInfo {
   username: string;
@@ -6,7 +6,7 @@ export interface UserInfo {
   bookkeepingDays: number;
   bookkeepCount: number;
   category: {
-    expenditureList: CategoryItem[];
-    incomeList: CategoryItem[];
+    expenditureList: CategoryItemWithSortIndex[];
+    incomeList: CategoryItemWithSortIndex[];
   };
 }

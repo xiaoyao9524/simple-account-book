@@ -11,7 +11,10 @@ import CategoryItem from './components/CategoryItem';
 
 /** types */
 import { IStoreState } from '../../store/reducers';
-import { CategoryItem as ICategoryItemProps } from '../../types/category';
+import { 
+  CategoryItem as ICategoryItemProps,
+  CategoryItemWithSortIndex
+} from '../../types/category';
 import { AllCategoryListResult } from '../../types/category';
 
 /** request */
@@ -22,7 +25,7 @@ import {
   checkBillByCategoryId,
   deleteCategory,
   addCategoryToCurrent,
-  updateCurrentUserCategory
+  updateCurrentUserCategory,
 } from '../../api/category';
 
 /** action */
@@ -31,9 +34,7 @@ import {
   getSetUserCategoryAction,
   getDeleteOneCtegoryAction,
 } from '../../store/reducers/modules/user/actionCreator';
-import {
-  actionTypes as UserActionTypes
-} from '../../store/reducers/modules/user'
+import { actionTypes as UserActionTypes } from '../../store/reducers/modules/user';
 
 /** style */
 import './style.scss';
@@ -55,10 +56,10 @@ const CategorySetting = () => {
 
   const [tab, setTab] = useState<tabs>('支出');
   // 当前用户已有的分类(store)
-  const expenditureIcons = useSelector<IStoreState, ICategoryItemProps[]>(
+  const expenditureIcons = useSelector<IStoreState, CategoryItemWithSortIndex[]>(
     (state) => state.user.userInfo.category.expenditureList
   );
-  const incomeIcons = useSelector<IStoreState, ICategoryItemProps[]>(
+  const incomeIcons = useSelector<IStoreState, CategoryItemWithSortIndex[]>(
     (state) => state.user.userInfo.category.incomeList
   );
 
@@ -73,7 +74,7 @@ const CategorySetting = () => {
 
   const [currentIncomeList, setCurrentIncomeList] = useState([...incomeIcons]);
   useEffect(() => {
-    setCurrentIncomeList([...incomeIcons])
+    setCurrentIncomeList([...incomeIcons]);
   }, [incomeIcons]);
 
   // 当前用户所有的分类(接口获取，包括启用的和未启用的)
@@ -86,7 +87,7 @@ const CategorySetting = () => {
 
   // 当前显示的列表（选中的和未选的）
   const currentCategory = useMemo<{
-    selectedCategory: ICategoryItemProps[];
+    selectedCategory: CategoryItemWithSortIndex[];
     noSelectedCategory: ICategoryItemProps[];
   }>(() => {
     const isExpenditrue = tab === '支出';
@@ -99,9 +100,9 @@ const CategorySetting = () => {
     ).filter((item) => !currentCategoryIds.includes(item.id));
 
     return {
-      selectedCategory: isExpenditrue
+      selectedCategory: (isExpenditrue
         ? currentExpenditureList
-        : currentIncomeList,
+        : currentIncomeList).sort((a, b) => a.sortIndex - b.sortIndex),
       noSelectedCategory,
     };
   }, [
@@ -157,14 +158,14 @@ const CategorySetting = () => {
     async (category: ICategoryItemProps) => {
       try {
         const res = await addCategoryToCurrent({
-          categoryId: category.id
+          categoryId: category.id,
         });
 
         if (res.data.status === 200 && res.data.data) {
           // 新增成功，更新用户分类信息
           dispatch({
-            type: UserActionTypes.UPDATE_USER_CATEGORY
-          })
+            type: UserActionTypes.UPDATE_USER_CATEGORY,
+          });
         } else {
           Toast.fail(res.data.message);
         }
@@ -176,7 +177,7 @@ const CategorySetting = () => {
   );
 
   // 跳转删除记账页弹窗
-  const toDelBillPage = useCallback((category: ICategoryItemProps) => {
+  const toDelBillPage = useCallback((category: CategoryItemWithSortIndex) => {
     const operations = [
       {
         text: '取消',
@@ -195,33 +196,34 @@ const CategorySetting = () => {
 
   // 接口请求删除某个分类
   const fetchDeleteCategoryItem = useCallback(
-    async (category: ICategoryItemProps) => {
+    async (category: CategoryItemWithSortIndex) => {
       const { id } = category;
 
       try {
         const res = await deleteCategory({
-          id
+          id,
         });
 
         if (res.data.status === 200) {
           // 删除成功，更新用户分类信息
           dispatch({
-            type: UserActionTypes.UPDATE_USER_CATEGORY
-          })
+            type: UserActionTypes.UPDATE_USER_CATEGORY,
+          });
           // 重新获取当前用户所有的分类信息
           fetchAllCategoryList();
         } else {
           Toast.fail(res.data.message);
         }
-        
       } catch (err) {
         Toast.fail(err.message);
       }
-  }, [dispatch, fetchAllCategoryList]);
+    },
+    [dispatch, fetchAllCategoryList]
+  );
 
   // 点击删除， 检查当前分类下是否有记账信息
   const handlerDelCategoryClick = useCallback(
-    async (category: ICategoryItemProps) => {
+    async (category: CategoryItemWithSortIndex) => {
       const { id } = category;
 
       try {
@@ -352,8 +354,8 @@ const CategorySetting = () => {
               key={`item-${item.title}`}
               index={index}
               {...item}
-              onDelete={(category) => {
-                handlerDelCategoryClick(category);
+              onDelete={() => {
+                handlerDelCategoryClick(item);
               }}
             />
           ))}
