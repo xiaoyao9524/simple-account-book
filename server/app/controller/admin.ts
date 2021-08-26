@@ -6,6 +6,10 @@ import { CategoryItemProps } from '../types/category';
 
 import md5 = require('md5');
 
+
+interface CategoryItemPropsWithSortIndex extends CategoryItemProps {
+  sortIndex: number;
+}
 class AdminController extends BaseController {
   async register() {
     const { ctx, app } = this;
@@ -52,16 +56,14 @@ class AdminController extends BaseController {
 
     const insertRes = await ctx.service.user.insertUser({
       ...params,
-      expenditureList: expenditureList.map(i => i.id).join(','),
-      incomeList: incomeList.map(i => i.id).join(',')
+      expenditureList: expenditureList.map((i) => i.id).join(','),
+      incomeList: incomeList.map((i) => i.id).join(','),
     });
 
     if (!insertRes) {
       this.error('注册失败');
       return;
     }
-
-    
 
     const { id, username } = insertRes;
 
@@ -129,12 +131,12 @@ class AdminController extends BaseController {
     this.success({ token });
   }
 
-  async getUserInfo () {
+  async getUserInfo() {
     const { ctx } = this;
 
     const { id } = ctx.state.tokenParse as TokenParseProps;
 
-    const user = await ctx.service.user.getUser({id});
+    const user = await ctx.service.user.getUser({ id });
 
     if (!user) {
       this.error('用户不存在');
@@ -145,48 +147,61 @@ class AdminController extends BaseController {
 
     const { username, avatar, createTime } = user;
 
-    const expenditureIds = user.expenditureList.split(',').map(i => Number(i));
-    let expenditureList = await ctx.service.category.getCategoryList(expenditureIds);
+    const expenditureIds = user.expenditureList
+      .split(',')
+      .map(i => Number(i));
+    const expenditureList = await ctx.service.category.getCategoryList(
+      expenditureIds
+    );
 
     if (!expenditureList) {
       this.error('获取支出列表失败');
       return;
-    } else {
-      const _expenditureList: CategoryItemProps[] = [];
-
-      for (let id of expenditureIds) {
-        const item = expenditureList.find(i => i.id === id);
-
-        if (item) {
-          _expenditureList.push(item);
-        }
-      }
-      expenditureList = _expenditureList;
     }
 
-    const incomeIds = user.incomeList.split(',').map(i => Number(i));
-    let incomeList = await ctx.service.category.getCategoryList(incomeIds);
+    const _expenditureList: CategoryItemPropsWithSortIndex[] = [];
+
+    for (const item of expenditureList) {
+      const sortIndex = expenditureIds.indexOf(item.id);
+
+      _expenditureList.push({
+        ...item,
+        sortIndex
+      });
+    }
+
+    const incomeIds = user.incomeList.split(',').map((i) => Number(i));
+    const incomeList = await ctx.service.category.getCategoryList(incomeIds);
 
     if (!incomeList) {
       this.error('获取收入列表失败');
       return;
-    } else {
-      const _incomeList: CategoryItemProps[] = [];
-
-      for (let id of incomeIds) {
-        const item = incomeList.find(i => i.id === id);
-
-        if (item) {
-          _incomeList.push(item);
-        }
-      }
-      incomeList = _incomeList;
     }
+
+    const _incomeList: CategoryItemPropsWithSortIndex[] = [];
+  
+    for (const item of incomeList) {
+      const sortIndex = incomeIds.indexOf(item.id);
+      _incomeList.push({
+        ...item,
+        sortIndex
+      });
+    }
+    // for (let id of incomeIds) {
+    //   const item = incomeList.find((i) => i.id === id);
+
+    //   if (item) {
+    //     _incomeList.push(item);
+    //   }
+    // }
+    // incomeList = _incomeList;
 
     // 计算记账天数
     const currentTimeStamp = new Date().getTime();
     const userCreateTimeStamp = new Date(createTime).getTime();
-    const bookkeepingDays = Math.ceil((currentTimeStamp - userCreateTimeStamp) / 86400000);
+    const bookkeepingDays = Math.ceil(
+      (currentTimeStamp - userCreateTimeStamp) / 86400000
+    );
 
     // 计算记账笔数
     const bookkeepCountRes = await ctx.service.bill.getBookkeepCount(id);
@@ -201,16 +216,15 @@ class AdminController extends BaseController {
       bookkeepingDays,
       bookkeepCount,
       category: {
-        expenditureList,
-        incomeList
-      }
+        expenditureList: _expenditureList,
+        incomeList: _incomeList,
+      },
     };
 
     this.success(ret);
-
   }
 
-  async logout () {
+  async logout() {
     const { ctx, app } = this;
 
     const tokenParse: TokenParseProps = ctx.state.tokenParse;
@@ -219,9 +233,7 @@ class AdminController extends BaseController {
       maxAge: app.config.tokenExpiresMS,
     });
 
-    app.redis.del(
-      `user_${tokenParse.username}_token`
-    );
+    app.redis.del(`user_${tokenParse.username}_token`);
 
     this.success(null, '退出成功');
   }
