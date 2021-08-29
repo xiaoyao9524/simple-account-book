@@ -1,5 +1,5 @@
 .category-setting {
-  padding-top: 102px;
+  padding: 102px 0 50px;
   .tabs {
     position: fixed;
     left: 0;
@@ -64,6 +64,17 @@
           }
         }
       }
+    }
+  }
+
+  .add-category-btn-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    .add-category-btn {
+      border-radius: 0;
     }
   }
 }

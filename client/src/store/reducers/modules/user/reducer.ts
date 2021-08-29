@@ -32,7 +32,15 @@ export default (state = defaultState, action: UserActions) => {
 
   switch (action.type) {
     case SET_USER_INFO:
-      newState.userInfo = action.userInfo;
+      const { category: {expenditureList, incomeList} } = action.userInfo;
+      const newCategory = {
+        expenditureList: expenditureList.sort((a, b) => a.sortIndex - b.sortIndex),
+        incomeList: incomeList.sort((a, b) => a.sortIndex - b.sortIndex)
+      }
+      newState.userInfo = {
+        ...action.userInfo,
+        category:newCategory
+      };
       localStorage.setItem('userInfo', JSON.stringify(action.userInfo));
       break;
     case SET_TOKEN:
@@ -62,6 +70,7 @@ export default (state = defaultState, action: UserActions) => {
       console.log('设置用户分类: ', action.category);
       
       newState.userInfo.category = action.category;
+      localStorage.setItem('userInfo', JSON.stringify(newState.userInfo));
       break;
     case DELETE_ONE_CATEGORY:
       const { category } = action;
@@ -90,5 +99,7 @@ export default (state = defaultState, action: UserActions) => {
       
       break
   }
+
+  
   return newState;
 };

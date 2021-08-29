@@ -11,9 +11,9 @@ import CategoryItem from './components/CategoryItem';
 
 /** types */
 import { IStoreState } from '../../store/reducers';
-import { 
+import {
   CategoryItem as ICategoryItemProps,
-  CategoryItemWithSortIndex
+  CategoryItemWithSortIndex,
 } from '../../types/category';
 import { AllCategoryListResult } from '../../types/category';
 
@@ -56,9 +56,10 @@ const CategorySetting = () => {
 
   const [tab, setTab] = useState<tabs>('支出');
   // 当前用户已有的分类(store)
-  const expenditureIcons = useSelector<IStoreState, CategoryItemWithSortIndex[]>(
-    (state) => state.user.userInfo.category.expenditureList
-  );
+  const expenditureIcons = useSelector<
+    IStoreState,
+    CategoryItemWithSortIndex[]
+  >((state) => state.user.userInfo.category.expenditureList);
   const incomeIcons = useSelector<IStoreState, CategoryItemWithSortIndex[]>(
     (state) => state.user.userInfo.category.incomeList
   );
@@ -91,6 +92,7 @@ const CategorySetting = () => {
     noSelectedCategory: ICategoryItemProps[];
   }>(() => {
     const isExpenditrue = tab === '支出';
+    
     const currentCategoryIds = (
       isExpenditrue ? currentExpenditureList : currentIncomeList
     ).map((item) => item.id);
@@ -102,7 +104,8 @@ const CategorySetting = () => {
     return {
       selectedCategory: (isExpenditrue
         ? currentExpenditureList
-        : currentIncomeList).sort((a, b) => a.sortIndex - b.sortIndex),
+        : currentIncomeList
+      ).sort((a, b) => a.sortIndex - b.sortIndex),
       noSelectedCategory,
     };
   }, [
@@ -113,6 +116,30 @@ const CategorySetting = () => {
     allIncomeCategoryList,
   ]);
 
+  // 保存当前分类顺序
+  const saveCurrentCategorySort = useCallback(async (newCategory: {
+    expenditureList: CategoryItemWithSortIndex[];
+    incomeList: CategoryItemWithSortIndex[];
+  }) => {
+    const params = {
+      expenditureList: newCategory.expenditureList.map((i) => i.id),
+      incomeList: newCategory.incomeList.map((i) => i.id),
+    };
+
+    try {
+      const res = await updateCategory(params);
+
+      if (res.data.status === 200) {
+        dispatch(getSetUserCategoryAction(res.data.data));
+        // Toast.success('保存成功', 1, () => {}, false);
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch (err) {
+      Toast.fail(err.message);
+    }
+  }, [dispatch]);
+
   /** 拖拽排序结束回调 */
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
@@ -122,13 +149,25 @@ const CategorySetting = () => {
         isExpenditure ? currentExpenditureList : currentIncomeList,
         oldIndex,
         newIndex
-      );
+      )
+
+      newItems.forEach((item, index) => {
+        item.sortIndex = index
+      });
 
       isExpenditure
         ? setCurrentExpenditureList(newItems)
         : setCurrentIncomeList(newItems);
+
+      const newCategory = {
+        expenditureList: isExpenditure ? newItems : currentExpenditureList,
+        incomeList: isExpenditure ? currentIncomeList : newItems
+      }
+      
+
+      saveCurrentCategorySort(newCategory);
     },
-    [tab, currentExpenditureList, currentIncomeList]
+    [tab, currentExpenditureList, currentIncomeList, saveCurrentCategorySort]
   );
 
   // 获取当前用户分类数据(所有的，包括默认分类和用户自定义分类)
@@ -249,27 +288,6 @@ const CategorySetting = () => {
     [toDelBillPage, fetchDeleteCategoryItem]
   );
 
-  // 保存
-  async function handlerSave() {
-    const params = {
-      expenditureList: currentExpenditureList.map((i) => i.id),
-      incomeList: currentIncomeList.map((i) => i.id),
-    };
-
-    try {
-      const res = await updateCategory(params);
-
-      if (res.data.status === 200) {
-        dispatch(getSetUserCategoryAction(res.data.data));
-        Toast.success('保存成功', 1, () => {}, false);
-      } else {
-        Toast.fail(res.data.message);
-      }
-    } catch (err) {
-      Toast.fail(err.message);
-    }
-  }
-
   // 点击删除分类 => 确认
   const handlerDeleteCategory = useCallback(
     async (
@@ -360,22 +378,7 @@ const CategorySetting = () => {
             />
           ))}
         </SortableContainer>
-        <WingBlank style={{ marginTop: 10 }}>
-          <Button type="primary" onClick={handlerSave}>
-            保存
-          </Button>
-          <Button
-            type="primary"
-            style={{ marginTop: 10 }}
-            onClick={() => {
-              history.push('/insertCategory', {
-                type: tab,
-              });
-            }}
-          >
-            新增
-          </Button>
-        </WingBlank>
+        <WingBlank style={{ marginTop: 10 }}></WingBlank>
       </div>
 
       {currentCategory.noSelectedCategory.length > 0 && (
@@ -415,6 +418,22 @@ const CategorySetting = () => {
           </ul>
         </div>
       )}
+
+      {/* 新增分类按钮 */}
+      <div className="add-category-btn-wrapper">
+        <Button
+          className="add-category-btn"
+          type="primary"
+          style={{ marginTop: 10 }}
+          onClick={() => {
+            history.push('/insertCategory', {
+              type: tab,
+            });
+          }}
+        >
+          新增
+        </Button>
+      </div>
     </div>
   );
 };
