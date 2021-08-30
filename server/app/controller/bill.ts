@@ -171,10 +171,62 @@ class BillController extends BaseController {
 
     // 分类可删除，获取该分类下的记账信息
     const billList = await ctx.service.bill.getBillListByCategoryId(categoryItem.id);
+    console.log('billList: ', billList);
+    
 
+    if (!billList) {
+      this.error('查询失败');
+      return;
+    }
+
+    const categoryIdList = Array.from(new Set(billList.map(i => i.categoryId)));
+    // 查询分类
+    const categoryList = await ctx.service.category.getCategoryList(categoryIdList);
+
+    console.log('categoryList: ', categoryList);
+    
+
+    if (!categoryList) {
+      this.error('查询失败');
+      return;
+    }
+
+    const ret: BillListItem[] = [];
+
+    for (const item of billList) {
+
+      console.log('item: ', item);
+      
+
+      const {
+        id,
+        categoryId,
+        categoryType,
+        billTime,
+        price,
+        remark
+      } = item;
+
+      const category = categoryList.find(i => i.id === categoryId);
+      console.log('category: ', category);
+      
+
+      if (category) {
+        const billItem = {
+          id,
+          categoryType,
+          category,
+          billTime,
+          price,
+          remark,
+        };
+
+        ret.push(billItem);
+      }
+    }
     // 说明该分类下有记账信息，需要让用户确认是否全部删除
     this.success({
-      billList: billList ? billList : []
+      billList: ret
     });
     
     /*
