@@ -219,13 +219,13 @@ const CategorySetting = () => {
   const toDelBillPage = useCallback((category: CategoryItemWithSortIndex) => {
     const operations = [
       {
-        text: '取消',
-        onPress: () => {},
+        text: '取消'
       },
       {
         text: '确认',
         onPress: () => {
           console.log('删除分类: ', category);
+          history.push(`/deleteCategoryAndBill?categoryId=${category.id}`);
         },
       },
     ];
