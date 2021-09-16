@@ -73,12 +73,12 @@ class AdminController extends BaseController {
       maxAge: app.config.tokenExpiresMS,
     });
 
-    app.redis.set(
-      `user_${username}_token`,
-      token,
-      'EX',
-      app.config.tokenExpiresSeconds
-    );
+    // app.redis.set(
+    //   `user_${username}_token`,
+    //   token,
+    //   'EX',
+    //   app.config.tokenExpiresSeconds
+    // );
 
     this.success({ token });
   }
@@ -121,12 +121,12 @@ class AdminController extends BaseController {
       maxAge: app.config.tokenExpiresMS,
     });
 
-    app.redis.set(
-      `user_${user.username}_token`,
-      token,
-      'EX',
-      app.config.tokenExpiresSeconds
-    );
+    // app.redis.set(
+    //   `user_${user.username}_token`,
+    //   token,
+    //   'EX',
+    //   app.config.tokenExpiresSeconds
+    // );
 
     this.success({ token });
   }
@@ -227,13 +227,13 @@ class AdminController extends BaseController {
   async logout() {
     const { ctx, app } = this;
 
-    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+    // const tokenParse: TokenParseProps = ctx.state.tokenParse;
 
     ctx.cookies.set('token', null, {
       maxAge: app.config.tokenExpiresMS,
     });
 
-    app.redis.del(`user_${tokenParse.username}_token`);
+    // app.redis.del(`user_${tokenParse.username}_token`);
 
     this.success(null, '退出成功');
   }

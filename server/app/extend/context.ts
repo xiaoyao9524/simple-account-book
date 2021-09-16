@@ -15,7 +15,7 @@ export default {
   decodeToken(this: Context): TokenParseProps {
     const { app } = this;
     const cookieToken = this.cookies.get('token');
-    const headersToken = this.request.headers['token'];
+    const headersToken = (this.request.headers.token) as string;
     
     const token = cookieToken || headersToken;
     

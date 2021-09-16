@@ -33,22 +33,22 @@ export default function checkToken(): any {
     try {
       const tokenParse = ctx.decodeToken();
 
-      const { username } = tokenParse;
+      // const { username } = tokenParse;
 
-      const currentRedisToken = await ctx.app.redis.get(
-        `user_${username}_token`
-      );
+      // const currentRedisToken = await ctx.app.redis.get(
+      //   `user_${username}_token`
+      // );
 
-      if (token !== currentRedisToken) {
-        ctx.status = 200;
-        ctx.statusText = 'token已失效';
-        ctx.cookies.set('token', null);
-        ctx.body = {
-          status: 1002,
-          message: 'token已失效',
-        };
-        return;
-      }
+      // if (token !== currentRedisToken) {
+      //   ctx.status = 200;
+      //   ctx.statusText = 'token已失效';
+      //   ctx.cookies.set('token', null);
+      //   ctx.body = {
+      //     status: 1002,
+      //     message: 'token已失效',
+      //   };
+      //   return;
+      // }
 
       ctx.state.tokenParse = tokenParse;
 

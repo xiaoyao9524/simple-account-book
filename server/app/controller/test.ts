@@ -29,6 +29,7 @@ class TestController extends BaseController {
      this.success();
   }
 
+  /*
   async testSet () {
     const {ctx, app} = this;
 
@@ -47,7 +48,9 @@ class TestController extends BaseController {
     }
     
   }
+  */
 
+  /*
   async testGet () {
     const {ctx, app} = this;
 
@@ -63,6 +66,7 @@ class TestController extends BaseController {
       }
     }
   }
+  
 
   async testDel () {
     const {ctx, app} = this;
@@ -92,12 +96,14 @@ class TestController extends BaseController {
       message: '测试延迟：' + delTime,
     }
   }
+  */
 }
 
+/*
 function delay (delTime = 3000) {
   return new Promise<void>(res => {
     setTimeout(res, delTime);
   });
 }
-
+*/
 export default TestController;
