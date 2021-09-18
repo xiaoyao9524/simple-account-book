@@ -14,10 +14,10 @@ const plugin: EggPlugin = {
     enable: true,
     package: 'egg-jwt',
   },
-  redis: {
-    enable: true,
-    package: 'egg-redis',
-  },
+  // redis: {
+  //   enable: true,
+  //   package: 'egg-redis',
+  // },
   validatePlus: {
     enable: true,
     package: 'egg-validate-plus',
