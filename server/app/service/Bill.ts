@@ -45,7 +45,7 @@ class BillService extends Service {
   }
 
   // 删除记账
-  async deleteBill(id: number) {
+  async deleteBill(id: number[]) {
     try {
       const result = await this.ctx.model.Bill.destroy({
         where: {
@@ -109,12 +109,15 @@ class BillService extends Service {
   }
 
   // 根据分类id获取记账记录
-  async getBillListByCategoryId (categoryId: number) {
+  async getBillListByCategoryId (userId: number, categoryId: number) {
+    console.log('ttttttttttttttttt: ', userId, categoryId);
+    
     const { ctx } = this;
 
     try {
       const result = await ctx.model.Bill.findAll({
         where: {
+          uId: userId,
           categoryId
         }
       });

@@ -219,7 +219,7 @@ class CategoryController extends BaseController {
     });
   }
 
-  /** 删除类别 */
+  /** 删除类别(分类下无记账的情况) */
   async deleteCategory() {
     const { ctx, app } = this;
 
@@ -364,6 +364,63 @@ class CategoryController extends BaseController {
     });
   }
 
+  /** 删除类别并删除该类别下的记账信息 */
+  async deleteCategoryAndBill () {
+    const { ctx, app } = this;
+    const validateResult = await ctx.validate(
+      app.rules.category.deleteCategory,
+      ctx.request.body
+    );
+
+    if (!validateResult) {
+      return;
+    }
+
+    // 解析token
+    const tokenParse: TokenParseProps = ctx.state.tokenParse;
+
+    const { id }: { id: number } = ctx.request.body;
+
+    // 获取完整的分类数据
+    const categoryData = await ctx.service.category.getCategoryById(id);
+
+    if (!categoryData) {
+      this.error('要删除的分类不存在');
+      return;
+    }
+
+    // 判断该分类是不是该用户创建的
+    if (categoryData.isDefault !== 1 && categoryData.pid !== tokenParse.id) {
+      this.error('要删除的分类不存在');
+      return;
+    }
+
+    // 去获取该用户该分类下的记账信息
+    const billList = await ctx.service.bill.getBillListByCategoryId(tokenParse.id, ctx.request.body.id);
+    
+    // 删除记账信息
+    if (billList && billList.length) {
+      const delBillRes = await ctx.service.bill.deleteBill(billList.map(i => i.id));
+
+      if (!delBillRes) {
+        this.error('删除失败');
+        return;
+      }
+    }
+
+    // 删除分类
+
+    const delCategoryRes = await ctx.service.category.deleteCategory(categoryData.id);
+
+    if (!delCategoryRes) {
+      this.error('删除失败');
+      return;
+    }
+
+    this.success(true, '删除成功');
+
+  }
+
   /** 某用户将某默认分类添加到当前分类中 */
   async addCategoryToCurrent () {
     const { ctx, app } = this;
@@ -426,6 +483,8 @@ class CategoryController extends BaseController {
 
     this.success(true);
   }
+
+
 
   /** test */
   async getCategoryList() {

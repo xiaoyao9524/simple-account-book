@@ -135,7 +135,7 @@ class BillController extends BaseController {
     });
   }
 
-  // 删除分类前根据分类id查找对应的记账数据
+  // 根据分类id查找对应的记账数据
   async getBillListByCategoryId () {
     const { ctx, app } = this;
     
@@ -155,24 +155,13 @@ class BillController extends BaseController {
     // 先检查传入的分类id是不是该用户的
     const categoryItem = await ctx.service.category.getCategoryById(requuestParams.categoryId);
 
-    if (!categoryItem) {
+    if (!categoryItem || (categoryItem.isDefault !== 1 && (categoryItem.pid !== tokenParse.id))) {
       this.error('要删除的分类不存在');
       return;
     }
 
-    if (categoryItem.isDefault !== 0) {
-      this.error('不能删除默认分类');
-      return;
-    } else if (categoryItem.pid !== tokenParse.id) {
-      // 只能删除自己的分类
-      this.error('删除失败');
-      return;
-    }
-
-    // 分类可删除，获取该分类下的记账信息
-    const billList = await ctx.service.bill.getBillListByCategoryId(categoryItem.id);
-    console.log('billList: ', billList);
-    
+    // 分类可删除，获取该用户该分类下的记账信息
+    const billList = await ctx.service.bill.getBillListByCategoryId(tokenParse.id, categoryItem.id);
 
     if (!billList) {
       this.error('查询失败');
@@ -224,21 +213,11 @@ class BillController extends BaseController {
         ret.push(billItem);
       }
     }
+
     // 说明该分类下有记账信息，需要让用户确认是否全部删除
     this.success({
       billList: ret
     });
-    
-    /*
-    const delRes = await ctx.service.category.deleteCategory(categoryItem.id);
-
-    if (!delRes) {
-      this.error('删除失败');
-      return;
-    }
-
-    this.success(null, '删除成功');
-    */
   }
 
   // 删除记账
@@ -256,7 +235,7 @@ class BillController extends BaseController {
 
     const requestBody: { id: number } = { ...ctx.request.body };
 
-    const delResult = await ctx.service.bill.deleteBill(requestBody.id);
+    const delResult = await ctx.service.bill.deleteBill([requestBody.id]);
 
     if (!delResult) {
       return this.error('删除失败');
