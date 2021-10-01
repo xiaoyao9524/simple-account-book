@@ -11,7 +11,8 @@ import {
     DeleteCategoryResult,
     UpdateCurrentUserCategoryResult,
     AddCategoryToCurrentRequestParams,
-    AddCategoryToCurrentResponseProps
+    AddCategoryToCurrentResponseProps,
+    DeleteCategoryAndBillResponse
 } from "../types/category";
 
 
@@ -86,5 +87,13 @@ export const updateCurrentUserCategory = () => (
     request<UpdateCurrentUserCategoryResult>({
         method: 'post',
         url: '/api/category/getCurrentUserCategory'
+    })
+)
+
+// 删除类别并删除该类别下的记账信息
+export const deleteCategoryAndBill = (id: number) => (
+    request<DeleteCategoryAndBillResponse>({
+        method: 'post',
+        url: '/api/category/deleteCategoryAndBill'
     })
 )

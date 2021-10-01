@@ -81,3 +81,6 @@ export interface AddCategoryToCurrentRequestParams {
 
 // 将某用户的某分类添加到当前分类中接口 返回参数
 export type AddCategoryToCurrentResponseProps = BaseResult<boolean>;
+
+// 删除类别并删除该类别下的记账信息 接口返回
+export type DeleteCategoryAndBillResponse = BaseResult<boolean>;

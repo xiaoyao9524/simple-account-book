@@ -6,7 +6,10 @@ import useQuery from '../../hooks/useQuery';
 import { List, WingBlank, Button, Modal, Toast } from 'antd-mobile';
 
 // request
-import { getBillListByCategoryId } from '../../api/category';
+import {
+  getBillListByCategoryId,
+  deleteCategoryAndBill,
+} from '../../api/category';
 
 // types
 import { BillItem } from '../../types/bill';
@@ -56,7 +59,7 @@ const DeleteCategoryAndBill: FC = (props) => {
   }, []);
 
   // 将接口数据转化为可渲染的格式
-  
+
   const handlerList = useCallback((list: BillItem[]) => {
     const obj = {} as {
       [key: string]: any;
@@ -88,8 +91,24 @@ const DeleteCategoryAndBill: FC = (props) => {
     return handlerList(list);
   }, [handlerList, list]);
 
-  console.log('renderList: ', renderList);
-  
+  const handlerDelete = useCallback(async (categoryId: number) => {
+    console.log('del: ', categoryId);
+
+    try {
+      // const res = await deleteCategoryAndBill(categoryId)
+    } catch (err) {}
+  }, []);
+
+  const showAlert = useCallback(() => {
+    alert('警告', '确定要删除该分类以及该分类下全部记账信息吗？', [
+      {
+        text: '确定',
+        onPress: () => {
+          handlerDelete(Number(query.categoryId));
+        },
+      },
+    ]);
+  }, [handlerDelete, query]);
 
   return (
     <div className="delete-category-and-bill">
@@ -119,7 +138,9 @@ const DeleteCategoryAndBill: FC = (props) => {
           </List>
         ))}
         <div className="btn-wrapper">
-          <Button type="warning">删除全部</Button>
+          <Button type="warning" onClick={showAlert}>
+            删除全部
+          </Button>
         </div>
       </div>
     </div>
