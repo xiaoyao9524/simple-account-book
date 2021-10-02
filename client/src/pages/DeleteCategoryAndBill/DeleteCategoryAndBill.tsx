@@ -1,6 +1,9 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 
+
 // hooks
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import useQuery from '../../hooks/useQuery';
 // ui
 import { List, WingBlank, Button, Modal, Toast } from 'antd-mobile';
@@ -14,9 +17,11 @@ import {
 // types
 import { BillItem } from '../../types/bill';
 
+// action
+import { actionTypes as UserActionTypes } from '../../store/reducers/modules/user';
+
 // style
 import './index.scss';
-import { useLocation, useHistory } from 'react-router-dom';
 
 interface BillListItem {
   date: string;
@@ -30,6 +35,7 @@ const DeleteCategoryAndBill: FC = (props) => {
     categoryId?: string;
   };
 
+  const dispatch = useDispatch();
   const history = useHistory();
 
   if (!query.categoryId) {
@@ -95,8 +101,22 @@ const DeleteCategoryAndBill: FC = (props) => {
     console.log('del: ', categoryId);
 
     try {
-      // const res = await deleteCategoryAndBill(categoryId)
-    } catch (err) {}
+      const res = await deleteCategoryAndBill(categoryId);
+
+      if (res.data.status === 200 && res.data.data) {
+        
+        dispatch({
+          type: UserActionTypes.UPDATE_USER_CATEGORY,
+        });
+
+        history.goBack();
+
+      } else {
+        Toast.fail(res.data.message);
+      }
+    } catch (err) {
+      Toast.fail(err.message);
+    }
   }, []);
 
   const showAlert = useCallback(() => {
@@ -116,6 +136,7 @@ const DeleteCategoryAndBill: FC = (props) => {
         {renderList.map((billItem) => (
           <List
             key={billItem.date}
+            className="my-list"
             renderHeader={() => (
               <div className="bill-item-header">
                 <p className="date">{billItem.date}</p>
@@ -126,10 +147,10 @@ const DeleteCategoryAndBill: FC = (props) => {
                 </p>
               </div>
             )}
-            className="my-list"
           >
             {billItem.list.map((item) => (
               <List.Item
+                key={item.id}
                 extra={`${item.categoryType === 1 ? '-' : ''}${item.price}`}
               >
                 {item.remark || item.category.title}

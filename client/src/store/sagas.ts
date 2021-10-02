@@ -26,8 +26,6 @@ const {getinitList} = todoListSagas;
 
 // sagas
 function* watchInitTodoList() {
-  console.log('watchInitTodoList: ');
-  
   yield takeEvery(TEST_INIT_LIST, getinitList);
 }
 
@@ -39,9 +37,6 @@ function* initSagas () {
   // 更新用户分类
   yield takeEvery(userActionTypes.UPDATE_USER_CATEGORY, userActionCreator.updateUserCategoryAction);
 }
-
-// // 更新当前用户分类
-// function 
 
 // export
 export default function* rootSaga () {

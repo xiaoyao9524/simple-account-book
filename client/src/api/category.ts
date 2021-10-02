@@ -94,6 +94,9 @@ export const updateCurrentUserCategory = () => (
 export const deleteCategoryAndBill = (id: number) => (
     request<DeleteCategoryAndBillResponse>({
         method: 'post',
-        url: '/api/category/deleteCategoryAndBill'
+        url: '/api/category/deleteCategoryAndBill',
+        data: {
+            id
+        }
     })
 )
