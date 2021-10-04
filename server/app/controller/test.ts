@@ -1,13 +1,13 @@
 import BaseController from './BaseController';
 
 class TestController extends BaseController {
-  async detail () {
+  async detail() {
     this.success({
-      msg: '成功'
-    })
+      msg: '成功',
+    });
   }
 
-  async testValidate () {
+  async testValidate() {
     /**
      * {
      *    username: string;
@@ -15,95 +15,18 @@ class TestController extends BaseController {
      *    confirmPassword: string;
      * }
      */
-    const {ctx, app} = this;
+    const { ctx, app } = this;
 
     const rule = app.rules.admin.test;
 
-     const validateResult  = await ctx.validate(rule, ctx.request.body);
+    const validateResult = await ctx.validate(rule, ctx.request.body);
 
-     if (!validateResult ) {
-       return;
-     }
-     
-
-     this.success();
-  }
-
-  /*
-  async testSet () {
-    const {ctx, app} = this;
-
-    const {username} = ctx.request.body;
-
-    app.redis.set
-
-    const insertRes = await app.redis.hset('user_logins', username, `${username}-token`);
-
-    ctx.body = {
-      status: 200,
-      message: 'success',
-      data: {
-        insertRes
-      }
+    if (!validateResult) {
+      return;
     }
-    
+
+    this.success();
   }
-  */
-
-  /*
-  async testGet () {
-    const {ctx, app} = this;
-
-    const {username} = ctx.request.body;
-
-    const userLogins = await app.redis.hget('user_logins', username);
-
-    ctx.body = {
-      status: 200,
-      message: '成功',
-      data: {
-        userLogins
-      }
-    }
-  }
-  
-
-  async testDel () {
-    const {ctx, app} = this;
-
-    const {username} = ctx.request.body;
-
-    const userLogins = await app.redis.hdel('user_logins', username);
-
-    ctx.body = {
-      status: 200,
-      message: '成功',
-      data: {
-        userLogins
-      }
-    }
-  }
-
-  async testDelay () {
-    const {ctx} = this;
-
-    const delTime = 3000;
-
-    await delay(delTime);
-
-    ctx.body = {
-      status: 200,
-      message: '测试延迟：' + delTime,
-    }
-  }
-  */
 }
 
-/*
-function delay (delTime = 3000) {
-  return new Promise<void>(res => {
-    setTimeout(res, delTime);
-  });
-}
-*/
 export default TestController;
