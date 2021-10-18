@@ -230,7 +230,7 @@ const CategorySetting = () => {
       },
     ];
 
-    alert('警告', '删除类别会同事删除该类别下所有记账信息', operations);
+    alert('警告', '删除类别会同时删除该类别下所有记账信息', operations);
   }, []);
 
   // 接口请求删除某个分类
