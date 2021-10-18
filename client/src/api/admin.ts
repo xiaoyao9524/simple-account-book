@@ -1,4 +1,4 @@
-import request from '../utils/axios';
+import request from '@/utils/axios';
 import {
     SignupRequestProps, 
     RegisterResponseProps,
@@ -6,7 +6,7 @@ import {
     LoginResponseProps,
     userInfoProps,
     LogoutResponseProps
-} from '../types/admin';
+} from '@/types/admin';
 
 // 注册
 export const register = (data: SignupRequestProps) => (

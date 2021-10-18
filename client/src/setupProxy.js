@@ -15,7 +15,7 @@ module.exports = function (app) {
     createProxyMiddleware(
       '/api',
       {
-        target: 'http://localhost:7001',
+        target: 'http://xiaoyao9524.top:7001',
         changeOrigin: true
       }
     )

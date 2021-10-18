@@ -1,4 +1,4 @@
-import request from '../utils/axios';
+import request from '@/utils/axios';
 import {
   GetBillListByDateRequestProps,
   GetBillListByDateResponse,
@@ -8,7 +8,7 @@ import {
   DeleteBillResponse,
   UpdateBillProps,
   UpdateBillResponse
-} from "../types/bill";
+} from "@/types/bill";
 
 // 获取记账列表
 export const getBillListByDate = (data: GetBillListByDateRequestProps) => (

@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { IStoreState } from '../../store/reducers';
+import { IStoreState } from '@/store/reducers';
 
 /** components */
 import { SegmentedControl, Toast } from 'antd-mobile';
-import NavBar from '../../components/NavBar';
-import NoLogin from '../../components/NoLogin/noLogin';
+import NavBar from '@/components/NavBar';
+import NoLogin from '@/components/NoLogin/noLogin';
 import Calculator, {
   ICalculatorOnConfirmResult,
   CalculatorRefProps,
-} from '../../components/Calculator/calculator';
+} from '@/components/Calculator/calculator';
 
 /** type */
-import { UserInfo } from '../../types/user';
-import { CategoryItem } from '../../types/category';
-import { InsertBillProps, UpdateBillProps } from '../../types/bill';
-import { BillItem } from '../../types/bill';
+import { UserInfo } from '@/types/user';
+import { CategoryItem } from '@/types/category';
+import { InsertBillProps, UpdateBillProps } from '@/types/bill';
+import { BillItem } from '@/types/bill';
 /** request */
-import { insertBill, updateBill } from '../../api/bill';
+import { insertBill, updateBill } from '@/api/bill';
 
 /** style */
 import './style.scss';

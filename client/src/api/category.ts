@@ -1,4 +1,4 @@
-import request from '../utils/axios';
+import request from '@/utils/axios';
 import { 
     GetAllCategoryListResult,
     InsertCategoryProps,
@@ -13,7 +13,7 @@ import {
     AddCategoryToCurrentRequestParams,
     AddCategoryToCurrentResponseProps,
     DeleteCategoryAndBillResponse
-} from "../types/category";
+} from "@/types/category";
 
 
 // 获取该用户下所有的类别列表，包含默认分类以及该用户删除的分类
