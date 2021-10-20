@@ -8,8 +8,8 @@ import {
 } from './actionTypes';
 
 import { IUserState } from './types';
-import { UserInfo } from '../../../../types/user';
-import { CategoryItem, CategoryItemWithSortIndex } from '../../../../types/category';
+import { UserInfo } from '@/types/user';
+import { CategoryItemWithSortIndex } from '@/types/category';
 
 const defaultState: IUserState = {
   userInfo: {

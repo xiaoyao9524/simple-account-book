@@ -10,7 +10,7 @@ import {
 
 import {
   checkSystemInfo
-} from '../../../../utils/system';
+} from '@/utils/system';
 
 type actionTypes = SetTabbarShowAction | SetSystemInfoAction;
 
