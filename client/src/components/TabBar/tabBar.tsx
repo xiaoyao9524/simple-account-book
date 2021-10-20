@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 
-import { IStoreState } from '../../store/reducers/index'
+import { IStoreState } from '@/store/reducers/index'
 import {
   NavLink
 } from 'react-router-dom';
