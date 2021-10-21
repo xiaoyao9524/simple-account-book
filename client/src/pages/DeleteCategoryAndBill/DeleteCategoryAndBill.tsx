@@ -1,24 +1,24 @@
 import React, { FC, useState, useEffect, useCallback, useMemo } from 'react';
 
-
 // hooks
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import useQuery from '../../hooks/useQuery';
+import useQuery from '@/hooks/useQuery';
+
 // ui
-import { List, WingBlank, Button, Modal, Toast } from 'antd-mobile';
+import { List, Button, Modal, Toast } from 'antd-mobile';
 
 // request
 import {
   getBillListByCategoryId,
   deleteCategoryAndBill,
-} from '../../api/category';
+} from '@/api/category';
 
 // types
-import { BillItem } from '../../types/bill';
+import { BillItem } from '@/types/bill';
 
 // action
-import { actionTypes as UserActionTypes } from '../../store/reducers/modules/user';
+import { actionTypes as UserActionTypes } from '@/store/reducers/modules/user';
 
 // style
 import './index.scss';

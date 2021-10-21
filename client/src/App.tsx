@@ -1,6 +1,6 @@
-import React, { /*useEffect*/ } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IStoreState } from './store/reducers';
+import { IStoreState } from '@/store/reducers';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,18 +8,18 @@ import {
 } from 'react-router-dom';
 
 // pages
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Home from './pages/Home';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import Home from '@/pages/Home';
 import Bookkeeping from './pages/Bookkeeping';
-import My from './pages/My';
-import CategorySetting from './pages/CategorySetting';
-import InsertCategory from './pages/InsertCategory';
-import DeleteCategoryAndBill from './pages/DeleteCategoryAndBill';
+import My from '@/pages/My';
+import CategorySetting from '@/pages/CategorySetting';
+import InsertCategory from '@/pages/InsertCategory';
+import DeleteCategoryAndBill from '@/pages/DeleteCategoryAndBill';
 
 // store
-import { setSystemInfoAction } from './store/reducers/modules/system/actionCreators';
-import { getSetUserDataByLocalAction } from './store/reducers/modules/user/actionCreator';
+import { setSystemInfoAction } from '@/store/reducers/modules/system/actionCreators';
+import { getSetUserDataByLocalAction } from '@/store/reducers/modules/user/actionCreator';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();

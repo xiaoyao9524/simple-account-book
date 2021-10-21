@@ -1,16 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 
-import { IStoreState } from '../../store/reducers';
+import { IStoreState } from '@/store/reducers';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { UserInfo } from '../../types/user';
-import { BillItem } from '../../types/bill';
+import { UserInfo } from '@/types/user';
+import { BillItem } from '@/types/bill';
 
-// import moment, { Moment } from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
-// import { useLocation } from 'react-router-dom';
 
-import { getBillListByDate, deleteBill } from '../../api/bill';
+import { getBillListByDate, deleteBill } from '@/api/bill';
 
 import {
   NoticeBar,
@@ -20,143 +18,12 @@ import {
   Toast,
   Modal,
 } from 'antd-mobile';
-import TabBar from '../../components/TabBar';
-import NoLogin from '../../components/NoLogin';
+import TabBar from '@/components/TabBar';
+import NoLogin from '@/components/NoLogin';
 
 import './style.scss';
 
 const { alert } = Modal;
-
-/*
-const list = [
-  {
-    id: 1,
-    date: '2020-08-11',
-    list: [
-      {
-        id: 1,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 2,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      }
-    ]
-  },
-  {
-    id: 2,
-    date: '2020-08-10',
-    list: [
-      {
-        id: 3,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 4,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      }
-    ]
-  },
-  {
-    id: 3,
-    date: '2020-08-10',
-    list: [
-      {
-        id: 5,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 6,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 7,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 8,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 9,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 10,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 11,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 12,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 13,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 14,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 15,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 16,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-      {
-        id: 17,
-        type: '支出',
-        category: '餐饮',
-        price: '10.00',
-      },
-      {
-        id: 18,
-        type: '收入',
-        category: '红包',
-        price: '11.00',
-      },
-    ]
-  },
-]
-*/
 
 const mobileNoticBar = (
   <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
@@ -200,7 +67,6 @@ function handlerList(list: BillItem[]) {
 }
 
 const Home: FC = () => {
-  // const location = useLocation();
   const history = useHistory();
   const isMobile = useSelector<IStoreState, boolean>(
     (state) => state.system.isMobile

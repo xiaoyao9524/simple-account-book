@@ -6,16 +6,15 @@ import arrayMove from 'array-move';
 /** components */
 import { SegmentedControl, Toast, WingBlank, Button, Modal } from 'antd-mobile';
 import { SortableContainer as sortableContainer } from 'react-sortable-hoc';
-import NavBar from '../../components/NavBar/navBar';
+import NavBar from '@/components/NavBar/navBar';
 import CategoryItem from './components/CategoryItem';
 
 /** types */
-import { IStoreState } from '../../store/reducers';
+import { IStoreState } from '@/store/reducers';
 import {
   CategoryItem as ICategoryItemProps,
   CategoryItemWithSortIndex,
-} from '../../types/category';
-import { AllCategoryListResult } from '../../types/category';
+} from '@/types/category';
 
 /** request */
 import {
@@ -25,16 +24,15 @@ import {
   checkBillByCategoryId,
   deleteCategory,
   addCategoryToCurrent,
-  updateCurrentUserCategory,
-} from '../../api/category';
+} from '@/api/category';
 
 /** action */
 import {
   // getUpdateUserCategoryAction,
   getSetUserCategoryAction,
   getDeleteOneCtegoryAction,
-} from '../../store/reducers/modules/user/actionCreator';
-import { actionTypes as UserActionTypes } from '../../store/reducers/modules/user';
+} from '@/store/reducers/modules/user/actionCreator';
+import { actionTypes as UserActionTypes } from '@/store/reducers/modules/user';
 
 /** style */
 import './style.scss';
@@ -231,7 +229,7 @@ const CategorySetting = () => {
     ];
 
     alert('警告', '删除类别会同时删除该类别下所有记账信息', operations);
-  }, []);
+  }, [history]);
 
   // 接口请求删除某个分类
   const fetchDeleteCategoryItem = useCallback(
@@ -324,7 +322,7 @@ const CategorySetting = () => {
       }
       alertInstance.close();
     },
-    []
+    [dispatch, fetchAllCategoryList]
   );
 
   // 删除弹窗

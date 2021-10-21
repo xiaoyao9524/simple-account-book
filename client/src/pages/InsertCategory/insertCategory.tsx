@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import {useDispatch} from 'react-redux'
 
 import useForm from 'rc-form-hooks';
+
 /** components */
 import {
   List,
@@ -10,16 +11,16 @@ import {
   Button,
   Toast
 } from "antd-mobile";
-import NavBar from '../../components/NavBar'
+import NavBar from '@/components/NavBar'
 
 /** type */
-import { InsertCategoryProps } from "../../types/category";
+import { InsertCategoryProps } from "@/types/category";
 
 /** request */
-import { insertCategory } from "../../api/category";
+import { insertCategory } from "@/api/category";
 
 /** dispatch */
-import { getSetUserCategoryAction } from "../../store/reducers/modules/user/actionCreator";
+import { getSetUserCategoryAction } from "@/store/reducers/modules/user/actionCreator";
 /** style */
 import './style.scss';
 
