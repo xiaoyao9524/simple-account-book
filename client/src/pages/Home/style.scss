@@ -35,6 +35,10 @@
       }
       .price-total {
         flex: 0 0 auto;
+        color: #1890ff;
+        &.minus {
+          color: #f95a5a;
+        }
       }
     }
   }

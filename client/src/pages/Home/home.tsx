@@ -33,6 +33,7 @@ const mobileNoticBar = (
 
 interface BillListItem {
   date: string;
+  totalPrice: string;
   list: BillItem[];
 }
 
@@ -57,6 +58,11 @@ function handlerList(list: BillItem[]) {
   const ret: BillListItem[] = keys
     .map((key) => ({
       date: key,
+      totalPrice: (
+        obj[key]
+          .map((i) => (i.categoryType === 0 ? i.price : -i.price))
+          .reduce((total, num) => total + num)
+          .toFixed(2)),
       list: obj[key],
     }))
     .sort((a, b) => {
@@ -176,10 +182,8 @@ const Home: FC = () => {
                 renderHeader={() => (
                   <div className="bill-item-header">
                     <p className="date">{billItem.date}</p>
-                    <p className="price-total">
-                      {billItem.list
-                        .map((i) => (i.categoryType === 0 ? i.price : -i.price))
-                        .reduce((total, num) => total + num)}
+                    <p className={`price-total ${Number(billItem.totalPrice) < 0 ? 'minus' : ''}`}>
+                      {billItem.totalPrice}
                     </p>
                   </div>
                 )}
