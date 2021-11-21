@@ -62,7 +62,7 @@ const DeleteCategoryAndBill: FC = (props) => {
 
   useEffect(() => {
     fetchBillList();
-  }, []);
+  }, []); // eslint-disable-line
 
   // 将接口数据转化为可渲染的格式
 
@@ -98,8 +98,6 @@ const DeleteCategoryAndBill: FC = (props) => {
   }, [handlerList, list]);
 
   const handlerDelete = useCallback(async (categoryId: number) => {
-    console.log('del: ', categoryId);
-
     try {
       const res = await deleteCategoryAndBill(categoryId);
 
@@ -117,7 +115,7 @@ const DeleteCategoryAndBill: FC = (props) => {
     } catch (err) {
       Toast.fail(err.message);
     }
-  }, []);
+  }, [dispatch, history]);
 
   const showAlert = useCallback(() => {
     alert('警告', '确定要删除该分类以及该分类下全部记账信息吗？', [
