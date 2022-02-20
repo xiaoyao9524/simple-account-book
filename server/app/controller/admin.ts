@@ -42,7 +42,7 @@ class AdminController extends BaseController {
     const incomeList: CategoryItemProps[] = [];
 
     if (categoryListData) {
-      for (let item of categoryListData) {
+      for (const item of categoryListData) {
         if (item.categoryType === 0) {
           incomeList.push(item);
         } else {
@@ -56,8 +56,8 @@ class AdminController extends BaseController {
 
     const insertRes = await ctx.service.user.insertUser({
       ...params,
-      expenditureList: expenditureList.map((i) => i.id).join(','),
-      incomeList: incomeList.map((i) => i.id).join(','),
+      expenditureList: expenditureList.map(i => i.id).join(','),
+      incomeList: incomeList.map(i => i.id).join(','),
     });
 
     if (!insertRes) {
@@ -170,7 +170,7 @@ class AdminController extends BaseController {
       });
     }
 
-    const incomeIds = user.incomeList.split(',').map((i) => Number(i));
+    const incomeIds = user.incomeList.split(',').map(i => Number(i));
     const incomeList = await ctx.service.category.getCategoryList(incomeIds);
 
     if (!incomeList) {
